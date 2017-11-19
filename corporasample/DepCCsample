@@ -1,0 +1,1000 @@
+# parser = MaltParser Language: English. Parser configuration: Stack. Transition system: Projective. Model: de.tudarmstadt.ukp.dkpro.core.maltparser-upstream-parser-en-linear. Model version: 20120312.
+
+# newdoc	url = http://attractivespot.blogspot.com/2012/03/sangla-vallay-in-himachal-in-india.html	s3 = s3://aws-publicdatasets/common-crawl/crawl-data/CC-MAIN-2016-07/segments/1454701152130.53/warc/CC-MAIN-20160205193912-00334-ip-10-236-182-209.ec2.internal.warc.gz
+
+# sent_id = http://attractivespot.blogspot.com/2012/03/sangla-vallay-in-himachal-in-india.html#1
+# text = Sangla Valley in Himachal Pradesh in India .
+0	Sangla	Sangla	NNP	NNP		1	nn	1:nn	B-Location
+1	Valley	Valley	NNP	NNP		1	ROOT	1:ROOT	I-Location
+2	in	in	IN	IN		1	prep	_	O
+3	Himachal	Himachal	NNP	NNP		4	nn	4:nn	O
+4	Pradesh	Pradesh	NNP	NNP		2	pobj	1:prep_in	O
+5	in	in	IN	IN		1	prep	_	O
+6	India	India	NNP	NNP		5	pobj	1:prep_in	O
+7	.	.	.	.		1	punct	1:punct	O
+
+# sent_id = http://attractivespot.blogspot.com/2012/03/sangla-vallay-in-himachal-in-india.html#2
+# text = Samgla is the best for the Apple .
+0	Samgla	Samgla	NNP	NNP		3	nsubj	3:nsubj	B-Person
+1	is	be	VBZ	VBZ		3	cop	3:cop	O
+2	the	the	DT	DT		3	det	3:det	O
+3	best	best	JJS	JJS		3	ROOT	3:ROOT	O
+4	for	for	IN	IN		3	prep	_	O
+5	the	the	DT	DT		6	det	6:det	O
+6	Apple	Apple	NNP	NNP		4	pobj	3:prep_for	O
+7	.	.	.	.		3	punct	3:punct	O
+
+# sent_id = http://attractivespot.blogspot.com/2012/03/sangla-vallay-in-himachal-in-india.html#3
+# text = The city of Sangla is very charming.You will never desire to come back from here.
+0	The	the	DT	DT		1	det	1:det	O
+1	city	city	NN	NN		9	nsubj	9:nsubj	O
+2	of	of	IN	IN		1	prep	_	O
+3	Sangla	Sangla	NNP	NNP		2	pobj	1:prep_of	B-Location
+4	is	be	VBZ	VBZ		9	aux	9:aux	O
+5	very	very	RB	RB		6	advmod	6:advmod	O
+6	charming.You	charming.you	PRP	PRP		9	nsubj	9:nsubj	O
+7	will	will	MD	MD		9	aux	9:aux	O
+8	never	never	RB	RB		9	neg	9:neg	O
+9	desire	desire	VB	VB		9	ROOT	9:ROOT	O
+10	to	to	TO	TO		11	aux	11:aux	O
+11	come	come	VB	VB		9	xcomp	9:xcomp	O
+12	back	back	RB	RB		11	advmod	11:advmod	O
+13	from	from	IN	IN		11	prep	_	O
+14	here	here	RB	RB		13	pobj	11:prep_from	O
+15	.	.	.	.		9	punct	9:punct	O
+
+# sent_id = http://attractivespot.blogspot.com/2012/03/sangla-vallay-in-himachal-in-india.html#4
+# text = Bufra in Himachal is also a wonderful area.You will like this place indeed hill after hill made nature beauty area in here.Apples are hanging in the tree.In every side heavenly sight in covered.So it is called the best valley of the Kinnar .
+0	Bufra	Bufra	NNP	NNP		9	nsubj	9:nsubj	O
+1	in	in	IN	IN		0	prep	_	O
+2	Himachal	Himachal	NNP	NNP		1	pobj	0:prep_in	B-Location
+3	is	be	VBZ	VBZ		9	aux	9:aux	O
+4	also	also	RB	RB		9	advmod	9:advmod	O
+5	a	a	DT	DT		7	det	7:det	O
+6	wonderful	wonderful	JJ	JJ		7	amod	7:amod	O
+7	area.You	area.you	NNS	NNS		9	nsubj	9:nsubj	O
+8	will	will	MD	MD		9	aux	9:aux	O
+9	like	like	VB	VB		9	ROOT	9:ROOT	O
+10	this	this	DT	DT		11	det	11:det	O
+11	place	place	NN	NN		9	dobj	9:dobj	O
+12	indeed	indeed	RB	RB		11	advmod	11:advmod	O
+13	hill	hill	NN	NN		16	nsubj	16:nsubj	O
+14	after	after	IN	IN		13	prep	_	O
+15	hill	hill	NN	NN		14	pobj	13:prep_after	O
+16	made	make	VBD	VBD		11	rcmod	11:rcmod	O
+17	nature	nature	NN	NN		19	nn	19:nn	O
+18	beauty	beauty	NN	NN		19	nn	19:nn	O
+19	area	area	NN	NN		16	dobj	16:dobj	O
+20	in	in	IN	IN		16	prep	_	O
+21	here.Apples	here.apples	NNS	NNS		20	pobj	16:prep_in	O
+22	are	be	VBP	VBP		23	aux	23:aux	O
+23	hanging	hang	VBG	VBG		9	xcomp	9:xcomp	O
+24	in	in	IN	IN		23	prep	_	O
+25	the	the	DT	DT		26	det	26:det	O
+26	tree.In	tree.in	NN	NN		24	pobj	23:prep_in	O
+27	every	every	DT	DT		28	det	28:det	O
+28	side	side	NN	NN		30	nsubj	30:nsubj	O
+29	heavenly	heavenly	RB	RB		28	advmod	28:advmod	O
+30	sight	sight	NN	NN		23	ccomp	23:ccomp	O
+31	in	in	IN	IN		30	prep	_	O
+32	covered.So	covered.so	NN	NN		31	pobj	30:prep_in	O
+33	it	it	PRP	PRP		35	nsubjpass	35:nsubjpass	O
+34	is	be	VBZ	VBZ		35	auxpass	35:auxpass	O
+35	called	call	VBN	VBN		30	rcmod	30:rcmod	O
+36	the	the	DT	DT		38	det	38:det	O
+37	best	best	JJS	JJS		38	amod	38:amod	O
+38	valley	valley	NN	NN		35	dobj	35:dobj	O
+39	of	of	IN	IN		38	prep	_	O
+40	the	the	DT	DT		41	det	41:det	O
+41	Kinnar	Kinnar	NNP	NNP		39	pobj	38:prep_of	O
+42	.	.	.	.		9	punct	9:punct	O
+
+# sent_id = http://attractivespot.blogspot.com/2012/03/sangla-vallay-in-himachal-in-india.html#5
+# text = How to reach : From Kolkata you can reach Ambala by Jambu Tayoue express.
+0	How	how	WRB	WRB		2	advmod	2:advmod	O
+1	to	to	TO	TO		2	aux	2:aux	O
+2	reach	reach	VB	VB		8	dep	8:dep	O
+3	:	:	:	:		8	punct	8:punct	O
+4	From	from	IN	IN		8	prep	_	O
+5	Kolkata	Kolkata	NNP	NNP		4	pobj	8:prep_from	B-Location
+6	you	you	PRP	PRP		8	nsubj	8:nsubj	O
+7	can	can	MD	MD		8	aux	8:aux	O
+8	reach	reach	VB	VB		8	ROOT	8:ROOT	O
+9	Ambala	Ambala	NNP	NNP		8	dobj	8:dobj	O
+10	by	by	IN	IN		8	prep	_	O
+11	Jambu	Jambu	NNP	NNP		13	nn	13:nn	O
+12	Tayoue	Tayoue	NNP	NNP		13	nn	13:nn	O
+13	express	express	NN	NN		10	pobj	8:prep_by	O
+14	.	.	.	.		8	punct	8:punct	O
+
+# sent_id = http://attractivespot.blogspot.com/2012/03/sangla-vallay-in-himachal-in-india.html#6
+# text = Ambala is 150 kilometer away from Simla .
+0	Ambala	Ambala	NNP	NNP		3	nsubj	3:nsubj	B-Location
+1	is	be	VBZ	VBZ		3	cop	3:cop	O
+2	150	150	CD	CD		3	num	3:num	O
+3	kilometer	kilometer	NN	NN		3	ROOT	3:ROOT	O
+4	away	away	RB	RB		3	advmod	3:advmod	O
+5	from	from	IN	IN		4	dep	4:dep	O
+6	Simla	Simla	NNP	NNP		5	pobj	5:pobj	O
+7	.	.	.	.		3	punct	3:punct	O
+
+# sent_id = http://attractivespot.blogspot.com/2012/03/sangla-vallay-in-himachal-in-india.html#7
+# text = From here you can go by bus or Topri .
+0	From	from	IN	IN		4	prep	_	O
+1	here	here	RB	RB		0	pobj	4:prep_from	O
+2	you	you	PRP	PRP		4	nsubj	4:nsubj	O
+3	can	can	MD	MD		4	aux	4:aux	O
+4	go	go	VB	VB		4	ROOT	4:ROOT	O
+5	by	by	IN	IN		4	prep	_	O
+6	bus	bus	NN	NN		5	pobj	4:prep_by	O
+7	or	or	CC	CC		6	cc	_	O
+8	Topri	Topri	NNP	NNP		6	conj	4:prep_by	B-Person
+9	.	.	.	.		4	punct	4:punct	O
+
+# sent_id = http://attractivespot.blogspot.com/2012/03/sangla-vallay-in-himachal-in-india.html#8
+# text = From here you will go to Sangla .
+0	From	from	IN	IN		4	prep	_	O
+1	here	here	RB	RB		0	pobj	4:prep_from	O
+2	you	you	PRP	PRP		4	nsubj	4:nsubj	O
+3	will	will	MD	MD		4	aux	4:aux	O
+4	go	go	VB	VB		4	ROOT	4:ROOT	O
+5	to	to	TO	TO		4	prep	_	O
+6	Sangla	Sangla	NNP	NNP		5	pobj	4:prep_to	B-Location
+7	.	.	.	.		4	punct	4:punct	O
+
+# sent_id = http://attractivespot.blogspot.com/2012/03/sangla-vallay-in-himachal-in-india.html#9
+# text = Where you stay : You can stay Topri,Rampur,Sangla and any other places.At you want to stay in full time.You will get better facility in HTPDC Kinnar hotel.On the other hand if you want to stay in Cheaper hotel,You can go hotel Darmitary.
+0	Where	where	WRB	WRB		2	advmod	2:advmod	O
+1	you	you	PRP	PRP		2	nsubj	2:nsubj	O
+2	stay	stay	VB	VB		2	ROOT	2:ROOT	O
+3	:	:	:	:		2	punct	2:punct	O
+4	You	you	PRP	PRP		6	nsubj	6:nsubj	O
+5	can	can	MD	MD		6	aux	6:aux	O
+6	stay	stay	VB	VB		2	parataxis	2:parataxis	O
+7	Topri	Topri	NNP	NNP		6	dobj	6:dobj	B-Person
+8	,	,	,	,		7	punct	7:punct	O
+9	Rampur	Rampur	NNP	NNP		7	conj	6:dobj	O
+10	,	,	,	,		7	punct	7:punct	O
+11	Sangla	Sangla	NNP	NNP		7	conj	6:dobj	O
+12	and	and	CC	CC		7	cc	_	O
+13	any	any	DT	DT		15	det	15:det	O
+14	other	other	JJ	JJ		15	amod	15:amod	O
+15	places.At	places.at	NN	NN		7	conj	6:dobj	O
+16	you	you	PRP	PRP		17	nsubj	17:nsubj	O
+17	want	want	VBP	VBP		6	dep	6:dep	O
+18	to	to	TO	TO		19	aux	19:aux	O
+19	stay	stay	VB	VB		17	xcomp	17:xcomp	O
+20	in	in	IN	IN		19	prep	_	O
+21	full	full	JJ	JJ		22	amod	22:amod	O
+22	time.You	time.you	NNS	NNS		20	pobj	19:prep_in	O
+23	will	will	MD	MD		24	aux	24:aux	O
+24	get	get	VB	VB		17	xcomp	17:xcomp	O
+25	better	better	JJR	JJR		26	amod	26:amod	O
+26	facility	facility	NN	NN		24	dobj	24:dobj	O
+27	in	in	IN	IN		26	prep	_	O
+28	HTPDC	HTPDC	NNP	NNP		29	nn	29:nn	O
+29	Kinnar	Kinnar	NNP	NNP		27	pobj	26:prep_in	O
+30	hotel.On	hotel.on	IN	IN		24	prep	_	O
+31	the	the	DT	DT		33	det	33:det	O
+32	other	other	JJ	JJ		33	amod	33:amod	O
+33	hand	hand	NN	NN		30	pobj	24:prep_hotel.on	O
+34	if	if	IN	IN		36	mark	36:mark	O
+35	you	you	PRP	PRP		36	nsubj	36:nsubj	O
+36	want	want	VBP	VBP		24	advcl	24:advcl	O
+37	to	to	TO	TO		38	aux	38:aux	O
+38	stay	stay	VB	VB		36	xcomp	36:xcomp	O
+39	in	in	IN	IN		38	prep	_	O
+40	Cheaper	Cheaper	NNP	NNP		41	nn	41:nn	O
+41	hotel	hotel	NN	NN		39	pobj	38:prep_in	O
+42	,	,	,	,		6	punct	6:punct	O
+43	You	you	PRP	PRP		45	nsubj	45:nsubj	O
+44	can	can	MD	MD		45	aux	45:aux	O
+45	go	go	VB	VB		6	ccomp	6:ccomp	O
+46	hotel	hotel	NN	NN		47	nn	47:nn	O
+47	Darmitary	Darmitary	NNP	NNP		45	dobj	45:dobj	O
+48	.	.	.	.		2	punct	2:punct	O
+
+# sent_id = http://attractivespot.blogspot.com/2012/03/sangla-vallay-in-himachal-in-india.html#10
+# text = The things which you see in Sangla : The most super fine area is kinnar in Himalaya .
+0	The	the	DT	DT		1	det	1:det	O
+1	things	thing	NNS	NNS		1	ROOT	1:ROOT	O
+2	which	which	WDT	WDT		4	dobj	4:dobj	O
+3	you	you	PRP	PRP		4	nsubj	4:nsubj	O
+4	see	see	VBP	VBP		1	rcmod	1:rcmod	O
+5	in	in	IN	IN		4	prep	_	O
+6	Sangla	Sangla	NNP	NNP		5	pobj	4:prep_in	B-Location
+7	:	:	:	:		1	punct	1:punct	O
+8	The	the	DT	DT		12	det	12:det	O
+9	most	most	RBS	RBS		10	advmod	10:advmod	O
+10	super	super	JJ	JJ		12	amod	12:amod	O
+11	fine	fine	JJ	JJ		12	amod	12:amod	O
+12	area	area	NN	NN		14	nsubj	14:nsubj	O
+13	is	be	VBZ	VBZ		14	cop	14:cop	O
+14	kinnar	kinnar	JJ	JJ		1	dep	1:dep	O
+15	in	in	IN	IN		14	prep	_	O
+16	Himalaya	Himalaya	NNP	NNP		15	pobj	14:prep_in	O
+17	.	.	.	.		1	punct	1:punct	O
+
+# sent_id = http://attractivespot.blogspot.com/2012/03/sangla-vallay-in-himachal-in-india.html#11
+# text = Where you will go in this Valley surely you will get much pleasure Remember that this country in for kinnar and kinnary .
+0	Where	where	WRB	WRB		3	advmod	3:advmod	O
+1	you	you	PRP	PRP		3	nsubj	3:nsubj	O
+2	will	will	MD	MD		3	aux	3:aux	O
+3	go	go	VB	VB		3	ROOT	3:ROOT	O
+4	in	in	IN	IN		3	prep	_	O
+5	this	this	DT	DT		6	det	6:det	O
+6	Valley	Valley	NNP	NNP		4	pobj	3:prep_in	O
+7	surely	surely	RB	RB		10	advmod	10:advmod	O
+8	you	you	PRP	PRP		10	nsubj	10:nsubj	O
+9	will	will	MD	MD		10	aux	10:aux	O
+10	get	get	VB	VB		3	dep	3:dep	O
+11	much	much	JJ	JJ		12	amod	12:amod	O
+12	pleasure	pleasure	NN	NN		13	nsubj	13:nsubj	O
+13	Remember	remember	VB	VB		10	xcomp	10:xcomp	O
+14	that	that	IN	IN		13	prep	_	O
+15	this	this	DT	DT		16	det	16:det	O
+16	country	country	NN	NN		14	pobj	13:prep_that	O
+17	in	in	IN	IN		16	prep	16:prep	O
+18	for	for	IN	IN		17	dep	16:dep	O
+19	kinnar	kinnar	NN	NN		18	pobj	18:pobj	O
+20	and	and	CC	CC		19	cc	_	O
+21	kinnary	kinnary	NN	NN		19	conj	19:conj_and	O
+22	.	.	.	.		3	punct	3:punct	O
+
+# sent_id = http://attractivespot.blogspot.com/2012/03/sangla-vallay-in-himachal-in-india.html#12
+# text = Kinnary social life are fulfilled with dancing and singing.The large qualities houses are as like as Buddist temple.You will go through the way.The way of the village are made of stone.But the main roads are made of pitch.
+0	Kinnary	Kinnary	NNP	NNP		2	nn	2:nn	O
+1	social	social	JJ	JJ		2	amod	2:amod	O
+2	life	life	NN	NN		4	nsubjpass	4:nsubjpass	O
+3	are	be	VBP	VBP		4	auxpass	4:auxpass	O
+4	fulfilled	fulfil	VBN	VBN		19	dep	19:dep	O
+5	with	with	IN	IN		4	prep	_	O
+6	dancing	dancing	NN	NN		5	pobj	4:prep_with	O
+7	and	and	CC	CC		6	cc	_	O
+8	singing.The	singing.the	DT	DT		11	det	11:det	O
+9	large	large	JJ	JJ		11	amod	11:amod	O
+10	qualities	quality	NNS	NNS		11	nn	11:nn	O
+11	houses	house	NNS	NNS		6	conj	4:prep_with	O
+12	are	be	VBP	VBP		19	nsubj	19:nsubj	O
+13	as	as	RB	RB		14	dep	12:dep	O
+14	like	like	IN	IN		12	prep	12:prep	O
+15	as	as	IN	IN		14	dep	12:dep	O
+16	Buddist	Buddist	NNP	NNP		17	nn	17:nn	O
+17	temple.You	temple.you	NNS	NNS		15	pobj	15:pobj	O
+18	will	will	MD	MD		19	aux	19:aux	O
+19	go	go	VB	VB		28	nsubjpass	28:nsubjpass	O
+20	through	through	IN	IN		19	prep	_	O
+21	the	the	DT	DT		23	det	23:det	O
+22	way.The	way.the	JJ	JJ		23	amod	23:amod	O
+23	way	way	NN	NN		20	pobj	19:prep_through	O
+24	of	of	IN	IN		23	prep	_	O
+25	the	the	DT	DT		26	det	26:det	O
+26	village	village	NN	NN		24	pobj	23:prep_of	O
+27	are	be	VBP	VBP		28	auxpass	28:auxpass	O
+28	made	make	VBN	VBN		28	ROOT	28:ROOT	O
+29	of	of	IN	IN		28	prep	_	O
+30	stone.But	stone.but	NN	NN		29	pobj	28:prep_of	O
+31	the	the	DT	DT		33	det	33:det	O
+32	main	main	JJ	JJ		33	amod	33:amod	O
+33	roads	road	NNS	NNS		35	nsubjpass	35:nsubjpass	O
+34	are	be	VBP	VBP		35	auxpass	35:auxpass	O
+35	made	make	VBN	VBN		28	xcomp	28:xcomp	O
+36	of	of	IN	IN		35	prep	_	O
+37	pitch	pitch	NN	NN		36	pobj	35:prep_of	O
+38	.	.	.	.		28	punct	28:punct	O
+
+# sent_id = http://attractivespot.blogspot.com/2012/03/sangla-vallay-in-himachal-in-india.html#13
+# text = The roads are not straight.Kinnar is another charming area in hilly region .
+0	The	the	DT	DT		1	det	1:det	O
+1	roads	road	NNS	NNS		4	nsubj	4:nsubj	O
+2	are	be	VBP	VBP		4	cop	4:cop	O
+3	not	not	RB	RB		4	neg	4:neg	O
+4	straight.Kinnar	straight.kinnar	JJ	JJ		8	nsubj	8:nsubj	O
+5	is	be	VBZ	VBZ		8	cop	8:cop	O
+6	another	another	DT	DT		8	det	8:det	O
+7	charming	charming	JJ	JJ		8	amod	8:amod	O
+8	area	area	NN	NN		8	ROOT	8:ROOT	O
+9	in	in	IN	IN		8	prep	_	O
+10	hilly	hilly	JJ	JJ		11	amod	11:amod	O
+11	region	region	NN	NN		9	pobj	8:prep_in	O
+12	.	.	.	.		8	punct	8:punct	O
+
+# sent_id = http://attractivespot.blogspot.com/2012/03/sangla-vallay-in-himachal-in-india.html#14
+# text = Sangla is a large village.Generally their house are made of wood.Rampur is very Beautiful Place .
+0	Sangla	Sangla	NNP	NNP		8	nsubjpass	8:nsubjpass	O
+1	is	be	VBZ	VBZ		8	auxpass	8:auxpass	O
+2	a	a	DT	DT		8	nsubjpass	8:nsubjpass	O
+3	large	large	JJ	JJ		2	amod	2:amod	O
+4	village.Generally	village.generally	RB	RB		3	advmod	3:advmod	O
+5	their	they	PRP$	PRP$		6	poss	6:poss	O
+6	house	house	NN	NN		3	dep	3:dep	O
+7	are	be	VBP	VBP		8	auxpass	8:auxpass	O
+8	made	make	VBN	VBN		8	ROOT	8:ROOT	O
+9	of	of	IN	IN		8	prep	_	O
+10	wood.Rampur	wood.rampur	NN	NN		9	pobj	8:prep_of	O
+11	is	be	VBZ	VBZ		14	cop	14:cop	O
+12	very	very	RB	RB		13	advmod	13:advmod	O
+13	Beautiful	beautiful	JJ	JJ		14	amod	14:amod	O
+14	Place	Place	NNP	NNP		8	tmod	8:tmod	O
+15	.	.	.	.		8	punct	8:punct	O
+
+# sent_id = http://attractivespot.blogspot.com/2012/03/sangla-vallay-in-himachal-in-india.html#15
+# text = The place of Rumpur is very charming.It stands on the Satadril river.Rumpur is the most important commercial area.You will be very pleased to see the Himalaya.Chitkul is another interesting place.Here are five peak of the mountains which is coverd with ice.You will become astonish to see it.
+0	The	the	DT	DT		1	det	1:det	O
+1	place	place	NN	NN		7	nsubj	7:nsubj	O
+2	of	of	IN	IN		1	prep	_	O
+3	Rumpur	Rumpur	NNP	NNP		2	pobj	1:prep_of	B-Location
+4	is	be	VBZ	VBZ		7	cop	7:cop	O
+5	very	very	RB	RB		6	advmod	6:advmod	O
+6	charming.It	charming.it	JJ	JJ		7	amod	7:amod	O
+7	stands	stand	NNS	NNS		17	nsubj	17:nsubj	O
+8	on	on	IN	IN		7	prep	_	O
+9	the	the	DT	DT		11	det	11:det	O
+10	Satadril	Satadril	NNP	NNP		11	nn	11:nn	O
+11	river.Rumpur	river.rumpur	NN	NN		8	pobj	7:prep_on	O
+12	is	be	VBZ	VBZ		17	cop	17:cop	O
+13	the	the	DT	DT		17	det	17:det	O
+14	most	most	RBS	RBS		15	advmod	15:advmod	O
+15	important	important	JJ	JJ		17	amod	17:amod	O
+16	commercial	commercial	JJ	JJ		17	amod	17:amod	O
+17	area.You	area.you	NNS	NNS		21	nsubj	21:nsubj	O
+18	will	will	MD	MD		21	aux	21:aux	O
+19	be	be	VB	VB		21	cop	21:cop	O
+20	very	very	RB	RB		21	advmod	21:advmod	O
+21	pleased	pleased	JJ	JJ		21	ROOT	21:ROOT	O
+22	to	to	TO	TO		23	aux	23:aux	O
+23	see	see	VB	VB		21	xcomp	21:xcomp	O
+24	the	the	DT	DT		25	det	25:det	O
+25	Himalaya.Chitkul	Himalaya.Chitkul	NNP	NNP		29	nsubj	29:nsubj	O
+26	is	be	VBZ	VBZ		29	cop	29:cop	O
+27	another	another	DT	DT		29	det	29:det	O
+28	interesting	interesting	JJ	JJ		29	amod	29:amod	O
+29	place.Here	place.here	NN	NN		32	nsubj	32:nsubj	O
+30	are	be	VBP	VBP		32	cop	32:cop	O
+31	five	five	CD	CD		32	num	32:num	O
+32	peak	peak	NN	NN		43	nsubj	43:nsubj	O
+33	of	of	IN	IN		32	prep	_	O
+34	the	the	DT	DT		35	det	35:det	O
+35	mountains	mountain	NNS	NNS		33	pobj	32:prep_of	O
+36	which	which	WDT	WDT		38	nsubjpass	38:nsubjpass	O
+37	is	be	VBZ	VBZ		38	auxpass	38:auxpass	O
+38	coverd	coverd	VBN	VBN		35	rcmod	35:rcmod	O
+39	with	with	IN	IN		38	prep	_	O
+40	ice.You	ice.you	PRP	PRP		39	pobj	38:prep_with	O
+41	will	will	MD	MD		43	aux	43:aux	O
+42	become	become	VB	VB		43	cop	43:cop	O
+43	astonish	astonish	JJ	JJ		23	ccomp	23:ccomp	O
+44	to	to	TO	TO		45	aux	45:aux	O
+45	see	see	VB	VB		43	xcomp	43:xcomp	O
+46	it	it	PRP	PRP		45	dobj	45:dobj	O
+47	.	.	.	.		21	punct	21:punct	O
+
+# sent_id = http://attractivespot.blogspot.com/2012/03/sangla-vallay-in-himachal-in-india.html#16
+# text = Other information : Sangla Valley is very fine for the tourists .
+0	Other	other	JJ	JJ		1	amod	1:amod	O
+1	information	information	NN	NN		1	ROOT	1:ROOT	O
+2	:	:	:	:		1	punct	1:punct	O
+3	Sangla	Sangla	NNP	NNP		4	nn	4:nn	B-Location
+4	Valley	Valley	NNP	NNP		7	nsubj	7:nsubj	I-Location
+5	is	be	VBZ	VBZ		7	cop	7:cop	O
+6	very	very	RB	RB		7	advmod	7:advmod	O
+7	fine	fine	JJ	JJ		1	parataxis	1:parataxis	O
+8	for	for	IN	IN		7	prep	_	O
+9	the	the	DT	DT		10	det	10:det	O
+10	tourists	tourist	NNS	NNS		8	pobj	7:prep_for	O
+11	.	.	.	.		1	punct	1:punct	O
+
+# sent_id = http://attractivespot.blogspot.com/2012/03/sangla-vallay-in-himachal-in-india.html#17
+# text = So it is called the heaven of travelers.Fafra,Opla,Chathu,Chuly,Bumy,Kathbadam,Thilgoja and Jafran are cultivated throught out the Valley.The most important and interesting time for travelling is the month of March to June.
+0	So	so	IN	IN		3	dep	3:dep	O
+1	it	it	PRP	PRP		3	nsubjpass	3:nsubjpass	O
+2	is	be	VBZ	VBZ		3	auxpass	3:auxpass	O
+3	called	call	VBN	VBN		37	csubj	37:csubj	O
+4	the	the	DT	DT		5	det	5:det	O
+5	heaven	heaven	NN	NN		3	dobj	3:dobj	O
+6	of	of	IN	IN		5	prep	_	O
+7	travelers.Fafra	travelers.fafra	NN	NN		6	pobj	5:prep_of	O
+8	,	,	,	,		7	punct	7:punct	O
+9	Opla	Opla	NNP	NNP		7	conj	5:prep_of	B-Person
+10	,	,	,	,		9	punct	9:punct	O
+11	Chathu	Chathu	NNP	NNP		9	conj	9:conj	O
+12	,	,	,	,		9	punct	9:punct	O
+13	Chuly	Chuly	NNP	NNP		9	conj	9:conj	O
+14	,	,	,	,		9	punct	9:punct	O
+15	Bumy	Bumy	NNP	NNP		9	conj	9:conj	O
+16	,	,	,	,		9	punct	9:punct	O
+17	Kathbadam	Kathbadam	NNP	NNP		9	conj	9:conj	O
+18	,	,	,	,		7	punct	7:punct	O
+19	Thilgoja	Thilgoja	NNP	NNP		7	conj	5:prep_of	O
+20	and	and	CC	CC		7	cc	_	O
+21	Jafran	Jafran	NNP	NNP		7	conj	5:prep_of	O
+22	are	be	VBP	VBP		23	auxpass	23:auxpass	O
+23	cultivated	cultivate	VBN	VBN		3	xcomp	3:xcomp	O
+24	throught	throught	VBN	VBN		23	partmod	23:partmod	O
+25	out	out	IN	IN		24	prep	_	O
+26	the	the	DT	DT		32	det	32:det	O
+27	Valley.The	Valley.The	NNP	NNP		29	dep	29:dep	O
+28	most	most	RBS	RBS		29	advmod	29:advmod	O
+29	important	important	JJ	JJ		32	amod	32:amod	O
+30	and	and	CC	CC		29	cc	_	O
+31	interesting	interesting	JJ	JJ		29	conj	29:conj_and	O
+32	time	time	NN	NN		25	pobj	24:prep_out	O
+33	for	for	IN	IN		32	prep	_	O
+34	travelling	travelling	NN	NN		33	pobj	32:prep_for	O
+35	is	be	VBZ	VBZ		37	cop	37:cop	O
+36	the	the	DT	DT		37	det	37:det	O
+37	month	month	NN	NN		37	ROOT	37:ROOT	O
+38	of	of	IN	IN		37	prep	_	O
+39	March	March	NNP	NNP		38	pobj	37:prep_of	O
+40	to	to	TO	TO		37	prep	_	O
+41	June	June	NNP	NNP		40	pobj	37:prep_to	O
+42	.	.	.	.		37	punct	37:punct	O
+
+# newdoc	url = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66	s3 = s3://aws-publicdatasets/common-crawl/crawl-data/CC-MAIN-2016-07/segments/1454702032759.79/warc/CC-MAIN-20160205195352-00188-ip-10-236-182-209.ec2.internal.warc.gz
+
+# sent_id = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66#1
+# text = Abstract .
+0	Abstract	abstract	NN	NN		0	ROOT	0:ROOT	O
+1	.	.	.	.		0	punct	0:punct	O
+
+# sent_id = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66#2
+# text = We discuss univalent solutions of boundary fractional differential equations in a complex domain.
+0	We	we	PRP	PRP		1	nsubj	1:nsubj	O
+1	discuss	discuss	VBP	VBP		1	ROOT	1:ROOT	O
+2	univalent	univalent	JJ	JJ		3	amod	3:amod	O
+3	solutions	solution	NNS	NNS		1	dobj	1:dobj	O
+4	of	of	IN	IN		3	prep	_	O
+5	boundary	boundary	NN	NN		8	nn	8:nn	O
+6	fractional	fractional	JJ	JJ		8	amod	8:amod	O
+7	differential	differential	JJ	JJ		8	amod	8:amod	O
+8	equations	equation	NNS	NNS		4	pobj	3:prep_of	O
+9	in	in	IN	IN		1	prep	_	O
+10	a	a	DT	DT		12	det	12:det	O
+11	complex	complex	JJ	JJ		12	amod	12:amod	O
+12	domain	domain	NN	NN		9	pobj	1:prep_in	O
+13	.	.	.	.		1	punct	1:punct	O
+
+# sent_id = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66#3
+# text = The fractional operators are taken in the sense of the Srivastava-Owa calculus in the unit disk.
+0	The	the	DT	DT		2	det	2:det	O
+1	fractional	fractional	JJ	JJ		2	amod	2:amod	O
+2	operators	operator	NNS	NNS		4	nsubjpass	4:nsubjpass	O
+3	are	be	VBP	VBP		4	auxpass	4:auxpass	O
+4	taken	take	VBN	VBN		4	ROOT	4:ROOT	O
+5	in	in	IN	IN		4	prep	_	O
+6	the	the	DT	DT		7	det	7:det	O
+7	sense	sense	NN	NN		5	pobj	4:prep_in	O
+8	of	of	IN	IN		7	prep	_	O
+9	the	the	DT	DT		11	det	11:det	O
+10	Srivastava-Owa	Srivastava-Owa	NNP	NNP		11	nn	11:nn	O
+11	calculus	calculus	NN	NN		8	pobj	7:prep_of	O
+12	in	in	IN	IN		4	prep	_	O
+13	the	the	DT	DT		15	det	15:det	O
+14	unit	unit	NN	NN		15	nn	15:nn	O
+15	disk	disk	NN	NN		12	pobj	4:prep_in	O
+16	.	.	.	.		4	punct	4:punct	O
+
+# sent_id = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66#4
+# text = The existence of subsolutions and supersolutions (maximal and minimal) is established.
+0	The	the	DT	DT		1	det	1:det	O
+1	existence	existence	NN	NN		1	ROOT	1:ROOT	O
+2	of	of	IN	IN		1	prep	_	O
+3	subsolutions	subsolution	NNS	NNS		2	pobj	1:prep_of	O
+4	and	and	CC	CC		3	cc	_	O
+5	supersolutions	supersolution	NNS	NNS		3	conj	1:prep_of	O
+6	(	-lrb-	-LRB-	-LRB-		1	dep	1:dep	O
+7	maximal	maximal	NN	NN		6	dep	6:dep	O
+8	and	and	CC	CC		7	cc	_	O
+9	minimal	minimal	JJ	JJ		7	conj	7:conj_and	O
+10	)	-rrb-	-RRB-	-RRB-		12	nsubjpass	12:nsubjpass	O
+11	is	be	VBZ	VBZ		12	auxpass	12:auxpass	O
+12	established	establish	VBN	VBN		7	rcmod	7:rcmod	O
+13	.	.	.	.		1	punct	1:punct	O
+
+# sent_id = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66#5
+# text = The existence of a unique univalent solution is imposed.
+0	The	the	DT	DT		1	det	1:det	O
+1	existence	existence	NN	NN		8	nsubjpass	8:nsubjpass	O
+2	of	of	IN	IN		1	prep	_	O
+3	a	a	DT	DT		6	det	6:det	O
+4	unique	unique	JJ	JJ		6	amod	6:amod	O
+5	univalent	univalent	JJ	JJ		6	amod	6:amod	O
+6	solution	solution	NN	NN		2	pobj	1:prep_of	O
+7	is	be	VBZ	VBZ		8	auxpass	8:auxpass	O
+8	imposed	impose	VBN	VBN		8	ROOT	8:ROOT	O
+9	.	.	.	.		8	punct	8:punct	O
+
+# sent_id = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66#6
+# text = Applications are constructed by making use of a transformation formula for fractional derivatives as well as generalized fractional derivatives.
+0	Applications	application	NNS	NNS		2	nsubjpass	2:nsubjpass	O
+1	are	be	VBP	VBP		2	auxpass	2:auxpass	O
+2	constructed	construct	VBN	VBN		2	ROOT	2:ROOT	O
+3	by	by	IN	IN		2	prep	_	O
+4	making	make	VBG	VBG		3	pcomp	2:agent	O
+5	use	use	NN	NN		4	dobj	4:dobj	O
+6	of	of	IN	IN		5	prep	_	O
+7	a	a	DT	DT		9	det	9:det	O
+8	transformation	transformation	NN	NN		9	nn	9:nn	O
+9	formula	formula	NN	NN		6	pobj	5:prep_of	O
+10	for	for	IN	IN		9	prep	_	O
+11	fractional	fractional	JJ	JJ		12	amod	12:amod	O
+12	derivatives	derivative	NNS	NNS		10	pobj	9:prep_for	O
+13	as	as	RB	RB		14	dep	_	O
+14	well	well	RB	RB		9	cc	9:cc	O
+15	as	as	IN	IN		14	dep	_	O
+16	generalized	generalized	JJ	JJ		18	amod	18:amod	O
+17	fractional	fractional	JJ	JJ		18	amod	18:amod	O
+18	derivatives	derivative	NNS	NNS		9	conj	5:prep_of	O
+19	.	.	.	.		2	punct	2:punct	O
+
+# sent_id = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66#7
+# text = 1 Introduction .
+0	1	1	CD	CD		1	num	1:num	O
+1	Introduction	introduction	NN	NN		1	ROOT	1:ROOT	O
+2	.	.	.	.		1	punct	1:punct	O
+
+# sent_id = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66#8
+# text = Fractional calculus is the most significant branch of mathematical analysis that transacts with the potential of covering real number powers or complex number powers of the differentiation operator .
+0	Fractional	Fractional	NNP	NNP		1	nn	1:nn	O
+1	calculus	calculus	NN	NN		6	nsubj	6:nsubj	O
+2	is	be	VBZ	VBZ		6	cop	6:cop	O
+3	the	the	DT	DT		6	det	6:det	O
+4	most	most	RBS	RBS		5	advmod	5:advmod	O
+5	significant	significant	JJ	JJ		6	amod	6:amod	O
+6	branch	branch	NN	NN		6	ROOT	6:ROOT	O
+7	of	of	IN	IN		6	prep	_	O
+8	mathematical	mathematical	JJ	JJ		9	amod	9:amod	O
+9	analysis	analysis	NN	NN		7	pobj	6:prep_of	O
+10	that	that	IN	IN		9	prep	_	O
+11	transacts	transact	NNS	NNS		10	pobj	9:prep_that	O
+12	with	with	IN	IN		11	prep	_	O
+13	the	the	DT	DT		14	det	14:det	O
+14	potential	potential	NN	NN		12	pobj	11:prep_with	O
+15	of	of	IN	IN		14	prep	_	O
+16	covering	cover	VBG	VBG		15	pcomp	14:prepc_of	O
+17	real	real	JJ	JJ		19	amod	19:amod	O
+18	number	number	NN	NN		19	nn	19:nn	O
+19	powers	power	NNS	NNS		16	dobj	16:dobj	O
+20	or	or	CC	CC		19	cc	_	O
+21	complex	complex	JJ	JJ		23	amod	23:amod	O
+22	number	number	NN	NN		23	nn	23:nn	O
+23	powers	power	NNS	NNS		19	conj	16:dobj	O
+24	of	of	IN	IN		19	prep	_	O
+25	the	the	DT	DT		27	det	27:det	O
+26	differentiation	differentiation	NN	NN		27	nn	27:nn	O
+27	operator	operator	NN	NN		24	pobj	19:prep_of	O
+28	.	.	.	.		6	punct	6:punct	O
+
+# sent_id = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66#9
+# text = D .
+0	D	D	NNP	NNP		0	ROOT	0:ROOT	O
+1	.	.	.	.		0	punct	0:punct	O
+
+# sent_id = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66#10
+# text = d .
+0	d	d	NN	NN		0	ROOT	0:ROOT	O
+1	.	.	.	.		0	punct	0:punct	O
+
+# sent_id = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66#11
+# text = d .
+0	d	d	NN	NN		0	ROOT	0:ROOT	O
+1	.	.	.	.		0	punct	0:punct	O
+
+# sent_id = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66#12
+# text = x .
+0	x	x	NN	NN		0	ROOT	0:ROOT	O
+1	.	.	.	.		0	punct	0:punct	O
+
+# sent_id = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66#13
+# text = This concept was harnessed in geometric function theory (GFT).
+0	This	this	DT	DT		1	det	1:det	O
+1	concept	concept	NN	NN		3	nsubjpass	3:nsubjpass	O
+2	was	be	VBD	VBD		3	auxpass	3:auxpass	O
+3	harnessed	harness	VBN	VBN		3	ROOT	3:ROOT	O
+4	in	in	IN	IN		3	prep	_	O
+5	geometric	geometric	JJ	JJ		7	amod	7:amod	O
+6	function	function	NN	NN		7	nn	7:nn	O
+7	theory	theory	NN	NN		4	pobj	3:prep_in	O
+8	(	-lrb-	-LRB-	-LRB-		7	dep	7:dep	O
+9	GFT	GFT	NNP	NNP		10	nn	10:nn	O
+10	)	-rrb-	-RRB-	-RRB-		8	dep	8:dep	O
+11	.	.	.	.		3	punct	3:punct	O
+
+# sent_id = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66#14
+# text = It was applied to derive different types of differential and integral operators mapping the class of univalent functions and its subclasses into themselves.
+0	It	it	PRP	PRP		2	nsubjpass	2:nsubjpass	O
+1	was	be	VBD	VBD		2	auxpass	2:auxpass	O
+2	applied	apply	VBN	VBN		2	ROOT	2:ROOT	O
+3	to	to	TO	TO		4	aux	4:aux	O
+4	derive	derive	VB	VB		2	xcomp	2:xcomp	O
+5	different	different	JJ	JJ		6	amod	6:amod	O
+6	types	type	NNS	NNS		4	dobj	4:dobj	O
+7	of	of	IN	IN		6	prep	_	O
+8	differential	differential	JJ	JJ		11	amod	11:amod	O
+9	and	and	CC	CC		8	cc	_	O
+10	integral	integral	JJ	JJ		8	conj	8:conj_and	O
+11	operators	operator	NNS	NNS		7	pobj	6:prep_of	O
+12	mapping	map	VBG	VBG		11	partmod	11:partmod	O
+13	the	the	DT	DT		14	det	14:det	O
+14	class	class	NN	NN		12	dobj	12:dobj	O
+15	of	of	IN	IN		14	prep	_	O
+16	univalent	univalent	JJ	JJ		17	amod	17:amod	O
+17	functions	function	NNS	NNS		15	pobj	14:prep_of	O
+18	and	and	CC	CC		17	cc	_	O
+19	its	its	PRP$	PRP$		20	poss	20:poss	O
+20	subclasses	subclass	NNS	NNS		17	conj	14:prep_of	O
+21	into	into	IN	IN		20	prep	_	O
+22	themselves	themselves	PRP	PRP		21	pobj	20:prep_into	O
+23	.	.	.	.		2	punct	2:punct	O
+
+# sent_id = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66#15
+# text = Hohlov [ 1 , 2 ] imposed sufficient conditions that guaranteed such mappings for the operators defined by means of the Hadamard product (or convolution) with Gauss hypergeometric functions.
+0	Hohlov	Hohlov	NNP	NNP		1	nn	1:nn	O
+1	[	-LSB-	NNP	NNP		1	ROOT	1:ROOT	O
+2	1	1	CD	CD		1	num	1:num	O
+3	,	,	,	,		1	punct	1:punct	O
+4	2	2	CD	CD		8	num	8:num	O
+5	]	-rsb-	JJ	JJ		8	amod	8:amod	O
+6	imposed	impose	VBN	VBN		8	amod	8:amod	O
+7	sufficient	sufficient	JJ	JJ		8	amod	8:amod	O
+8	conditions	condition	NNS	NNS		1	appos	1:appos	O
+9	that	that	WDT	WDT		10	nsubj	10:nsubj	O
+10	guaranteed	guarantee	VBD	VBD		8	rcmod	8:rcmod	O
+11	such	such	JJ	JJ		12	amod	12:amod	O
+12	mappings	mapping	NNS	NNS		10	dobj	10:dobj	O
+13	for	for	IN	IN		12	prep	_	O
+14	the	the	DT	DT		15	det	15:det	O
+15	operators	operator	NNS	NNS		13	pobj	12:prep_for	O
+16	defined	define	VBN	VBN		15	partmod	15:partmod	O
+17	by	by	IN	IN		16	prep	_	O
+18	means	means	NNS	NNS		17	pobj	16:prep_by	O
+19	of	of	IN	IN		18	prep	_	O
+20	the	the	DT	DT		22	det	22:det	O
+21	Hadamard	hadamard	JJ	JJ		22	amod	22:amod	O
+22	product	product	NN	NN		19	pobj	18:prep_of	O
+23	(	-lrb-	-LRB-	-LRB-		22	prep	22:prep	O
+24	or	or	CC	CC		23	cc	23:cc	O
+25	convolution	convolution	NN	NN		23	conj	18:prep_of	O
+26	)	-rrb-	-RRB-	-RRB-		10	prep	10:prep	O
+27	with	with	IN	IN		26	prep	_	O
+28	Gauss	Gauss	NNP	NNP		30	nn	30:nn	B-Person
+29	hypergeometric	hypergeometric	JJ	JJ		30	amod	30:amod	O
+30	functions	function	NNS	NNS		27	pobj	10:prep_with	O
+31	.	.	.	.		1	punct	1:punct	O
+
+# sent_id = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66#16
+# text = These techniques can be used to display sufficient conditions that guarantee mapping of univalent functions (or, respectively, of convex functions) into univalent functions.
+0	These	these	DT	DT		1	det	1:det	O
+1	techniques	technique	NNS	NNS		4	nsubjpass	4:nsubjpass	O
+2	can	can	MD	MD		4	aux	4:aux	O
+3	be	be	VB	VB		4	auxpass	4:auxpass	O
+4	used	use	VBN	VBN		4	ROOT	4:ROOT	O
+5	to	to	TO	TO		6	aux	6:aux	O
+6	display	display	VB	VB		4	purpcl	4:purpcl	O
+7	sufficient	sufficient	JJ	JJ		8	amod	8:amod	O
+8	conditions	condition	NNS	NNS		6	dobj	6:dobj	O
+9	that	that	WDT	WDT		10	nsubj	10:nsubj	O
+10	guarantee	guarantee	VBP	VBP		8	rcmod	8:rcmod	O
+11	mapping	mapping	NN	NN		10	dobj	10:dobj	O
+12	of	of	IN	IN		11	prep	_	O
+13	univalent	univalent	JJ	JJ		14	amod	14:amod	O
+14	functions	function	NNS	NNS		12	pobj	11:prep_of	O
+15	(	-lrb-	-LRB-	-LRB-		14	dep	14:dep	O
+16	or	or	CC	CC		15	cc	_	O
+17	,	,	,	,		18	punct	18:punct	O
+18	respectively	respectively	RB	RB		20	dep	20:dep	O
+19	,	,	,	,		18	punct	18:punct	O
+20	of	of	IN	IN		15	conj	15:conj_or	O
+21	convex	convex	JJ	JJ		22	amod	22:amod	O
+22	functions	function	NNS	NNS		20	pobj	20:pobj	O
+23	)	-rrb-	-RRB-	-RRB-		20	dep	20:dep	O
+24	into	into	IN	IN		23	prep	_	O
+25	univalent	univalent	JJ	JJ		26	amod	26:amod	O
+26	functions	function	NNS	NNS		24	pobj	23:prep_into	O
+27	.	.	.	.		4	punct	4:punct	O
+
+# sent_id = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66#17
+# text = For example, for the case of Dziok-Srivastava operator see [ 6 ], and for an extension to the Wright functions see [ 7 ] which is concerned with the Srivastava-Wright operator.
+0	For	for	IN	IN		9	prep	_	O
+1	example	example	NN	NN		0	pobj	9:prep_for	O
+2	,	,	,	,		9	punct	9:punct	O
+3	for	for	IN	IN		9	prep	_	O
+4	the	the	DT	DT		5	det	5:det	O
+5	case	case	NN	NN		3	pobj	9:prep_for	O
+6	of	of	IN	IN		5	prep	_	O
+7	Dziok-Srivastava	Dziok-Srivastava	NNP	NNP		8	nn	8:nn	O
+8	operator	operator	NN	NN		6	pobj	5:prep_of	O
+9	see	see	VBP	VBP		9	ROOT	9:ROOT	O
+10	[	-lsb-	RB	RB		12	advmod	12:advmod	O
+11	6	6	CD	CD		12	num	12:num	O
+12	]	-rsb-	NN	NN		9	dobj	9:dobj	O
+13	,	,	,	,		9	punct	9:punct	O
+14	and	and	CC	CC		9	cc	_	O
+15	for	for	IN	IN		22	prep	_	O
+16	an	a	DT	DT		17	det	17:det	O
+17	extension	extension	NN	NN		15	pobj	22:prep_for	O
+18	to	to	TO	TO		17	prep	_	O
+19	the	the	DT	DT		21	det	21:det	O
+20	Wright	Wright	NNP	NNP		21	nn	21:nn	B-Person
+21	functions	function	NNS	NNS		18	pobj	17:prep_to	O
+22	see	see	VBP	VBP		9	conj	9:conj_and	O
+23	[	-lsb-	NN	NN		25	nn	25:nn	O
+24	7	7	CD	CD		25	num	25:num	O
+25	]	-rsb-	NN	NN		22	dobj	22:dobj	O
+26	which	which	WDT	WDT		28	nsubjpass	28:nsubjpass	O
+27	is	be	VBZ	VBZ		28	auxpass	28:auxpass	O
+28	concerned	concern	VBN	VBN		25	rcmod	25:rcmod	O
+29	with	with	IN	IN		28	prep	_	O
+30	the	the	DT	DT		32	det	32:det	O
+31	Srivastava-Wright	srivastava-wright	JJ	JJ		32	amod	32:amod	O
+32	operator	operator	NN	NN		29	pobj	28:prep_with	O
+33	.	.	.	.		9	punct	9:punct	O
+
+# sent_id = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66#18
+# text = With the help of operators introduced in [ 6 ] and [ 7 ] one can establish univalence criteria for a large number of operators in GFT and GFC and for many of their special cases such as operators of the classical fractional calculus.
+0	With	with	IN	IN		0	ROOT	0:ROOT	O
+1	the	the	DT	DT		2	det	2:det	O
+2	help	help	NN	NN		0	pobj	0:pobj	O
+3	of	of	IN	IN		2	prep	_	O
+4	operators	operator	NNS	NNS		3	pobj	2:prep_of	O
+5	introduced	introduce	VBN	VBN		4	partmod	4:partmod	O
+6	in	in	IN	IN		5	prep	_	O
+7	[	-LSB-	NNP	NNP		9	nn	9:nn	O
+8	6	6	CD	CD		9	num	9:num	O
+9	]	-rsb-	NN	NN		6	pobj	5:prep_in	O
+10	and	and	CC	CC		9	cc	_	O
+11	[	-lsb-	NN	NN		13	nn	13:nn	O
+12	7	7	CD	CD		13	num	13:num	O
+13	]	-rsb-	NN	NN		9	conj	5:prep_in	O
+14	one	one	CD	CD		16	nsubj	16:nsubj	O
+15	can	can	MD	MD		16	aux	16:aux	O
+16	establish	establish	VB	VB		13	rcmod	13:rcmod	O
+17	univalence	univalence	NN	NN		18	nn	18:nn	O
+18	criteria	criterion	NNS	NNS		16	dobj	16:dobj	O
+19	for	for	IN	IN		18	prep	_	O
+20	a	a	DT	DT		22	det	22:det	O
+21	large	large	JJ	JJ		22	amod	22:amod	O
+22	number	number	NN	NN		19	pobj	18:prep_for	O
+23	of	of	IN	IN		22	prep	_	O
+24	operators	operator	NNS	NNS		23	pobj	22:prep_of	O
+25	in	in	IN	IN		24	prep	_	O
+26	GFT	GFT	NNP	NNP		25	pobj	24:prep_in	B-Organization
+27	and	and	CC	CC		26	cc	_	O
+28	GFC	GFC	NNP	NNP		26	conj	24:prep_in	O
+29	and	and	CC	CC		25	cc	25:cc	O
+30	for	for	IN	IN		25	conj	22:prep_of	O
+31	many	many	JJ	JJ		30	pobj	24:prep_for	O
+32	of	of	IN	IN		31	prep	_	O
+33	their	they	PRP$	PRP$		35	poss	35:poss	O
+34	special	special	JJ	JJ		35	amod	35:amod	O
+35	cases	case	NNS	NNS		32	pobj	31:prep_of	O
+36	such	such	JJ	JJ		37	dep	35:dep	O
+37	as	as	IN	IN		35	prep	_	O
+38	operators	operator	NNS	NNS		37	pobj	35:prep_as	O
+39	of	of	IN	IN		38	prep	_	O
+40	the	the	DT	DT		43	det	43:det	O
+41	classical	classical	JJ	JJ		43	amod	43:amod	O
+42	fractional	fractional	JJ	JJ		43	amod	43:amod	O
+43	calculus	calculus	NN	NN		39	pobj	38:prep_of	O
+44	.	.	.	.		0	punct	0:punct	O
+
+# sent_id = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66#19
+# text = Srivastava and Owa [ 8 ] generalized the definitions of fractional operators as follows.
+0	Srivastava	Srivastava	NNP	NNP		0	ROOT	0:ROOT	B-Person
+1	and	and	CC	CC		0	cc	_	O
+2	Owa	Owa	NNP	NNP		6	nsubj	6:nsubj	O
+3	[	-lsb-	,	,		6	punct	6:punct	O
+4	8	8	CD	CD		5	num	5:num	O
+5	]	-rsb-	SYM	SYM		6	nsubj	6:nsubj	O
+6	generalized	generalize	VBD	VBD		0	conj	0:conj_and	O
+7	the	the	DT	DT		8	det	8:det	O
+8	definitions	definition	NNS	NNS		6	dobj	6:dobj	O
+9	of	of	IN	IN		8	prep	_	O
+10	fractional	fractional	JJ	JJ		11	amod	11:amod	O
+11	operators	operator	NNS	NNS		9	pobj	8:prep_of	O
+12	as	as	IN	IN		6	prep	_	O
+13	follows	follow	VBZ	VBZ		12	pobj	6:prep_as	O
+14	.	.	.	.		0	punct	0:punct	O
+
+# sent_id = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66#20
+# text = Definition 1.1 For the function .
+0	Definition	Definition	NNP	NNP		0	ROOT	0:ROOT	O
+1	1.1	1.1	CD	CD		0	num	0:num	O
+2	For	for	IN	IN		0	prep	_	O
+3	the	the	DT	DT		4	det	4:det	O
+4	function	function	NN	NN		2	pobj	0:prep_for	O
+5	.	.	.	.		0	punct	0:punct	O
+
+# sent_id = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66#21
+# text = f .
+0	f	f	NN	NN		0	ROOT	0:ROOT	O
+1	.	.	.	.		0	punct	0:punct	O
+
+# sent_id = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66#22
+# text = z . )
+0	z	z	NN	NN		0	ROOT	0:ROOT	O
+1	.	.	.	.		0	punct	0:punct	O
+2	)	-rrb-	-RRB-	-RRB-		0	dep	0:dep	O
+
+# sent_id = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66#23
+# text = , the fractional derivative of order α is defined by .
+0	,	,	,	,		8	punct	8:punct	O
+1	the	the	DT	DT		3	det	3:det	O
+2	fractional	fractional	JJ	JJ		3	amod	3:amod	O
+3	derivative	derivative	NN	NN		8	nsubjpass	8:nsubjpass	O
+4	of	of	IN	IN		3	prep	_	O
+5	order	order	NN	NN		6	nn	6:nn	O
+6	α	α	NN	NN		4	pobj	3:prep_of	O
+7	is	be	VBZ	VBZ		8	auxpass	8:auxpass	O
+8	defined	define	VBN	VBN		8	ROOT	8:ROOT	O
+9	by	by	IN	IN		8	prt	8:prt	O
+10	.	.	.	.		8	punct	8:punct	O
+
+# sent_id = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66#24
+# text = D .
+0	D	D	NNP	NNP		0	ROOT	0:ROOT	O
+1	.	.	.	.		0	punct	0:punct	O
+
+# sent_id = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66#25
+# text = z .
+0	z	z	NN	NN		0	ROOT	0:ROOT	O
+1	.	.	.	.		0	punct	0:punct	O
+
+# sent_id = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66#26
+# text = f .
+0	f	f	NN	NN		0	ROOT	0:ROOT	O
+1	.	.	.	.		0	punct	0:punct	O
+
+# sent_id = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66#27
+# text = z . )
+0	z	z	NN	NN		0	ROOT	0:ROOT	O
+1	.	.	.	.		0	punct	0:punct	O
+2	)	-rrb-	-RRB-	-RRB-		0	dep	0:dep	O
+
+# sent_id = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66#28
+# text = d .
+0	d	d	NN	NN		0	ROOT	0:ROOT	O
+1	.	.	.	.		0	punct	0:punct	O
+
+# sent_id = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66#29
+# text = d .
+0	d	d	NN	NN		0	ROOT	0:ROOT	O
+1	.	.	.	.		0	punct	0:punct	O
+
+# sent_id = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66#30
+# text = z .
+0	z	z	NN	NN		0	ROOT	0:ROOT	O
+1	.	.	.	.		0	punct	0:punct	O
+
+# sent_id = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66#31
+# text = z .
+0	z	z	NN	NN		0	ROOT	0:ROOT	O
+1	.	.	.	.		0	punct	0:punct	O
+
+# sent_id = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66#32
+# text = f .
+0	f	f	NN	NN		0	ROOT	0:ROOT	O
+1	.	.	.	.		0	punct	0:punct	O
+
+# sent_id = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66#33
+# text = z .
+0	z	z	NN	NN		0	ROOT	0:ROOT	O
+1	.	.	.	.		0	punct	0:punct	O
+
+# sent_id = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66#34
+# text = d .
+0	d	d	NN	NN		0	ROOT	0:ROOT	O
+1	.	.	.	.		0	punct	0:punct	O
+
+# sent_id = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66#35
+# text = log .
+0	log	log	NN	NN		0	ROOT	0:ROOT	O
+1	.	.	.	.		0	punct	0:punct	O
+
+# sent_id = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66#36
+# text = z .
+0	z	z	NN	NN		0	ROOT	0:ROOT	O
+1	.	.	.	.		0	punct	0:punct	O
+
+# sent_id = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66#37
+# text = to be real when .
+0	to	to	TO	TO		2	aux	2:aux	O
+1	be	be	VB	VB		2	cop	2:cop	O
+2	real	real	JJ	JJ		2	ROOT	2:ROOT	O
+3	when	when	WRB	WRB		2	dep	2:dep	O
+4	.	.	.	.		2	punct	2:punct	O
+
+# sent_id = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66#38
+# text = z .
+0	z	z	NN	NN		0	ROOT	0:ROOT	O
+1	.	.	.	.		0	punct	0:punct	O
+
+# sent_id = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66#39
+# text = Moreover, when .
+0	Moreover	moreover	RB	RB		2	advmod	2:advmod	O
+1	,	,	,	,		2	punct	2:punct	O
+2	when	when	WRB	WRB		2	ROOT	2:ROOT	O
+3	.	.	.	.		2	punct	2:punct	O
+
+# sent_id = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66#40
+# text = , we have .
+0	,	,	,	,		2	punct	2:punct	O
+1	we	we	PRP	PRP		2	nsubj	2:nsubj	O
+2	have	have	VBP	VBP		2	ROOT	2:ROOT	O
+3	.	.	.	.		2	punct	2:punct	O
+
+# sent_id = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66#41
+# text = D .
+0	D	D	NNP	NNP		0	ROOT	0:ROOT	O
+1	.	.	.	.		0	punct	0:punct	O
+
+# sent_id = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66#42
+# text = z .
+0	z	z	NN	NN		0	ROOT	0:ROOT	O
+1	.	.	.	.		0	punct	0:punct	O
+
+# sent_id = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66#43
+# text = f .
+0	f	f	NN	NN		0	ROOT	0:ROOT	O
+1	.	.	.	.		0	punct	0:punct	O
+
+# sent_id = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66#44
+# text = z . )
+0	z	z	NN	NN		0	ROOT	0:ROOT	O
+1	.	.	.	.		0	punct	0:punct	O
+2	)	-rrb-	-RRB-	-RRB-		0	dep	0:dep	O
+
+# sent_id = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66#45
+# text = f .
+0	f	f	NN	NN		0	ROOT	0:ROOT	O
+1	.	.	.	.		0	punct	0:punct	O
+
+# sent_id = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66#46
+# text = z . )
+0	z	z	NN	NN		0	ROOT	0:ROOT	O
+1	.	.	.	.		0	punct	0:punct	O
+2	)	-rrb-	-RRB-	-RRB-		0	dep	0:dep	O
+
+# sent_id = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66#47
+# text = . . . Definition 1.2 For the function .
+0	. . .	. . .	.	.		0	ROOT	0:ROOT	O
+1	Definition	Definition	NNP	NNP		0	dobj	0:dobj	O
+2	1.2	1.2	CD	CD		1	num	1:num	O
+3	For	for	IN	IN		1	prep	_	O
+4	the	the	DT	DT		5	det	5:det	O
+5	function	function	NN	NN		3	pobj	1:prep_for	O
+6	.	.	.	.		0	punct	0:punct	O
+
+# sent_id = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66#48
+# text = f .
+0	f	f	NN	NN		0	ROOT	0:ROOT	O
+1	.	.	.	.		0	punct	0:punct	O
+
+# sent_id = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66#49
+# text = z . )
+0	z	z	NN	NN		0	ROOT	0:ROOT	O
+1	.	.	.	.		0	punct	0:punct	O
+2	)	-rrb-	-RRB-	-RRB-		0	dep	0:dep	O
+
+# sent_id = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66#50
+# text = , the fractional integral of order α is defined by .
+0	,	,	,	,		8	punct	8:punct	O
+1	the	the	DT	DT		3	det	3:det	O
+2	fractional	fractional	JJ	JJ		3	amod	3:amod	O
+3	integral	integral	NN	NN		8	nsubjpass	8:nsubjpass	O
+4	of	of	IN	IN		3	prep	_	O
+5	order	order	NN	NN		6	nn	6:nn	O
+6	α	α	NN	NN		4	pobj	3:prep_of	O
+7	is	be	VBZ	VBZ		8	auxpass	8:auxpass	O
+8	defined	define	VBN	VBN		8	ROOT	8:ROOT	O
+9	by	by	IN	IN		8	prt	8:prt	O
+10	.	.	.	.		8	punct	8:punct	O
+
+# sent_id = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66#51
+# text = I .
+0	I	I	PRP	PRP		0	ROOT	0:ROOT	O
+1	.	.	.	.		0	punct	0:punct	O
+
+# sent_id = http://boundaryvalueproblems.springeropen.com/articles/10.1186/1687-2770-2014-66#52
+# text = z .
+0	z	z	NN	NN		0	ROOT	0:ROOT	O

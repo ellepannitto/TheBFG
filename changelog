@@ -1,3 +1,10 @@
+TheBFG ver 0.1.1
+  
+  * RelationsExtractor: 
+    - the queue handles long-distance pairs by concatenation of meaningful dependency relations.
+  
+-- Ludovica Pannitto <ellepannitto@gmail.com> Mon, 20 Nov 2017 10:00
+
 TheBFG ver 0.1
   
   * first commit

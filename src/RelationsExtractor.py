@@ -1,6 +1,29 @@
 import CorpusReader as Reader
 import DepCCToken
 
+
+def print_for_debug(sentence, rels):
+	print "[DEBUG] - sentence:"
+	print "\n".join(sentence)
+		
+	numbers = set()
+	for x, y, z in rels:
+		numbers.add(x)
+		numbers.add(y)
+		
+	print
+	print "[DEBUG] - interesting portion of sentence:"
+	for x in sorted(numbers):
+		print sentence[x]
+	print
+	
+	print "[DEBUG] - relations"
+	for x in rels:
+		print x
+	print
+	
+	raw_input()
+
 class RelationsExtractor:
 	"""
 	
@@ -50,25 +73,13 @@ class RelationsExtractor:
 		for sentence in self.reader:
 			if self.test(sentence):
 				parsed_sent = self.parse_sent (sentence, TokenClass)
-				
 				rels = self.process(parsed_sent)
 				
+				print_for_debug(sentence, rels)
 				
-				print "\n".join(sentence)
-				for x in rels:
-					print x
-					
-				numbers = set()
-				for x, y, z in rels:
-					numbers.add(x)
-					numbers.add(y)
-					
-				print
-				for x in sorted(numbers):
-					print sentence[x]
-				print
-				#~ raw_input()
 				
+			else:#DEBUG
+				print "[DEBUG] - ignoring sentence here"
 				
 
 	def parse_sent (self, raw_sentence, TokenClass):
@@ -86,7 +97,6 @@ class RelationsExtractor:
 		map_ne = {}
 		sentence = {}
 		for token in raw_sentence:
-			print token
 			token = TokenClass(token)
 			sentence[token.id_ord] = token
 
@@ -171,6 +181,16 @@ class RelationsExtractor:
 			if token.rel == "ROOT":
 				root = id_ord
 		
+		#here a sort of queue is implemented (I'm not using any pre-defined class since in the end it was easier to use lists. If things get more complicated I'm going to define a dedicated queue class.
+		#The idea is that the queue contains the root at the begininng, and navigated the dependencies starting from there.
+		#items is a set that contains all the tuples representing relations, they should be formed by a series of ids and the edge label as last element. As for now they're only pairs in the form (id_head, id_dependant, relation_label), because we have not yet defined the algorithm.
+		
+		#As for now it works like this:
+		# - consider the head H and it's dependants D
+		# - for each dependants d in D:
+		#   - if the relation rel is interesting add (H, d, rel) to the interesting items
+		#   - if it is a noun or a verb, add d to the queue Q
+		#   - add its dependants to the current dependencies D, with extendend relation (e.g. if I'm looking at a 
 		
 		items = set()
 		Q = [root]
@@ -181,33 +201,39 @@ class RelationsExtractor:
 			if Q[0] in deps:
 				curr_deps = [(x, y) for x, y in deps[Q[0]] if not x == Q[0]]
 			
-			print "[DEBUG] Queue:", Q
-			print "[DEBUG] current element:", curr_el.lemma
-			print "[DEBUG] current dependencies:", curr_deps
+			#~ print "[DEBUG] Queue:", Q
+			#~ print "[DEBUG] current element:", curr_el.lemma
+			#~ print "[DEBUG] current dependencies:", curr_deps
 			
 			for i, r in curr_deps:
-				print "[DEBUG] looking at relation:", i, r
-				if i in deps:
-					print "[DEBUG] dependencies of element", i, ":", deps[i]
-				else:
-					print "[DEBUG] dependencies of element", i, ": []"
+				#~ print "[DEBUG] looking at relation:", i, r
+				#~ if i in deps: #DEBUG
+					#~ print "[DEBUG] dependencies of element", i, ":", deps[i]
+				#~ else: #DEBUG
+					#~ print "[DEBUG] dependencies of element", i, ": []"
 				target = sentence[i]
 				
-				if r in self.switch_relations or "prep_" in r:
+				r_curr = r.split(":")[0]
+				if r_curr in self.switch_relations or "prep_" in r_curr:
 					items.add ((Q[0], i, r))
 					if target.pos[0] in ["N", "V"]:
 						Q.append(i)
-				else:
+					
+					#if I have already added the head, I add to current dependencies the "extended" dependencies of the head, to acquire long-distance pairs. 
+					#It's just a try, in my opinion we should parse differently depending on the PoS of the head, to distinguish between relations to recurr on and relations to just add.
 					if i in deps:
-						curr_deps.extend(deps[i])	
-				
+						curr_deps.extend([(x, y+":"+r) for x, y in deps[i] if y in self.switch_relations])	
+				else:
+					#else, if the head is not to be added, I percolate the tree further. This should do nothing with UD but it's relevant for other kinds of datasets, where heads are not always lexical items.
+					if i in deps:
+						curr_deps.extend(deps[i])
 						
-				print "[DEBUG] current dependencies:", curr_deps
-				print "[DEBUG] current items:", items
-				raw_input()
+				#~ print "[DEBUG] current dependencies:", curr_deps
+				#~ print "[DEBUG] current items:", items
+				#~ raw_input() #DEUBUG
 				
 			Q = Q[1:]
-			raw_input()
+			#~ raw_input() #DEBUG
 
 		return sorted(items)
 	

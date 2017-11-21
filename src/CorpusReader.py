@@ -39,8 +39,18 @@ class CorpusReader:
 			raise StopIteration
 
 if __name__ == "__main__":
+
+	stop_keys = ("x", "X", "q", "Q")
+
 	R = CorpusReader(open("../corporasample/DepCCsample"))
 	
 	for x in R:
+
 		print x
-		raw_input()
+		
+		y = raw_input("\n( X or Q to exit the loop )\n")
+
+		if y in stop_keys: break
+
+
+

@@ -20,6 +20,8 @@ class CorpusReader:
 	def __iter__ ( self ):
 		return self
 		
+
+
 	def next ( self ):
 		'''
 		  Returns next sentence of the corpus, if any, else it raises StopIteration
@@ -27,16 +29,22 @@ class CorpusReader:
 		curr_sent = []
 
 		line = self.input_file.readline()
-		
+
 		while line and not line[0] == self.delimiter and len( line.strip() ) :
-			linestrip = line.strip()
-			curr_sent.append(linestrip)
+
+			curr_sent.append(line.strip())
+
 			line = self.input_file.readline()
 			
-		if len(line)>0:
+
+		if len(line) > 0:
+
 			return curr_sent
+
 		else:
+
 			raise StopIteration
+
 
 if __name__ == "__main__":
 
@@ -44,13 +52,23 @@ if __name__ == "__main__":
 
 	R = CorpusReader(open("../corporasample/DepCCsample"))
 	
+	i = 0
+
 	for x in R:
 
-		print x
+		# if x is not empty
+		if x: 
+			
+			i += 1
+			print "\n\nSentence " + str(i) + ":\n---\n"
+			print(x)
 		
-		y = raw_input("\n( X or Q to exit the loop )\n")
+			y = raw_input("\n( X or Q to exit the loop )\n")
 
-		if y in stop_keys: break
+			if y in stop_keys: break
+
+
+
 
 
 

@@ -39,7 +39,7 @@ class CorpusReader:
 			raise StopIteration
 
 if __name__ == "__main__":
-	R = Reader(open("../corporasample/DepCCsample"))
+	R = CorpusReader(open("../corporasample/DepCCsample"))
 	
 	for x in R:
 		print x

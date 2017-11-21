@@ -17,7 +17,15 @@ class Token(object):
 		This function is meant to do a series of operations, only some of them being already implemented.
 		
 		- Transforms passive relations into active relations (nsubjpass -> dobj, csubjpass -> ccomp)
+		
+		Patrick: could you please an example for each case?
+
 		- Adds PoS or NE Class to lemma
+
+		Patrick: could you please an example for each case?
+
+
+
 		
 		Other things that could be implemented here:
 		- filter lemmas on frequency
@@ -27,7 +35,11 @@ class Token(object):
 		splitne = self.ne.split("-")
 		if len(self.ne)>1:
 			self.ne = splitne[1]
+
+		# Patrick: could you please an example ?
+
 		
+
 		if not self.ne == "O":
 			self.lemma = self.lemma+"/"+self.ne
 		else:
@@ -50,6 +62,8 @@ class Token(object):
 	def add_part (self, prt):
 		"""
 		Expands lemma by adding prt
+
+		Patrick: could you please give an example?
 		"""
 		
 		self.lemma = self.lemma+"_"+prt

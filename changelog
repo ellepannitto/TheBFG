@@ -1,14 +1,27 @@
+
+
 TheBFG ver 0.1.2
   
-  * CorpusReader: 
-    - Replaced 'Reader' by 'CorpusReader' in 'CorpusReader.py'.
-    - Added stop_keys to be found in raw_input() to exit the loop in 'CorpusReader.py'.
-    - Merged two lines in one in next() of 'CorpusReader'
-    - Only non empty sentences are printed in the MAIN call of 'CorpusReader'.
-    - Cosmetic change to display of sentences in 'CorpusReader'
+  * CorpusReader.py: 
 
-  
--- Patrick Jeuniaux <patrick.jeuniaux@gmail.com> Tue, 21 Nov 2017
+  	- In the 'CorpusReader' class:
+
+    --- Merged two lines in one in next() of 'CorpusReader'
+
+    - In the '__main__' section:
+
+    --- Replaced 'Reader' by 'CorpusReader'.
+    --- Added stop_keys to be found in raw_input() to exit the loop.
+    --- Only non empty sentences are printed.
+    --- Cosmetic change to display of sentences.
+
+  * Token.py:
+
+    - In the 'Token' class:
+
+    --- Added a few request for examples (for pedagogical purpose).
+
+-- Patrick Jeuniaux <patrick.jeuniaux@gmail.com> Tue, 21 Nov 2017 17:01
 
 
 TheBFG ver 0.1.1

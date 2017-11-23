@@ -20,10 +20,10 @@ The statistics count the number of times a 'relationship' appears.
 A relationship can be drawn between two items (pairs), three items (triads), four items, etc.
 
 For all sentences:
-	Take the graph composed by the elements (i.e., nodes) of that sentence (elements are related to each other by dependencies):
-		Take all subsets of elements (nodes) in the graph:
-			For each subset, name the relation (whether it is a pair, a trio, etc.), while keeping the order of the elements in the relation:
-				Increment the occurrence of the relation.
+    Take the graph composed by the elements (i.e., nodes) of that sentence (elements are related to each other by dependencies):
+	    Take all subsets of elements (nodes) in the graph:
+		    For each subset, name the relation (whether it is a pair, a trio, etc.), while keeping the order of the elements in the relation:       
+		        Increment the occurrence of the relation.
 
 Note: this step might be computionally consuming. It could become a stumbling block.
 

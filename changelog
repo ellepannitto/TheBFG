@@ -1,4 +1,10 @@
-
+TheBFG ver 0.2
+  
+  * LemmaFreqsExtractor: 
+    - script added to extract frequencies of lemmas in the corpus, in order to set a threshold
+    - the data folder has been added to the gitignore list
+  
+-- Ludovica Pannitto <ellepannitto@gmail.com> Mon, 27 Nov 2017 18:50
 
 TheBFG ver 0.1.2
   

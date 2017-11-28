@@ -11,8 +11,8 @@ _FROM = 0
 _TO = 19101
 
 if len(sys.argv)>2:
-	_FROM = sys.argv[1]
-	_TO = sys.argv[2]
+	_FROM = int(sys.argv[1])
+	_TO = int(sys.argv[2])
 
 
 

@@ -16,15 +16,18 @@ We consider the dependencies (either basic dependencies or enhanced ones) as a t
 * in order to take into account potentially interesting relations between dependants of different heads, we generate pairs formed by two items belonging to different groups. These relations are generic association relations (not labeled with syntactic paths). The idea is that they are useful to activate nieghbouring events
 
 From the example, we can extract 4 heads, and so 4 groups are formed:
-* read + student, book, speak
-* student + tall
-* book + black
-* speak + teacher, history
+* Group1: read + student, book, speak
+* Group2: student + tall
+* Group3: book + black
+* Group4: speak + teacher, history
 
 
-* Hence, from point 1 we get (each of this subset is labeled with syntactic relations):
+**Hence, from point 1 we get (each of this subset is labeled with syntactic relations)**:
+
 Group 1:
+
 --- subsets with 2 elements ---
+
 ('book', 'speak')
 ('read', 'speak')
 ('student', 'book')
@@ -33,32 +36,43 @@ Group 1:
 ('student', 'speak')
 
 --- subsets with 3 elements ---
+
 ('student', 'read', 'book')
 ('student', 'book', 'speak')
 ('student', 'read', 'speak')
 ('read', 'book', 'speak')
 
+
 --- subsets with 4 elements ---
+
 ('student', 'read', 'book', 'speak')
 
 Group 2:
+
 --- subsets with 2 elements ---
+
 ('student', 'tall')
 
 Group 3:
+
 --- subsets with 2 elements ---
+
 ('book', 'black')
 
 Group 4:
+
 --- subsets with 2 elements ---
+
 ('teacher', 'history')
 ('speak', 'teacher')
 ('speak', 'history')
 
 --- subsets with 3 elements ---
+
 ('speak', 'teacher', 'history')
 
-* From point 2 we get unlabeled generic pairs of associated items:
+
+**From point 2 we get unlabeled generic pairs of associated items**:
 
 ('read', 'tall')
 ('read', 'black')

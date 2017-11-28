@@ -7,8 +7,84 @@ This project consists in developing a solution to extract Generalized Event Know
 We consider the dependencies (either basic dependencies or enhanced ones) as a tool to get access to relations between lexical items. Basic dependencies and enhanced dependencies have the same status. One is not more important than the other. What matters are the frequency of the relations that unite lexical items with each other.
 
 
-## Pseudocode
+## Example
 
+> The tall student reads the black book while the teacher speaks about history
+
+### How to build subsets:
+* for each nominal or verbal head, take all its dependants and generate all possible subsets from this group
+* in order to take into account potentially interesting relations between dependants of different heads, we generate pairs formed by two items belonging to different groups. These relations are generic association relations (not labeled with syntactic paths). The idea is that they are useful to activate nieghbouring events
+
+From the example, we can extract 4 heads, and so 4 groups are formed:
+* read + student, book, speak
+* student + tall
+* book + black
+* speak + teacher, history
+
+
+* Hence, from point 1 we get (each of this subset is labeled with syntactic relations):
+Group 1:
+--- subsets with 2 elements ---
+('book', 'speak')
+('read', 'speak')
+('student', 'book')
+('read', 'book')
+('student', 'read')
+('student', 'speak')
+
+--- subsets with 3 elements ---
+('student', 'read', 'book')
+('student', 'book', 'speak')
+('student', 'read', 'speak')
+('read', 'book', 'speak')
+
+--- subsets with 4 elements ---
+('student', 'read', 'book', 'speak')
+
+Group 2:
+--- subsets with 2 elements ---
+('student', 'tall')
+
+Group 3:
+--- subsets with 2 elements ---
+('book', 'black')
+
+Group 4:
+--- subsets with 2 elements ---
+('teacher', 'history')
+('speak', 'teacher')
+('speak', 'history')
+
+--- subsets with 3 elements ---
+('speak', 'teacher', 'history')
+
+* From point 2 we get unlabeled generic pairs of associated items:
+
+('read', 'tall')
+('read', 'black')
+('read', 'teacher')
+('read', 'history')
+
+('student', 'black')
+('student', 'teacher')
+('student', 'history')
+
+('book', 'tall')
+('book', 'teacher')
+('book', 'history')
+
+('speak', 'tall')
+('speak', 'black')
+
+('tall', 'black')
+('tall', 'teacher')
+('tall', 'history')
+
+('black', 'teacher')
+('black', 'history')
+
+
+## Pseudocode
 Here is what we propose to do:
 
 We carry out the processing of the parsed corpus in several steps.

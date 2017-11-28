@@ -4,6 +4,16 @@ import gzip
 import CorpusReader
 import collections
 import heapq
+from multiprocessing import Pool
+import sys
+
+_FROM = 0
+_TO = 19101
+
+if len(sys.argv)>2:
+	_FROM = sys.argv[1]
+	_TO = sys.argv[2]
+
 
 
 def extract_lemmas(sentence, d):
@@ -15,39 +25,39 @@ def extract_lemmas(sentence, d):
 		if pos[0] in ["N", "V", "J", "R"] and any(c.isalpha() for c in linesplit[2]):
 			d[linesplit[2].strip()+"/"+pos]+=1
 
-basic_url = "http://ltdata1.informatik.uni-hamburg.de/depcc/corpus/parsed/part-m-"
+def f(i):
 
-testfile = urllib.URLopener()
+	basic_url = "http://ltdata1.informatik.uni-hamburg.de/depcc/corpus/parsed/part-m-"
 
-for i in range(0, 19101):
-#~ for i in range(0, 11):
+	testfile = urllib.URLopener()
+
 	k = str(i).zfill(5)
 	url = basic_url+k+".gz"
 
 	f = "../data/"+k+".gz"
 	print "[DEBUG] - file", f, "..."
-	
+
 	testfile.retrieve(url, f)
 
 	print "[DEBUG] - downloaded file", f
-	
+
 	fobj = gzip.open(f, 'rb')
-	
+
 	print "[DEBUG] - lemmas extraction started"
-	
-	
+
+
 	R = CorpusReader.CorpusReader(fobj)
-	
+
 	dict_file = collections.defaultdict(int)
-	
+
 	for x in R:
 		extract_lemmas(x, dict_file)
 
 	sortedlemmas = sorted(dict_file.items(), key=lambda x: x[0])
-	
-	
+
+
 	fout = gzip.open("../data/"+k+".sorted.gz", 'wb')
-	
+
 	print "[DEBUG] - writing to file"
 	for x, y in sortedlemmas:
 		fout.write (x+"\t"+str(y)+"\n")
@@ -63,6 +73,12 @@ def keyfunc(string):
 def decorated_file(f, key):
     for line in f: 
         yield (key(line), line)
+
+
+p = Pool(processes=8)
+#~ arg_list = [i for i in range(0, 11) ]
+arg_list = [i for i in range(_FROM, _TO)]
+p.map(f, arg_list)
 
 
 print "[DEBUG] - merge started"

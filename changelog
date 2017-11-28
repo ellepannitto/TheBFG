@@ -1,3 +1,10 @@
+TheBFG ver 0.2.1
+  
+  * LemmaFreqsExtractor: 
+    - first attempt of multithreading
+  
+-- Ludovica Pannitto <ellepannitto@gmail.com> Tue, 28 Nov 2017 10:30
+
 TheBFG ver 0.2
   
   * LemmaFreqsExtractor: 

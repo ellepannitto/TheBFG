@@ -1,4 +1,4 @@
-# The Big Friendly Graph
+ # The Big Friendly Graph
 
 ## Introduction
 
@@ -7,22 +7,54 @@ This project consists in developing a solution to extract Generalized Event Know
 We consider the dependencies (either basic dependencies or enhanced ones) as a tool to get access to relations between lexical items. Basic dependencies and enhanced dependencies have the same status. One is not more important than the other. What matters are the frequency of the relations that unite lexical items with each other.
 
 
-## Example
+## How to extract relations
+
+Example sentence:
 
 > The tall student reads the black book while the teacher speaks about history
 
-### How to build subsets:
-* for each nominal or verbal head, take all its dependants and generate all possible subsets from this group
-* in order to take into account potentially interesting relations between dependants of different heads, we generate pairs formed by two items belonging to different groups. These relations are generic association relations (not labeled with syntactic paths). The idea is that they are useful to activate nieghbouring events
+How to build subsets:
 
-From the example, we can extract 4 heads, and so 4 groups are formed:
-* Group1: read + student, book, speak
-* Group2: student + tall
-* Group3: book + black
-* Group4: speak + teacher, history
+* We consider only nominal and verbal heads.
+
+* We can have different heads in a sentence (not only the head under the root of the sentence).
+
+* Each head defines a group.
+
+* For each head of a group, take all its dependants and generate all possible subsets involving the head and its dependants.
+
+* A subset can be made of 2 elements (pairs), 3 elements (trios), 4 elements, etc. 
+
+* In order to take into account potentially interesting relations between dependants of different heads, we generate pairs formed by two items belonging to different groups. These relations are generic association relations (not labeled with syntactic paths). The idea is that they are useful to activate neighbouring events.
+
+From the example sentence, we can extract 4 heads, and so 4 groups are formed:
+
+* Group1: head = read, dependants = {student, book, speak}
+* Group2: head = student, dependants = {tall}
+* Group3: head = book, dependants = {black}
+* Group4: head = speak, dependants = {teacher, history}
 
 
-**Hence, from point 1 we get (each of this subset is labeled with syntactic relations)**:
+We have two types of relations.
+
+1) The relationships WITHIN a group 
+
+
+These relationships are labeled with a tag involving the syntactic relations between the elements of the subset.
+
+
+
+2) The relationships BETWEEN groups
+
+These relationships are not labeled.
+
+
+
+### Relationships WITHIN a subset
+
+
+For each group:
+
 
 Group 1:
 
@@ -47,17 +79,23 @@ Group 1:
 
 ('student', 'read', 'book', 'speak')
 
+
+
 Group 2:
 
 --- subsets with 2 elements ---
 
 ('student', 'tall')
 
+
+
 Group 3:
 
 --- subsets with 2 elements ---
 
 ('book', 'black')
+
+
 
 Group 4:
 
@@ -72,33 +110,65 @@ Group 4:
 ('speak', 'teacher', 'history')
 
 
-**From point 2 we get unlabeled generic pairs of associated items**:
+
+### Relationships across groups
+
+* Group1: head = read, dependants = {student, book, speak}
+* Group2: head = student, dependants = {tall}
+* Group3: head = book, dependants = {black}
+* Group4: head = speak, dependants = {teacher, history}
+
+Group1 - Group 2
 
 ('read', 'tall')
+('book', 'tall')
+('speak', 'tall')
+
+
+
+Group 1 - Group 3
+
 ('read', 'black')
+('student', 'black')
+('speak', 'black')
+('tall', 'black')
+
+
+
+Group 1 - Group 4
+
 ('read', 'teacher')
 ('read', 'history')
-
-('student', 'black')
 ('student', 'teacher')
 ('student', 'history')
-
-('book', 'tall')
 ('book', 'teacher')
 ('book', 'history')
 
-('speak', 'tall')
-('speak', 'black')
 
+
+Group 2 - Group 3
+
+('tall', 'book')
 ('tall', 'black')
+
+
+
+Group 2 - Group 4
+
 ('tall', 'teacher')
 ('tall', 'history')
+
+
+Group 3 - Group 4
 
 ('black', 'teacher')
 ('black', 'history')
 
 
-## Pseudocode
+
+
+## Pseudocode  TO REWRITE
+
 Here is what we propose to do:
 
 We carry out the processing of the parsed corpus in several steps.

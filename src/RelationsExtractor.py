@@ -1,24 +1,26 @@
 import CorpusReader as Reader
 import DepCCToken
 
+import itertools
+
 
 def print_for_debug(sentence, rels):
 	print "[DEBUG] - sentence:"
 	print "\n".join(sentence)
 		
-	numbers = set()
-	for x, y, z in rels:
-		numbers.add(x)
-		numbers.add(y)
+	#~ numbers = set()
+	#~ for x, y, z in rels:
+		#~ numbers.add(x)
+		#~ numbers.add(y)
 		
-	print
-	print "[DEBUG] - interesting portion of sentence:"
-	for x in sorted(numbers):
-		print sentence[x]
-	print
+	#~ print
+	#~ print "[DEBUG] - interesting portion of sentence:"
+	#~ for x in sorted(numbers):
+		#~ print sentence[x]
+	#~ print
 	
 	print "[DEBUG] - relations"
-	for x in rels:
+	for x in sorted(rels, key=lambda a: a[1]):
 		print x
 	print
 	
@@ -192,50 +194,92 @@ class RelationsExtractor:
 		#   - if it is a noun or a verb, add d to the queue Q
 		#   - add its dependants to the current dependencies D, with extendend relation (e.g. if I'm looking at a 
 		
-		items = set()
+#		#~ items = set()
+		groups = []
 		Q = [root]
 		while Q:
-			curr_el = sentence[Q[0]]
+			
+			x = Q.pop()
+			
+			curr_el = sentence[x]
+			group = [(curr_el.lemma, "ROOT")]
 			
 			curr_deps = []
-			if Q[0] in deps:
-				curr_deps = [(x, y) for x, y in deps[Q[0]] if not x == Q[0]]
+			if x in deps:
+				curr_deps = [(i, j) for i, j in deps[x] if not i == x]			
+
+			for i, r in curr_deps:
+				target = sentence[i]
+				#~ if target.pos[0] in ["V", "N", "J", "R"] and target.lemma in _SELECTEDLEMMAS:
+				if target.pos[0] in ["V", "N", "J", "R"]:
+					group.append((target.lemma, r))
+					
+				if target.pos[0] in ["V", "N"]:
+					Q.append(i)
+			groups.append(group)
+			
+#			#~ curr_el = sentence[Q[0]]
+#			#~ curr_deps = []
+#			#~ if Q[0] in deps:
+#				#~ curr_deps = [(x, y) for x, y in deps[Q[0]] if not x == Q[0]]
 			
 			#~ print "[DEBUG] Queue:", Q
 			#~ print "[DEBUG] current element:", curr_el.lemma
 			#~ print "[DEBUG] current dependencies:", curr_deps
 			
-			for i, r in curr_deps:
+#			#~ for i, r in curr_deps:
 				#~ print "[DEBUG] looking at relation:", i, r
 				#~ if i in deps: #DEBUG
 					#~ print "[DEBUG] dependencies of element", i, ":", deps[i]
 				#~ else: #DEBUG
 					#~ print "[DEBUG] dependencies of element", i, ": []"
-				target = sentence[i]
+#				#~ target = sentence[i]
 				
-				r_curr = r.split(":")[0]
-				if r_curr in self.switch_relations or "prep_" in r_curr:
-					items.add ((Q[0], i, r))
-					if target.pos[0] in ["N", "V"]:
-						Q.append(i)
+#				#~ r_curr = r.split(":")[0]
+#				#~ if r_curr in self.switch_relations or "prep_" in r_curr:
+#					#~ items.add ((Q[0], i, r))
+#					#~ if target.pos[0] in ["N", "V"]:
+#						#~ Q.append(i)
 					
 					#if I have already added the head, I add to current dependencies the "extended" dependencies of the head, to acquire long-distance pairs. 
 					#It's just a try, in my opinion we should parse differently depending on the PoS of the head, to distinguish between relations to recurr on and relations to just add.
-					if i in deps:
-						curr_deps.extend([(x, y+":"+r) for x, y in deps[i] if y in self.switch_relations])	
-				else:
+#					#~ if i in deps:
+#						#~ curr_deps.extend([(x, y+":"+r) for x, y in deps[i] if y in self.switch_relations])	
+#				#~ else:
 					#else, if the head is not to be added, I percolate the tree further. This should do nothing with UD but it's relevant for other kinds of datasets, where heads are not always lexical items.
-					if i in deps:
-						curr_deps.extend(deps[i])
+#					#~ if i in deps:
+#						#~ curr_deps.extend(deps[i])
 						
 				#~ print "[DEBUG] current dependencies:", curr_deps
 				#~ print "[DEBUG] current items:", items
 				#~ raw_input() #DEUBUG
-				
-			Q = Q[1:]
+
 			#~ raw_input() #DEBUG
 
-		return sorted(items)
+		items = set()
+		
+		for i in range(len(groups)):
+			g1 = groups[i]
+			
+			for n in range(2, len(g1)+1):
+				
+				subsets = set(itertools.combinations(g1, n))
+				
+				for s in subsets:
+					elements = [e[0] for e in s]
+					labels = [e[1] for e in s]
+				items.add ((":".join(elements), ":".join(labels)))
+			
+			for j in range(i, len(groups)):
+				g2 = groups[j]
+				
+				for x in g1:
+					for y in g2:
+						if not x == y:
+							if (x[0]+":"+y[0], x[1]+":"+y[1]) not in items:
+								items.add((x[0]+":"+y[0], "genassoc"))
+
+		return items
 	
 
 if __name__ == "__main__":

@@ -1,3 +1,10 @@
+TheBFG ver 0.3.0
+  
+  * RelationsExtractor: 
+    - implemented first version of queue to extract the graph, as described in the example (see TheBFG.md). The code selects groups of items from the parsed tree and extracts a list of items made up by: all sort of subsets from each group, labeled with their sintactic relations, pairs of items from different groups labeled with a generic association label. It still needs refinement, I just wrote down a sort of pseudocode.
+  
+-- Ludovica Pannitto <ellepannitto@gmail.com>  Wed, 13 Dec 2017 20:00
+
 TheBFG ver 0.2.3
   
   * TheBFG.md: 

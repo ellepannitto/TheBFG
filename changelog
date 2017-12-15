@@ -1,3 +1,16 @@
+TheBFG ver 0.3.1
+  
+  * RelationsExtractor: 
+    - The class now prints a first version of the graph, lexicographically ordered. Proper nouns and named entities have been replaced by placeholders (either PoS or NE). 
+    TODO:
+    - take into account frequency 
+    - implement a multithreading version of the script for extraction
+    - check conj relations
+    - add sensible comments to the code (please forgive me for this, I'm just trying various things and commits are just to keep track of my work, I know it's not really human-readable at the moment)
+    At the moment, generic associations are not printed (but the code is already implemented)
+  
+-- Ludovica Pannitto <ellepannitto@gmail.com>  Wed, 13 Dec 2017 20:00
+
 TheBFG ver 0.3.0
   
   * RelationsExtractor: 

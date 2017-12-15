@@ -1,8 +1,38 @@
 import CorpusReader as Reader
 import DepCCToken
 
+import os
 import itertools
+from collections import *
+import gzip
 
+def print_to_save(fobj, rels):
+	
+	for elements, labels in sorted(rels.items()):
+		#~ print elements
+		#~ print labels
+		#e = " ".join(elements)
+		counter = Counter(labels)
+		
+		for l in counter:
+			n = counter[l]
+			
+			if len(l)>1:
+				
+				new = zip(elements, l)
+				
+				nodes = " ".join([x[0] for x in new])
+				edge = "|".join([x[1] for x in new])
+				
+			else:
+				nodes = " ".join(elements)
+				edge = l[0]
+				
+			#~ print nodes, "\t", edge	
+			fobj.write(nodes+"\t"+edge+"\t"+str(n)+"\n")	
+			#~ raw_input()
+			#~ fobj.write(e+"\t"+"|".join(l)+"\n")
+	
 
 def print_for_debug(sentence, rels):
 	print "[DEBUG] - sentence:"
@@ -20,11 +50,12 @@ def print_for_debug(sentence, rels):
 	#~ print
 	
 	print "[DEBUG] - relations"
-	for x in sorted(rels, key=lambda a: a[1]):
-		print x
+	#~ for x in sorted(rels, key=lambda a: a[1]):
+	for x in sorted(rels):
+		print x, rels[x]
 	print
 	
-	raw_input()
+	#~ raw_input()
 
 class RelationsExtractor:
 	"""
@@ -37,6 +68,9 @@ class RelationsExtractor:
 		"""
 		
 		self.test = testfunction
+		
+		self.items = defaultdict(list)
+		
 		
 		# - relations I'm not considering at all: "abbrev", "appos", "attr", "aux", "auxpass", "cc", "complm", "cop", "dep", "det", "mark", "nn", "null", "number", "parataxis", "predet", "pred", "prep", "punct", "rel"
 		# - relations I'm not considering since they're considered elsewhere: "nsubjpass", "csubjpass", "pobj", "pcomp", "ROOT"
@@ -69,20 +103,33 @@ class RelationsExtractor:
 		"""
 		#As for now, the function also prints the whole sentence and the list of extracted n-uples.
 		
-		newfile = open(f)
+		#~ newfile = open(f)
+		newfile = gzip.open(f, "rb")
 		self.reader = Reader.CorpusReader(newfile)
 		
+		fout = gzip.open("../data/graph/"+os.path.basename(f)+".out.gz", "wb")
+		
+		n = 0
+		
 		for sentence in self.reader:
+			n+=1
 			if self.test(sentence):
 				parsed_sent = self.parse_sent (sentence, TokenClass)
-				rels = self.process(parsed_sent)
+				#~ rels = self.process(parsed_sent)
+				self.process(parsed_sent)
+			
+			if not n%10000:
+				print "leggo frase", n	
+			
+		print_to_save(fout, self.items)
 				
-				print_for_debug(sentence, rels)
+				#~ print_for_debug(sentence, rels)
 				
 				
-			else:#DEBUG
-				print "[DEBUG] - ignoring sentence here"
-				
+			#~ else:#DEBUG
+				#~ print "[DEBUG] - ignoring sentence here"
+		
+		fout.close()		
 
 	def parse_sent (self, raw_sentence, TokenClass):
 		"""
@@ -180,7 +227,7 @@ class RelationsExtractor:
 					deps[token.enhanced_pord] = []	
 				deps[token.enhanced_pord].append((id_ord, token.enhanced_rel))	
 			
-			if token.rel == "ROOT":
+			if token.rel == "ROOT" and token.pos[0] in ["V", "N"]:
 				root = id_ord
 		
 		#here a sort of queue is implemented (I'm not using any pre-defined class since in the end it was easier to use lists. If things get more complicated I'm going to define a dedicated queue class.
@@ -193,70 +240,70 @@ class RelationsExtractor:
 		#   - if the relation rel is interesting add (H, d, rel) to the interesting items
 		#   - if it is a noun or a verb, add d to the queue Q
 		#   - add its dependants to the current dependencies D, with extendend relation (e.g. if I'm looking at a 
-		
-#		#~ items = set()
-		groups = []
-		Q = [root]
-		while Q:
-			
-			x = Q.pop()
-			
-			curr_el = sentence[x]
-			group = [(curr_el.lemma, "ROOT")]
-			
-			curr_deps = []
-			if x in deps:
-				curr_deps = [(i, j) for i, j in deps[x] if not i == x]			
 
-			for i, r in curr_deps:
-				target = sentence[i]
-				#~ if target.pos[0] in ["V", "N", "J", "R"] and target.lemma in _SELECTEDLEMMAS:
-				if target.pos[0] in ["V", "N", "J", "R"]:
-					group.append((target.lemma, r))
-					
-				if target.pos[0] in ["V", "N"]:
-					Q.append(i)
-			groups.append(group)
-			
-#			#~ curr_el = sentence[Q[0]]
-#			#~ curr_deps = []
-#			#~ if Q[0] in deps:
-#				#~ curr_deps = [(x, y) for x, y in deps[Q[0]] if not x == Q[0]]
-			
-			#~ print "[DEBUG] Queue:", Q
-			#~ print "[DEBUG] current element:", curr_el.lemma
-			#~ print "[DEBUG] current dependencies:", curr_deps
-			
-#			#~ for i, r in curr_deps:
-				#~ print "[DEBUG] looking at relation:", i, r
-				#~ if i in deps: #DEBUG
-					#~ print "[DEBUG] dependencies of element", i, ":", deps[i]
-				#~ else: #DEBUG
-					#~ print "[DEBUG] dependencies of element", i, ": []"
-#				#~ target = sentence[i]
+
+		groups = []		
+		if root:
+			Q = [root]
+			while Q:
+				x = Q.pop()
 				
-#				#~ r_curr = r.split(":")[0]
-#				#~ if r_curr in self.switch_relations or "prep_" in r_curr:
-#					#~ items.add ((Q[0], i, r))
-#					#~ if target.pos[0] in ["N", "V"]:
-#						#~ Q.append(i)
-					
-					#if I have already added the head, I add to current dependencies the "extended" dependencies of the head, to acquire long-distance pairs. 
-					#It's just a try, in my opinion we should parse differently depending on the PoS of the head, to distinguish between relations to recurr on and relations to just add.
-#					#~ if i in deps:
-#						#~ curr_deps.extend([(x, y+":"+r) for x, y in deps[i] if y in self.switch_relations])	
-#				#~ else:
-					#else, if the head is not to be added, I percolate the tree further. This should do nothing with UD but it's relevant for other kinds of datasets, where heads are not always lexical items.
-#					#~ if i in deps:
-#						#~ curr_deps.extend(deps[i])
+				curr_el = sentence[x]
+				group = [(curr_el.lemma, "ROOT")]
+				
+				curr_deps = []
+				if x in deps:
+					curr_deps = [(i, j) for i, j in deps[x] if not i == x]			
+
+				for i, r in curr_deps:
+					target = sentence[i]
+					#~ if target.pos[0] in ["V", "N", "J", "R"] and target.lemma in _SELECTEDLEMMAS:
+					if target.pos[0] in ["V", "N", "J", "R"] and target.rel not in ["cop", "prt", "nn", "aux", "auxpass"]:
+						group.append((target.lemma, r))
 						
+					if target.pos[0] in ["V", "N"]:
+						Q.append(i)
+				groups.append(group)
+				
+	#			#~ curr_el = sentence[Q[0]]
+	#			#~ curr_deps = []
+	#			#~ if Q[0] in deps:
+	#				#~ curr_deps = [(x, y) for x, y in deps[Q[0]] if not x == Q[0]]
+				
+				#~ print "[DEBUG] Queue:", Q
+				#~ print "[DEBUG] current element:", curr_el.lemma
 				#~ print "[DEBUG] current dependencies:", curr_deps
-				#~ print "[DEBUG] current items:", items
-				#~ raw_input() #DEUBUG
+				
+	#			#~ for i, r in curr_deps:
+					#~ print "[DEBUG] looking at relation:", i, r
+					#~ if i in deps: #DEBUG
+						#~ print "[DEBUG] dependencies of element", i, ":", deps[i]
+					#~ else: #DEBUG
+						#~ print "[DEBUG] dependencies of element", i, ": []"
+	#				#~ target = sentence[i]
+					
+	#				#~ r_curr = r.split(":")[0]
+	#				#~ if r_curr in self.switch_relations or "prep_" in r_curr:
+	#					#~ items.add ((Q[0], i, r))
+	#					#~ if target.pos[0] in ["N", "V"]:
+	#						#~ Q.append(i)
+						
+						#if I have already added the head, I add to current dependencies the "extended" dependencies of the head, to acquire long-distance pairs. 
+						#It's just a try, in my opinion we should parse differently depending on the PoS of the head, to distinguish between relations to recurr on and relations to just add.
+	#					#~ if i in deps:
+	#						#~ curr_deps.extend([(x, y+":"+r) for x, y in deps[i] if y in self.switch_relations])	
+	#				#~ else:
+						#else, if the head is not to be added, I percolate the tree further. This should do nothing with UD but it's relevant for other kinds of datasets, where heads are not always lexical items.
+	#					#~ if i in deps:
+	#						#~ curr_deps.extend(deps[i])
+							
+					#~ print "[DEBUG] current dependencies:", curr_deps
+					#~ print "[DEBUG] current items:", items
+					#~ raw_input() #DEUBUG
 
-			#~ raw_input() #DEBUG
+				#~ raw_input() #DEBUG
 
-		items = set()
+			#~ items = defaultdict(set)
 		
 		for i in range(len(groups)):
 			g1 = groups[i]
@@ -266,20 +313,25 @@ class RelationsExtractor:
 				subsets = set(itertools.combinations(g1, n))
 				
 				for s in subsets:
+					s = sorted(s, key = lambda x:x[0])
+					
 					elements = [e[0] for e in s]
 					labels = [e[1] for e in s]
-				items.add ((":".join(elements), ":".join(labels)))
+					
+					
+				self.items[tuple(elements)].append(tuple(labels))
 			
-			for j in range(i, len(groups)):
-				g2 = groups[j]
+			
+			#GENERIC ASSOCIATIONS
+			#~ for j in range(i, len(groups)):
+				#~ g2 = groups[j]
 				
-				for x in g1:
-					for y in g2:
-						if not x == y:
-							if (x[0]+":"+y[0], x[1]+":"+y[1]) not in items:
-								items.add((x[0]+":"+y[0], "genassoc"))
+				#~ for x in g1:
+					#~ for y in g2:
+						#~ if not x[0] == y[0] and not x[0][0]=="_" and not y[0][0]=="_":
+							#~ self.items[tuple(sorted([x[0], y[0]]))].append(tuple(["genassoc"]))
 
-		return items
+		#~ return items
 	
 
 if __name__ == "__main__":
@@ -293,4 +345,5 @@ if __name__ == "__main__":
 
 	rex = RelationsExtractor(testlen)
 	
-	rex.parse_file("../corporasample/DepCCsample", DepCCToken.DepCCToken)
+	#~ rex.parse_file("../corporasample/DepCCsample", DepCCToken.DepCCToken)
+	rex.parse_file("../data/00000.gz", DepCCToken.DepCCToken)

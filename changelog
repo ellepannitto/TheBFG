@@ -1,3 +1,22 @@
+TheBFG ver 0.3.2
+  
+  * MainExtractor1:
+	- The script has produced a first version of the graph, as follows:
+		- the portion of the corpus taken into consideration is from file 00000.gz to file 00030.gz
+		- Proper nouns and named entities are normalized to the named entity tag or a placeholder such as NNP(S)
+		- Among other lemmas, only those with a frequency > 1000 are taken into consideration
+		- When considering an hyperedge among nodes, it may happen that some of them are low frequency lemmas. We impose that at least half of the lemma +1 are among the selected ones. This implies that binary relations are considered only when both lemmas have frequency > threshold, ternary relations when at least 2 nodes have this property and so on...
+		- only sentences between 6 and 20 tokens are examined
+	(the file is saved in data/graph/freq.sorted.gz file)
+		
+	TODO:
+	- check bug in extraction of enhanced dependencies
+	- implement multithreading
+    - add sensible comments to the code (please forgive me for this, I'm just trying various things and commits are just to keep track of my work, I know it's not really human-readable at the moment)
+    At the moment, generic associations are not printed (but the code is already implemented)
+  
+-- Ludovica Pannitto <ellepannitto@gmail.com>  Mon, 18 Dec 2017 17:40
+
 TheBFG ver 0.3.1
   
   * RelationsExtractor: 

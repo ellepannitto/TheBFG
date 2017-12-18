@@ -12,7 +12,7 @@ class Token(object):
 		self.enhanced_rel = ""
 		self.ne = "O"
 		
-	def normalize(self):
+	def normalize(self, vocab_dict):
 		"""
 		This function is meant to do a series of operations, only some of them being already implemented.
 		
@@ -54,6 +54,13 @@ class Token(object):
 			self.lemma = "_"+self.pos+"_"
 		elif not self.ne == "O":
 			self.lemma = "_"+self.ne+"_"
+		elif self.pos[0] in vocab_dict:
+			#~ print self.lemma, self.pos
+			if not self.lemma+"/"+self.pos in vocab_dict[self.pos[0]]:
+				#~ print self.lemma+"/"+self.pos
+				#~ print vocab_dict[self.pos[0]]
+				#~ raw_input()
+				self.lemma = "*"
 			
 		self.lemma = self.lemma+"/"+self.pos
 

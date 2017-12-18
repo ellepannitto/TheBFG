@@ -6,34 +6,6 @@ import itertools
 from collections import *
 import gzip
 
-def print_to_save(fobj, rels):
-	
-	for elements, labels in sorted(rels.items()):
-		#~ print elements
-		#~ print labels
-		#e = " ".join(elements)
-		counter = Counter(labels)
-		
-		for l in counter:
-			n = counter[l]
-			
-			if len(l)>1:
-				
-				new = zip(elements, l)
-				
-				nodes = " ".join([x[0] for x in new])
-				edge = "|".join([x[1] for x in new])
-				
-			else:
-				nodes = " ".join(elements)
-				edge = l[0]
-				
-			#~ print nodes, "\t", edge	
-			fobj.write(nodes+"\t"+edge+"\t"+str(n)+"\n")	
-			#~ raw_input()
-			#~ fobj.write(e+"\t"+"|".join(l)+"\n")
-	
-
 def print_for_debug(sentence, rels):
 	print "[DEBUG] - sentence:"
 	print "\n".join(sentence)
@@ -96,6 +68,9 @@ class RelationsExtractor:
 		}
 		
 	
+	def set_vocabulary(self, vocab_dict):
+		self.vocabulary = vocab_dict
+	
 	def parse_file(self, f, TokenClass):
 		"""
 		Parses a file given a class to represent tokens.
@@ -107,7 +82,7 @@ class RelationsExtractor:
 		newfile = gzip.open(f, "rb")
 		self.reader = Reader.CorpusReader(newfile)
 		
-		fout = gzip.open("../data/graph/"+os.path.basename(f)+".out.gz", "wb")
+		#~ fout = gzip.open("../data/graph/"+os.path.basename(f)+".out.gz", "wb")
 		
 		n = 0
 		
@@ -120,16 +95,13 @@ class RelationsExtractor:
 			
 			if not n%10000:
 				print "leggo frase", n	
-			
-		print_to_save(fout, self.items)
-				
-				#~ print_for_debug(sentence, rels)
-				
-				
 			#~ else:#DEBUG
 				#~ print "[DEBUG] - ignoring sentence here"
+							
+		#~ print_to_save(fout, self.items)
+
 		
-		fout.close()		
+		#~ fout.close()		
 
 	def parse_sent (self, raw_sentence, TokenClass):
 		"""
@@ -152,7 +124,12 @@ class RelationsExtractor:
 
 			#this line is meant to merge particles with verbs, so phrasal verbs are reconstructed.
 			if token.rel == "prt":
-				sentence[token.pord].add_part(token.lemma)
+				if token.pord in sentence:
+					sentence[token.pord].add_part(token.lemma)
+				else:
+					print "DEBUG - head of particle not in sentence"
+					print raw_sentence
+					print token.pord
 
 
 			# You can ignore this part for now, I was just trying to collpse NEs into single nodes, but it seems a bit harder than expected
@@ -184,7 +161,7 @@ class RelationsExtractor:
 		#normalize each token (see normalizing function in class token)
 		for id_ord in sentence:
 			token = sentence[id_ord]
-			token.normalize()
+			token.normalize(self.vocabulary)
 				
 		#postprocess steps:
 		# - collapse named entities to single token
@@ -227,7 +204,7 @@ class RelationsExtractor:
 					deps[token.enhanced_pord] = []	
 				deps[token.enhanced_pord].append((id_ord, token.enhanced_rel))	
 			
-			if token.rel == "ROOT" and token.pos[0] in ["V", "N"]:
+			if token.rel == "ROOT" and token.pos[0] in ["V", "N", "J"]:
 				root = id_ord
 		
 		#here a sort of queue is implemented (I'm not using any pre-defined class since in the end it was easier to use lists. If things get more complicated I'm going to define a dedicated queue class.
@@ -260,50 +237,12 @@ class RelationsExtractor:
 					#~ if target.pos[0] in ["V", "N", "J", "R"] and target.lemma in _SELECTEDLEMMAS:
 					if target.pos[0] in ["V", "N", "J", "R"] and target.rel not in ["cop", "prt", "nn", "aux", "auxpass"]:
 						group.append((target.lemma, r))
+					elif i in deps:
+						curr_deps.extend(deps[i])
 						
-					if target.pos[0] in ["V", "N"]:
+					if target.pos[0] in ["V", "N", "J"]:
 						Q.append(i)
 				groups.append(group)
-				
-	#			#~ curr_el = sentence[Q[0]]
-	#			#~ curr_deps = []
-	#			#~ if Q[0] in deps:
-	#				#~ curr_deps = [(x, y) for x, y in deps[Q[0]] if not x == Q[0]]
-				
-				#~ print "[DEBUG] Queue:", Q
-				#~ print "[DEBUG] current element:", curr_el.lemma
-				#~ print "[DEBUG] current dependencies:", curr_deps
-				
-	#			#~ for i, r in curr_deps:
-					#~ print "[DEBUG] looking at relation:", i, r
-					#~ if i in deps: #DEBUG
-						#~ print "[DEBUG] dependencies of element", i, ":", deps[i]
-					#~ else: #DEBUG
-						#~ print "[DEBUG] dependencies of element", i, ": []"
-	#				#~ target = sentence[i]
-					
-	#				#~ r_curr = r.split(":")[0]
-	#				#~ if r_curr in self.switch_relations or "prep_" in r_curr:
-	#					#~ items.add ((Q[0], i, r))
-	#					#~ if target.pos[0] in ["N", "V"]:
-	#						#~ Q.append(i)
-						
-						#if I have already added the head, I add to current dependencies the "extended" dependencies of the head, to acquire long-distance pairs. 
-						#It's just a try, in my opinion we should parse differently depending on the PoS of the head, to distinguish between relations to recurr on and relations to just add.
-	#					#~ if i in deps:
-	#						#~ curr_deps.extend([(x, y+":"+r) for x, y in deps[i] if y in self.switch_relations])	
-	#				#~ else:
-						#else, if the head is not to be added, I percolate the tree further. This should do nothing with UD but it's relevant for other kinds of datasets, where heads are not always lexical items.
-	#					#~ if i in deps:
-	#						#~ curr_deps.extend(deps[i])
-							
-					#~ print "[DEBUG] current dependencies:", curr_deps
-					#~ print "[DEBUG] current items:", items
-					#~ raw_input() #DEUBUG
-
-				#~ raw_input() #DEBUG
-
-			#~ items = defaultdict(set)
 		
 		for i in range(len(groups)):
 			g1 = groups[i]
@@ -316,10 +255,17 @@ class RelationsExtractor:
 					s = sorted(s, key = lambda x:x[0])
 					
 					elements = [e[0] for e in s]
+					elements_0 = [e[0] for e in elements]
 					labels = [e[1] for e in s]
-					
-					
-				self.items[tuple(elements)].append(tuple(labels))
+				
+				#~ print elements
+				#~ print elements_0
+				if (elements_0.count("*")+elements_0.count("_"))*1.0/len(elements)<= 0.51:
+					#~ print elements
+					#~ print elements_0
+					#~ print (elements_0.count("*")+elements_0.count("_"))*1.0/len(elements)
+					#~ raw_input()	
+					self.items[tuple(elements)].append(tuple(labels))
 			
 			
 			#GENERIC ASSOCIATIONS
@@ -332,7 +278,32 @@ class RelationsExtractor:
 							#~ self.items[tuple(sorted([x[0], y[0]]))].append(tuple(["genassoc"]))
 
 		#~ return items
+	def dump_relations(self, fobj):
 	
+		for elements, labels in sorted(self.items.items()):
+			#~ print elements
+			#~ print labels
+			#e = " ".join(elements)
+			counter = Counter(labels)
+			
+			for l in counter:
+				n = counter[l]
+				
+				if len(l)>1:
+					
+					new = zip(elements, l)
+					
+					nodes = " ".join([x[0] for x in new])
+					edge = "|".join([x[1] for x in new])
+					
+				else:
+					nodes = " ".join(elements)
+					edge = l[0]
+					
+				#~ print nodes, "\t", edge	
+				fobj.write(nodes+"\t"+edge+"\t"+str(n)+"\n")	
+				#~ raw_input()
+				#~ fobj.write(e+"\t"+"|".join(l)+"\n")
 
 if __name__ == "__main__":
 	

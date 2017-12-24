@@ -1,96 +1,267 @@
-import urllib
+'''
+	This script download gzip files from the DepCC corpus,
+	count the lemma/POS combination in each of them,
+	and merge the results.
+
+	The resulting output is a gzip file where each line is of the type
+	lemma/POS frequency
+
+	Psychiatrica/NNP	12
+	filibuster/NN	9
+	teacher/NN	530
+	Festival/NNP	199
+	Festivals/NNP	3
+	Festivals/NNPS	1
+	Festivities/NNP	1
+'''
+
+
+
+# https://docs.python.org/2/library/os.html
 import os
-import gzip
-import CorpusReader
-import collections
-import heapq
-from multiprocessing import Pool
+
+# https://docs.python.org/2/library/sys.html
 import sys
 
-_FROM = 0
-_TO = 19101
+# https://docs.python.org/2/library/gzip.html
+import gzip
 
-if len(sys.argv)>2:
-	_FROM = int(sys.argv[1])
-	_TO = int(sys.argv[2])
+# https://docs.python.org/2/library/urllib.html
+import urllib
+
+# https://docs.python.org/2/library/collections.html
+import collections
+
+# https://docs.python.org/2/library/heapq.html
+import heapq
+
+# https://docs.python.org/2/library/multiprocessing.html
+from multiprocessing import Pool
+
+# Own libraries:
+import CorpusReader
+import config
 
 
 
-def extract_lemmas(sentence, d):
+
+
+
+# some parameters
+#################
+
+first_file_ID = config.first_file_ID
+
+last_file_ID = config.last_file_ID
+
+
+if len(sys.argv) > 2:
+
+	first_file_ID = int(sys.argv[1])
+
+	last_file_ID = int(sys.argv[2])
+
+
+
+
+
+
+########################################
+def count_lemma_POS_pairs(sentence, dict_file):
+
 	for line in sentence:
+
 		linesplit = line.split("\t")
 		
-		pos = linesplit[3]
-		
-		if pos[0] in ["N", "V", "J", "R"] and any(c.isalpha() for c in linesplit[2]):
-			d[linesplit[2].strip()+"/"+pos]+=1
+		lemma = linesplit[2]
 
-def f(i):
+		POS = linesplit[3]
 
-	basic_url = "http://ltdata1.informatik.uni-hamburg.de/depcc/corpus/parsed/part-m-"
+		if POS[0] in config.which_POS_as_heads and any(character.isalpha() for character in lemma):
 
-	testfile = urllib.URLopener()
+			key = lemma.strip() + "/" + POS
 
-	k = str(i).zfill(5)
-	url = basic_url+k+".gz"
-
-	f = "../data/"+k+".gz"
-	print "[DEBUG] - file", f, "..."
-
-	testfile.retrieve(url, f)
-
-	print "[DEBUG] - downloaded file", f
-
-	fobj = gzip.open(f, 'rb')
-
-	print "[DEBUG] - lemmas extraction started"
+			dict_file[ key ] += 1
 
 
-	R = CorpusReader.CorpusReader(fobj)
+
+
+########################################
+def file_lemma_POS_frequency_calculation(file_ID):
+
+	proper_file_ID = str(file_ID).zfill(5)
+
+	input_file_path = config.DepCC_folder + "/" + proper_file_ID + ".gz"
+
+	if config.DEBUG : print "[config.DEBUG] - Input file: ", input_file_path 
+
+
+
+	# if the input file does not exist,
+	# it needs to be downloaded
+
+	if not os.path.exists( input_file_path ) :
+
+		testfile = urllib.URLopener()
+
+		URL = config.DepCC_basic_URL + proper_file_ID +".gz"
+
+		# Download the file
+		testfile.retrieve(url = URL, filename = input_file_path)
+
+		# Close the connection
+		testfile.close()
+
+		if config.DEBUG : print "[config.DEBUG] - downloaded !"
+
+
+	# Unzip the file
+
+	input_file_object = gzip.open(input_file_path, 'rb')
+
+
+
+
+
+
+	if config.DEBUG : print "[config.DEBUG] - lemmas extraction started for " + input_file_path
+
+
+	corpus_reader = CorpusReader.CorpusReader(input_file_object)
 
 	dict_file = collections.defaultdict(int)
 
-	for x in R:
-		extract_lemmas(x, dict_file)
+	for sentence in corpus_reader:
 
-	sortedlemmas = sorted(dict_file.items(), key=lambda x: x[0])
+		count_lemma_POS_pairs(sentence, dict_file)
 
 
-	fout = gzip.open("../data/"+k+".sorted.gz", 'wb')
+	sorted_lemma_POS_pairs = sorted(dict_file.items(), key = lambda x: x[0] )
 
-	print "[DEBUG] - writing to file"
-	for x, y in sortedlemmas:
-		fout.write (x+"\t"+str(y)+"\n")
-	fout.close()
-	print "[DEBUG] - removing file"
-	os.remove(f)
+
+	output_file_path = config.univariate_freq_folder + "/" + proper_file_ID + ".sorted.gz"
+
+	output_file_object = gzip.open( output_file_path, 'wb')
+
+
+	if config.DEBUG : print "[config.DEBUG] - writing to file" + output_file_path
+
+
+	for lemma_POS, frequency in sorted_lemma_POS_pairs:
+
+		output_line = lemma_POS + "\t" + str(frequency) + "\n"
+
+		output_file_object.write(output_line)
+	
+	output_file_object.close()
+
+
+
+	
+
+	
+	if config.delete_downloaded_files: 
+
+		# Deletion of the temporary copy.
+
+		if config.DEBUG : print "[config.DEBUG] - removing file: " + input_file_path
+
+		os.remove(input_file_path)
 	
 	
+
+
+########################################
 def keyfunc(string):
+
 	strsplit = string.strip().split("\t")
+
 	return int(strsplit[1])
 
-def decorated_file(f, key):
-    for line in f: 
+
+
+
+########################################
+def decorated_file(filename, key):
+
+    for line in filename: 
+
         yield (key(line), line)
 
 
-p = Pool(processes=8)
-#~ arg_list = [i for i in range(0, 11) ]
-arg_list = [i for i in range(_FROM, _TO)]
-p.map(f, arg_list)
 
 
-print "[DEBUG] - merge started"
-filenames = os.listdir("../data/")
 
-files = [gzip.open("../data/"+f, "rb") for f in  filenames]
-outfile = gzip.open('../data/merged.gz', "wb")
+# Calculation of the lemmas frequency for some files
+#####################################################
 
-for line in heapq.merge(*[decorated_file(f, keyfunc) for f in files]):
-    outfile.write(line[1])
-outfile.close()    
+
+# WARNING
+
+if not config.delete_downloaded_files:
+
+	print "WARNING. This script configuration does NOT delete downloaded files."
+
+	print "If you want to proceed press ENTER."
+
+	print "To exit, type any of [" + ', '.join(config.stop_keys) + "] + press ENTER )"
+
+	response = raw_input()
+
+	if response in config.stop_keys: sys.exit()
+
+
+
+
+
+
+# Using a pool of workers (multiprocessing)
+
+pool = Pool(processes = config.number_worker_processes)
+
+#~ input_file_IDs = [i for i in range(0, 11) ]
+input_file_IDs = [file_ID for file_ID in range(first_file_ID, last_file_ID)]
+
+pool.map(file_lemma_POS_frequency_calculation, input_file_IDs)
+
+
+
+
+
+############################
+
+print "[config.DEBUG] - merge started"
+
+filenames = os.listdir( config.univariate_freq_folder + "/")
+
+files = [gzip.open(config.univariate_freq_folder + "/" + filename, "rb") for filename in  filenames]
+
+
+
+output_path = config.univariate_freq_folder + "/univ_freq_merged.gz"
+
+merged_output_file_object = gzip.open(output_path, "wb")
+
+for line in heapq.merge(*[decorated_file(file, keyfunc) for file in files]):
+
+    merged_output_file_object.write(line[1])
+
+merged_output_file_object.close()    
     
-print "[DEBUG] - removing useless files"
-for f in filenames:
-	os.remove("../data/"+f)
+
+
+
+
+
+############################
+
+print "[config.DEBUG] - removing useless files"
+
+for filename in filenames:
+
+	os.remove( config.univariate_freq_folder + "/" + filename)
+
+
+
+
+print "[config.DEBUG] - Done ! "

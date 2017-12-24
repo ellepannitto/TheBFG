@@ -1,45 +1,60 @@
+# Own libraries:
+import config
+
 class CorpusReader:
 	'''
-	  Iterates a corpus reading from a file, a pipe... and returning one sentences at time
-	  CorpusIterator can be used as follows:
+	  Iterates a corpus reading from a file, a pipe... 
+	  and returns one sentence at time.
+
+	  CorpusReader can be used as follows:
 	  
-	    fin = open ("input_file.txt")
-		r = CorpusReader ( fin, delimiter = "#")
-		for sentence in r:
+	    input_file_object = open ("input_file.txt")
+
+		corpus_reader = CorpusReader (input_file_object, sentence_delimiter = "#")
+
+		for sentence in corpus_reader:
+
 			process (sentence)
 		
 	'''
-	def __init__(self, fin, sentence_delimiter = "#"):
+	def __init__(self, input_file_object, sentence_delimiter = "#"):
 		'''
-		  Initializes a new object, given the object to read, the first character of lines that separate sentences.
+		  Initializes a new object, given the object to read, 
+		  the first character of lines that separate sentences.
 		'''
-		self.input_file = fin
-		self.delimiter = sentence_delimiter
+		self.input_file_object = input_file_object
+
+		self.sentence_delimiter = sentence_delimiter
 		
 		
 	def __iter__ ( self ):
+
 		return self
 		
 
 
 	def next ( self ):
 		'''
-		  Returns next sentence of the corpus, if any, else it raises StopIteration
+		  Returns next sentence of the corpus, if any. 
+		  Else raises StopIteration
 		'''
-		curr_sent = []
+		current_sentence = []
 
-		line = self.input_file.readline()
+		line = self.input_file_object.readline()
 
-		while line and not line[0] == self.delimiter and len( line.strip() ) :
 
-			curr_sent.append(line.strip())
+		while line and not line[0] == self.sentence_delimiter and len( line.strip() ) :
 
-			line = self.input_file.readline()
+			clean_line = line.strip()
+
+			current_sentence.append(clean_line)
+
+			line = self.input_file_object.readline()
 			
 
 		if len(line) > 0:
 
-			return curr_sent
+			return current_sentence
 
 		else:
 
@@ -48,24 +63,28 @@ class CorpusReader:
 
 if __name__ == "__main__":
 
-	stop_keys = ("x", "X", "q", "Q")
+	input_file_object = open(config.DepCCsample)
 
-	R = CorpusReader(open("../corporasample/DepCCsample"))
+	corpus_reader = CorpusReader(input_file_object)
+
+	msg = "\n( To exit the loop: type any of [" + ', '.join(config.stop_keys) + "] + press ENTER )\n"
 	
-	i = 0
+	sentence_id = 0
 
-	for x in R:
+	for sentence in corpus_reader:
 
-		# if x is not empty
-		if x: 
+		# if sentence is not empty
+		if sentence: 
 			
-			i += 1
-			print "\n\nSentence " + str(i) + ":\n---\n"
-			print(x)
-		
-			y = raw_input("\n( X or Q to exit the loop )\n")
+			sentence_id += 1
 
-			if y in stop_keys: break
+			print "\n\nSentence " + str(sentence_id) + ":\n---\n"
+
+			print(sentence)
+
+			response = raw_input(msg)
+
+			if response in config.stop_keys: break
 
 
 

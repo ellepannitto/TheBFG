@@ -63,8 +63,8 @@ if len(sys.argv) > 2:
 
 
 # retrieving the positions of the columns
-lemma_position = config.DepCC_line_map.index("LEMMA") 
-POS_position = config.DepCC_line_map.index("UPOSTAG") 
+lemma_p = config.DepCC_line_map.index("LEMMA") 
+POS_p = config.DepCC_line_map.index("UPOSTAG") 
 
 
 
@@ -75,9 +75,9 @@ def count_lemma_POS_pairs(sentence, dict_file):
 
 		linesplit = line.split("\t")
 		
-		lemma = linesplit[lemma_position]
+		lemma = linesplit[lemma_p]
 
-		POS = linesplit[POS_position]
+		POS = linesplit[POS_p]
 
 		if POS[0] in config.which_POS_as_heads and any(character.isalpha() for character in lemma):
 
@@ -91,6 +91,9 @@ def count_lemma_POS_pairs(sentence, dict_file):
 ########################################
 def file_lemma_POS_frequency_calculation(file_ID):
 
+	# define the needed input
+	#########################
+
 	proper_file_ID = str(file_ID).zfill(5)
 
 	input_file_path = config.DepCC_folder + "/" + proper_file_ID + ".gz"
@@ -101,6 +104,7 @@ def file_lemma_POS_frequency_calculation(file_ID):
 
 	# if the input file does not exist,
 	# it needs to be downloaded
+	#############################
 
 	if not os.path.exists( input_file_path ) :
 
@@ -118,6 +122,7 @@ def file_lemma_POS_frequency_calculation(file_ID):
 
 
 	# Unzip the file
+	##################
 
 	input_file_object = gzip.open(input_file_path, 'rb')
 
@@ -125,23 +130,28 @@ def file_lemma_POS_frequency_calculation(file_ID):
 
 
 	# counting
+	#############
 
 	if config.DEBUG : print "[config.DEBUG] - lemmas/POS counting started for " + input_file_path
 
 	corpus_reader = CorpusReader.CorpusReader(input_file_object)
+
 	dict_file = collections.defaultdict(int)
+
 	for sentence in corpus_reader:
 		count_lemma_POS_pairs(sentence, dict_file)
 
 
 
 	# sorting
+	############
 
 	sorted_lemma_POS_pairs = sorted(dict_file.items(), key = lambda x: x[0] )
 
 	
 
 	# saving the output
+	####################
 
 	output_file_path = config.temp_folder + "/" + proper_file_ID + ".sorted.gz"
 	output_file_object = gzip.open( output_file_path, 'wb')
@@ -159,7 +169,8 @@ def file_lemma_POS_frequency_calculation(file_ID):
 
 	
 	# Deletion of the temporary copy of the input files
-	
+	####################################################
+
 	if config.delete_downloaded_files: 
 
 		if config.DEBUG : print "[config.DEBUG] - removing file: " + input_file_path

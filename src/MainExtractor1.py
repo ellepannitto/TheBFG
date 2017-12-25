@@ -14,61 +14,118 @@ This implies that binary relations are considered only when both lemmas have fre
 import gzip
 import urllib
 import os
+
+
+# Own libraries:
 import RelationsExtractor
 import DepCCToken
+import config
 
 
-_MAX_FREQ_LEMMA = 1000
-_LOWFREQ_THRESHOLD = 0.51
 
-_VOCAB_FOLDER = "../data/vocabulary/"
-_OUTPUT_FOLDER = "../data/graph/"
-_DATA_FOLDER = "../data/"
 
-def extractset (filename):
-	fobj = gzip.open(_VOCAB_FOLDER+filename, "rb")
+
+
+
+
+
+
+
+def extract_set (filename):
+
+	path = config.vocabulary_folder + "/" + filename
+
+	fobj = gzip.open( path , "rb")
 	
 	lines = fobj.read().splitlines()
 	
 	return set(lines)
 
-def testlen (s):
-	return len(s)>6 and len(s)<20
-
-_VOCAB_LISTS = {x:extractset("bfg_"+x+"_"+str(_MAX_FREQ_LEMMA)+".sorted.gz") for x in ["N", "J", "V", "R"]}
 
 
-#MAIN
-basic_url = "http://ltdata1.informatik.uni-hamburg.de/depcc/corpus/parsed/part-m-"
 
-testfile = urllib.URLopener()
 
-for i in range(0, 31):
-	k = str(i).zfill(5)
-	url = basic_url+k+".gz"
+vocabulary_dict = {x : extract_set("bfg_" + x + "_" + str(config.minimal_frequency_lemma) + ".sorted.gz") for x in ["N", "J", "V", "R"]}
 
-	f = _DATA_FOLDER+k+".gz"
-	print "[DEBUG] - file", f, "..."
+
+
+
+
+
+for file_ID in range(config.first_file_ID, config.last_file_ID):
+
+
+	# define the needed input
+	#########################
+
+	proper_file_ID = str(file_ID).zfill(5)
 	
-	testfile.retrieve(url, f)
+	input_file_path = config.DepCC_folder + "/" + proper_file_ID + ".gz"
 
-	print "[DEBUG] - downloaded file", f
+	if config.DEBUG : print "[config.DEBUG] - Input file: ", input_file_path 
 
-	rex = RelationsExtractor.RelationsExtractor(testlen)
+
+
+
+	# if the input file does not exist,
+	# it needs to be downloaded
+	###########################
+
+	if not os.path.exists( input_file_path ) :
+
+		testfile = urllib.URLopener()
+
+		URL = config.DepCC_basic_URL + proper_file_ID +".gz"
+
+		# Download the file
+		testfile.retrieve(url = URL, filename = input_file_path)
+
+		# Close the connection
+		testfile.close()
+
+		if config.DEBUG : print "[config.DEBUG] - downloaded !"
+
+
+
+	# extract relations
+	###################
+
+	# init 'RelationsExtractor'
+
+	rex = RelationsExtractor.RelationsExtractor(RelationsExtractor.test_sentence_length)
 	
-	rex.set_vocabulary(_VOCAB_LISTS)
+	rex.set_vocabulary(vocabulary_dict)
 		
-	rex.parse_file(f, DepCCToken.DepCCToken)
+	rex.parse_file(input_file_path, DepCCToken.DepCCToken)
 
-	rex.dump_relations(gzip.open(_OUTPUT_FOLDER+k+".gz", "wb"))
+
+	# output
+	########
+
+	output_path = config.graph_folder + "/" + proper_file_ID + ".gz"
+
+	rex.dump_relations( gzip.open(output_path, "wb") )
 	
-	print "[DEBUG] - removing file"
-	os.remove(f)
 
+
+
+	# Deletion of the temporary copy of the input files
+	####################################################
 	
-#~ rex = RelationsExtractor.RelationsExtractor(testlen)
+	if config.delete_downloaded_files: 
 
-#~ rex.set_vocabulary(_VOCAB_LISTS)
+		if config.DEBUG : print "[config.DEBUG] - removing file: " + input_file_path
+
+		os.remove(input_file_path)
+
+
+
+
+
+
+#~ rex = RelationsExtractor.RelationsExtractor(RelationsExtractor.test_sentence_length)
+
+#~ rex.set_vocabulary(vocabulary_dict)
 	
 #~ rex.parse_file("../data/00000.gz", DepCCToken.DepCCToken)
 

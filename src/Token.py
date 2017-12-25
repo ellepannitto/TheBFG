@@ -5,7 +5,7 @@ class Token(object):
 	def __init__(self):
 		self.id_ord = -1
 		self.lemma = ""
-		self.pos = ""
+		self.POS = ""
 		self.pord = -1
 		self.rel = ""
 		self.enhanced_pord = -1
@@ -33,7 +33,9 @@ class Token(object):
 		"""
 		
 		splitne = self.ne.split("-")
-		if len(self.ne)>1:
+
+		if len(self.ne) >1 :
+			
 			self.ne = splitne[1]
 
 		# Patrick: could you please an example ?
@@ -44,25 +46,32 @@ class Token(object):
 		#~ if not self.ne == "O":
 			#~ self.lemma = self.lemma+"/"+self.ne
 		#~ else:
-			#~ self.lemma = self.lemma+"/"+self.pos
+			#~ self.lemma = self.lemma+"/"+self.POS
 
 		# In order to remove proper nouns from the graph, but keep information about them (such as "ProperNoun subject of running" for example), I'm updating things this way:
 		#- proper nouns are in general replaced with a special string such as _NNP_
 		#- if the lemma is a recognized named entity, we replace it with _Location_ for example, so that we know it's a location, which is more specific than _NNP_
 		
-		if self.pos in ["NNP", "NNPS"] and self.ne == "O":
-			self.lemma = "_"+self.pos+"_"
+		if self.POS in ["NNP", "NNPS"] and self.ne == "O":
+
+			self.lemma = "_" + self.POS + "_"
+
 		elif not self.ne == "O":
-			self.lemma = "_"+self.ne+"_"
-		elif self.pos[0] in vocab_dict:
-			#~ print self.lemma, self.pos
-			if not self.lemma+"/"+self.pos in vocab_dict[self.pos[0]]:
-				#~ print self.lemma+"/"+self.pos
-				#~ print vocab_dict[self.pos[0]]
+
+			self.lemma = "_" + self.ne + "_"
+
+		elif self.POS[0] in vocab_dict:
+
+			#~ print self.lemma, self.POS
+
+			if not self.lemma + "/" + self.POS in vocab_dict[self.POS[0]]:
+				#~ print self.lemma+"/"+self.POS
+				#~ print vocab_dict[self.POS[0]]
 				#~ raw_input()
+
 				self.lemma = "*"
 			
-		self.lemma = self.lemma+"/"+self.pos
+		self.lemma = self.lemma + "/" + self.POS
 
 
 		if self.rel == "nsubjpass":
@@ -73,6 +82,7 @@ class Token(object):
 		
 		if self.enhanced_rel == "nsubjpass":
 			self.enhanced_rel = "dobj"
+
 		if self.enhanced_rel == "csubjpass":
 			self.enhanced_rel = "ccomp"
 
@@ -84,7 +94,7 @@ class Token(object):
 		Patrick: could you please give an example?
 		"""
 		
-		self.lemma = self.lemma+"_"+prt
+		self.lemma = self.lemma + "_" + prt
 		
 		
 		

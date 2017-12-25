@@ -1,10 +1,14 @@
-import CorpusReader as Reader
-import DepCCToken
-
 import os
 import itertools
 from collections import *
 import gzip
+
+# Own libraries:
+import CorpusReader as Reader
+import DepCCToken
+import config
+
+
 
 def print_for_debug(sentence, rels):
 	print "[DEBUG] - sentence:"
@@ -29,6 +33,19 @@ def print_for_debug(sentence, rels):
 	
 	#~ raw_input()
 
+
+
+
+# This functions just checks whether a sentence is enough and not too long, 
+# as parsing errors are more frequent in longer sentences, 
+# and sentences shorter than 6 may well be incomplete sentences or mistakes of some kind.
+
+def test_sentence_length (sentence):
+
+	return len(sentence) > config.min_sentence_length and len(sentence) < config.max_sentence_length
+
+
+
 class RelationsExtractor:
 	"""
 	
@@ -36,7 +53,8 @@ class RelationsExtractor:
 	
 	def __init__(self, testfunction):
 		"""
-		Initializes an extractor, given a test function. The function is meant to filter sentences on some criteria we can choose, as the corpus might be very noisy.
+		Initializes an extractor, given a test function. 
+		The function is meant to filter sentences on some criteria we can choose, as the corpus might be very noisy.
 		"""
 		
 		self.test = testfunction
@@ -44,11 +62,20 @@ class RelationsExtractor:
 		self.items = defaultdict(list)
 		
 		
-		# - relations I'm not considering at all: "abbrev", "appos", "attr", "aux", "auxpass", "cc", "complm", "cop", "dep", "det", "mark", "nn", "null", "number", "parataxis", "predet", "pred", "prep", "punct", "rel"
-		# - relations I'm not considering since they're considered elsewhere: "nsubjpass", "csubjpass", "pobj", "pcomp", "ROOT"
-		# - relations I would like to consider somehow: "expl", "num"+"measure", "neg", "poss", "possessive", "preconj", "prt", "quantmod"(?), "tmod"
+		# Relations I'm not considering at all: 
+		# "abbrev", "appos", "attr", "aux", "auxpass", "cc", "complm", "cop", "dep", "det", "mark", "nn", "null", 
+		# "number", "parataxis", "predet", "pred", "prep", "punct", "rel"
 		
-		#relations we're taking into consideration. Ignore the "lambda: True" thing, it is just in case we need different functions depending on the kind of relation
+		# Relations I'm not considering since they're considered elsewhere: 
+		# "nsubjpass", "csubjpass", "pobj", "pcomp", "ROOT"
+
+		# Relations I would like to consider somehow: 
+		# "expl", "num"+"measure", "neg", "poss", "possessive", "preconj", "prt", "quantmod"(?), "tmod"
+		
+		# Relations we're taking into consideration. 
+		# Ignore the "lambda: True" thing.
+		# It is just in case we need different functions depending on the kind of relation.
+
 		self.switch_relations = {
 			"acomp" : lambda: True, 
 			"advcl" : lambda: True, 
@@ -68,9 +95,18 @@ class RelationsExtractor:
 		}
 		
 	
+
+
+
 	def set_vocabulary(self, vocab_dict):
+
 		self.vocabulary = vocab_dict
 	
+
+
+
+
+
 	def parse_file(self, f, TokenClass):
 		"""
 		Parses a file given a class to represent tokens.
@@ -80,6 +116,7 @@ class RelationsExtractor:
 		
 		#~ newfile = open(f)
 		newfile = gzip.open(f, "rb")
+
 		self.reader = Reader.CorpusReader(newfile)
 		
 		#~ fout = gzip.open("../data/graph/"+os.path.basename(f)+".out.gz", "wb")
@@ -87,14 +124,19 @@ class RelationsExtractor:
 		n = 0
 		
 		for sentence in self.reader:
-			n+=1
+
+			n += 1
+
 			if self.test(sentence):
+
 				parsed_sent = self.parse_sent (sentence, TokenClass)
 				#~ rels = self.process(parsed_sent)
 				self.process(parsed_sent)
 			
 			if not n%10000:
+
 				print "leggo frase", n	
+
 			#~ else:#DEBUG
 				#~ print "[DEBUG] - ignoring sentence here"
 							
@@ -102,6 +144,13 @@ class RelationsExtractor:
 
 		
 		#~ fout.close()		
+
+
+
+
+
+
+
 
 	def parse_sent (self, raw_sentence, TokenClass):
 		"""
@@ -117,16 +166,22 @@ class RelationsExtractor:
 		B_ne = -1
 		map_ne = {}
 		sentence = {}
+
 		for token in raw_sentence:
+
 			token = TokenClass(token)
 			sentence[token.id_ord] = token
 
 
 			#this line is meant to merge particles with verbs, so phrasal verbs are reconstructed.
 			if token.rel == "prt":
+
 				if token.pord in sentence:
+
 					sentence[token.pord].add_part(token.lemma)
+
 				else:
+
 					print "DEBUG - head of particle not in sentence"
 					print raw_sentence
 					print token.pord
@@ -160,7 +215,9 @@ class RelationsExtractor:
 
 		#normalize each token (see normalizing function in class token)
 		for id_ord in sentence:
+
 			token = sentence[id_ord]
+
 			token.normalize(self.vocabulary)
 				
 		#postprocess steps:
@@ -183,6 +240,11 @@ class RelationsExtractor:
 		
 		return sentence
 				
+
+
+
+
+
 	def process (self, sentence):
 		"""
 		This is the core function of the whole script. Given a sentence in the following shape: s = {id_1: Token1, id_2:Token2...}, returns a set of items (n-uples) formed by two ore more ids of items in relation with each other, and a label to represent the relation.
@@ -192,19 +254,33 @@ class RelationsExtractor:
 		
 		deps  = {}
 		root = None
+
 		for id_ord in sentence:
+
 			token = sentence[id_ord]
+
+
 			if not token.pord in deps:
+
 				deps[token.pord] = []
+
 				
 			deps[token.pord].append((id_ord, token.rel))
 
-			if token.enhanced_pord>0:
+
+			if token.enhanced_pord > 0:
+
+
 				if not token.enhanced_pord in deps:
-					deps[token.enhanced_pord] = []	
+
+					deps[token.enhanced_pord] = []
+
+
 				deps[token.enhanced_pord].append((id_ord, token.enhanced_rel))	
+
 			
-			if token.rel == "ROOT" and token.pos[0] in ["V", "N", "J"]:
+			if token.rel == "ROOT" and token.POS[0] in ["V", "N", "J"]:
+
 				root = id_ord
 		
 		#here a sort of queue is implemented (I'm not using any pre-defined class since in the end it was easier to use lists. If things get more complicated I'm going to define a dedicated queue class.
@@ -220,31 +296,47 @@ class RelationsExtractor:
 
 
 		groups = []		
+
 		if root:
+
 			Q = [root]
+
 			while Q:
+
 				x = Q.pop()
 				
 				curr_el = sentence[x]
+
 				group = [(curr_el.lemma, "ROOT")]
 				
 				curr_deps = []
+
 				if x in deps:
+
 					curr_deps = [(i, j) for i, j in deps[x] if not i == x]			
 
 				for i, r in curr_deps:
+
 					target = sentence[i]
-					#~ if target.pos[0] in ["V", "N", "J", "R"] and target.lemma in _SELECTEDLEMMAS:
-					if target.pos[0] in ["V", "N", "J", "R"] and target.rel not in ["cop", "prt", "nn", "aux", "auxpass"]:
+
+					#~ if target.POS[0] in ["V", "N", "J", "R"] and target.lemma in _SELECTEDLEMMAS:
+
+					if target.POS[0] in ["V", "N", "J", "R"] and target.rel not in ["cop", "prt", "nn", "aux", "auxpass"]:
+
 						group.append((target.lemma, r))
+
 					elif i in deps:
+
 						curr_deps.extend(deps[i])
 						
-					if target.pos[0] in ["V", "N", "J"]:
+					if target.POS[0] in ["V", "N", "J"]:
+
 						Q.append(i)
+
 				groups.append(group)
 		
 		for i in range(len(groups)):
+
 			g1 = groups[i]
 			
 			for n in range(2, len(g1)+1):
@@ -252,19 +344,26 @@ class RelationsExtractor:
 				subsets = set(itertools.combinations(g1, n))
 				
 				for s in subsets:
+
 					s = sorted(s, key = lambda x:x[0])
 					
 					elements = [e[0] for e in s]
+
 					elements_0 = [e[0] for e in elements]
+
 					labels = [e[1] for e in s]
 				
 				#~ print elements
 				#~ print elements_0
-				if (elements_0.count("*")+elements_0.count("_"))*1.0/len(elements)<= 0.51:
+
+				#if (elements_0.count("*") + elements_0.count("_")) * 1.0 / len(elements) <= config.low_frequency_threshold:
+				if elements_0.count("_") > elements_0.count("*"):
+
 					#~ print elements
 					#~ print elements_0
 					#~ print (elements_0.count("*")+elements_0.count("_"))*1.0/len(elements)
 					#~ raw_input()	
+
 					self.items[tuple(elements)].append(tuple(labels))
 			
 			
@@ -278,6 +377,8 @@ class RelationsExtractor:
 							#~ self.items[tuple(sorted([x[0], y[0]]))].append(tuple(["genassoc"]))
 
 		#~ return items
+
+
 	def dump_relations(self, fobj):
 	
 		for elements, labels in sorted(self.items.items()):
@@ -287,6 +388,7 @@ class RelationsExtractor:
 			counter = Counter(labels)
 			
 			for l in counter:
+
 				n = counter[l]
 				
 				if len(l)>1:
@@ -294,27 +396,28 @@ class RelationsExtractor:
 					new = zip(elements, l)
 					
 					nodes = " ".join([x[0] for x in new])
+
 					edge = "|".join([x[1] for x in new])
 					
 				else:
+
 					nodes = " ".join(elements)
+
 					edge = l[0]
 					
 				#~ print nodes, "\t", edge	
-				fobj.write(nodes+"\t"+edge+"\t"+str(n)+"\n")	
+				fobj.write(nodes + "\t" + edge + "\t" + str(n) + "\n")	
 				#~ raw_input()
 				#~ fobj.write(e+"\t"+"|".join(l)+"\n")
 
+
+
+
+
 if __name__ == "__main__":
 	
-	
-	#this functions just checks whether a sentence is enough and not too long, as parsing errors are more frequent in longer sentences, and sentences shorter than 6 may well be incomplete sentences or mistakes of some kind
-	def testlen (s):
-		return len(s)>6 and len(s)<20
-
-
-
-	rex = RelationsExtractor(testlen)
+	rex = RelationsExtractor(test_sentence_length)
 	
 	#~ rex.parse_file("../corporasample/DepCCsample", DepCCToken.DepCCToken)
-	rex.parse_file("../data/00000.gz", DepCCToken.DepCCToken)
+
+	rex.parse_file(config.first_DepCC_file, DepCCToken.DepCCToken)

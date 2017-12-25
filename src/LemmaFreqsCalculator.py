@@ -62,7 +62,9 @@ if len(sys.argv) > 2:
 	last_file_ID = int(sys.argv[2])
 
 
-
+# retrieving the positions of the columns
+lemma_position = config.DepCC_line_map.index("LEMMA") 
+POS_position = config.DepCC_line_map.index("UPOSTAG") 
 
 
 
@@ -73,9 +75,9 @@ def count_lemma_POS_pairs(sentence, dict_file):
 
 		linesplit = line.split("\t")
 		
-		lemma = linesplit[2]
+		lemma = linesplit[lemma_position]
 
-		POS = linesplit[3]
+		POS = linesplit[POS_position]
 
 		if POS[0] in config.which_POS_as_heads and any(character.isalpha() for character in lemma):
 
@@ -122,35 +124,33 @@ def file_lemma_POS_frequency_calculation(file_ID):
 
 
 
+	# counting
 
-
-	if config.DEBUG : print "[config.DEBUG] - lemmas extraction started for " + input_file_path
-
+	if config.DEBUG : print "[config.DEBUG] - lemmas/POS counting started for " + input_file_path
 
 	corpus_reader = CorpusReader.CorpusReader(input_file_object)
-
 	dict_file = collections.defaultdict(int)
-
 	for sentence in corpus_reader:
-
 		count_lemma_POS_pairs(sentence, dict_file)
 
 
+
+	# sorting
+
 	sorted_lemma_POS_pairs = sorted(dict_file.items(), key = lambda x: x[0] )
 
+	
 
-	output_file_path = config.univariate_freq_folder + "/" + proper_file_ID + ".sorted.gz"
+	# saving the output
 
+	output_file_path = config.temp_folder + "/" + proper_file_ID + ".sorted.gz"
 	output_file_object = gzip.open( output_file_path, 'wb')
 
-
 	if config.DEBUG : print "[config.DEBUG] - writing to file" + output_file_path
-
 
 	for lemma_POS, frequency in sorted_lemma_POS_pairs:
 
 		output_line = lemma_POS + "\t" + str(frequency) + "\n"
-
 		output_file_object.write(output_line)
 	
 	output_file_object.close()
@@ -158,11 +158,9 @@ def file_lemma_POS_frequency_calculation(file_ID):
 
 
 	
-
+	# Deletion of the temporary copy of the input files
 	
 	if config.delete_downloaded_files: 
-
-		# Deletion of the temporary copy.
 
 		if config.DEBUG : print "[config.DEBUG] - removing file: " + input_file_path
 
@@ -228,17 +226,21 @@ pool.map(file_lemma_POS_frequency_calculation, input_file_IDs)
 
 
 
-############################
+# Merge
 
-print "[config.DEBUG] - merge started"
+if config.DEBUG : print "[config.DEBUG] - start merge of files in : " + config.temp_folder
 
-filenames = os.listdir( config.univariate_freq_folder + "/")
+filenames = os.listdir( config.temp_folder + "/")
 
-files = [gzip.open(config.univariate_freq_folder + "/" + filename, "rb") for filename in  filenames]
+files = [gzip.open(config.temp_folder + "/" + filename, "rb") for filename in  filenames]
+
+output_path = config.results_folder + "/univ_freq_merged.gz"
 
 
+if os.path.exists(output_path):
 
-output_path = config.univariate_freq_folder + "/univ_freq_merged.gz"
+	os.remove(output_path)
+
 
 merged_output_file_object = gzip.open(output_path, "wb")
 
@@ -249,19 +251,24 @@ for line in heapq.merge(*[decorated_file(file, keyfunc) for file in files]):
 merged_output_file_object.close()    
     
 
+print " --- Output saved in : " + output_path
+
+
+
 
 
 
 
 ############################
 
-print "[config.DEBUG] - removing useless files"
+if config.DEBUG : print "[config.DEBUG] - removing useless files"
 
 for filename in filenames:
 
-	os.remove( config.univariate_freq_folder + "/" + filename)
+	os.remove( config.temp_folder + "/" + filename)
 
 
 
 
-print "[config.DEBUG] - Done ! "
+
+print " --- Done ! "

@@ -39,7 +39,7 @@ first_DepCC_file = DepCC_folder + "/" + "00000.gz"
 
 
 #delete_downloaded_files = True
-delete_downloaded_files = True
+delete_downloaded_files = False
 
 
 DEBUG = True
@@ -48,7 +48,7 @@ DEBUG = True
 
 # Range of ID of the files in the DepCC corpus
 first_file_ID = 0
-last_file_ID = 3
+last_file_ID = 31
 #last_file_ID = 19101
 
 

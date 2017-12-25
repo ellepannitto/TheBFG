@@ -27,26 +27,6 @@ import config
 
 
 
-
-
-
-
-def extract_set (filename):
-
-	path = config.vocabulary_folder + "/" + filename
-
-	fobj = gzip.open( path , "rb")
-	
-	lines = fobj.read().splitlines()
-	
-	return set(lines)
-
-
-
-
-
-
-
 # WARNING
 
 if not config.delete_downloaded_files:
@@ -65,10 +45,52 @@ if not config.delete_downloaded_files:
 
 
 
+# list of vocabulary
+#######################
 
+
+
+def extract_set (filename):
+
+	path = config.vocabulary_folder + "/" + filename
+
+	fobj = gzip.open( path , "rb")
+	
+	lines = fobj.read().splitlines()
+	
+	return set(lines)
 
 
 vocabulary_dict = {x : extract_set("bfg_" + x + "_" + str(config.minimal_frequency_lemma) + ".sorted.gz") for x in ["N", "J", "V", "R"]}
+
+
+
+"""
+The vocabulary files are :
+
+data/vocabulary/bfg_J_1000.sorted.gz
+data/vocabulary/bfg_J_3000.sorted.gz
+data/vocabulary/bfg_N_1000.sorted.gz
+data/vocabulary/bfg_N_3000.sorted.gz
+data/vocabulary/bfg_R_1000.sorted.gz
+data/vocabulary/bfg_R_3000.sorted.gz
+data/vocabulary/bfg_V_1000.sorted.gz
+data/vocabulary/bfg_V_3000.sorted.gz
+
+Here are the first line for 'bfg_J_1000.sorted.gz':
+
+other/JJ
+more/JJR
+new/JJ
+first/JJ
+good/JJ
+many/JJ
+such/JJ
+last/JJ
+
+"""
+
+
 
 
 

@@ -45,9 +45,30 @@ def extract_set (filename):
 
 
 
+
+
+# WARNING
+
+if not config.delete_downloaded_files:
+
+	print "WARNING. This script configuration does NOT delete downloaded files."
+
+	print "If you want to proceed press ENTER."
+
+	print "To exit, type any of [" + ', '.join(config.stop_keys) + "] + press ENTER )"
+
+	response = raw_input()
+
+	if response in config.stop_keys: sys.exit()
+
+
+
+
+
+
+
+
 vocabulary_dict = {x : extract_set("bfg_" + x + "_" + str(config.minimal_frequency_lemma) + ".sorted.gz") for x in ["N", "J", "V", "R"]}
-
-
 
 
 

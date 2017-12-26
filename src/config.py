@@ -103,8 +103,8 @@ minimal_frequency_lemma = 1000
 low_frequency_threshold = 0.51 
 
 
-min_sentence_length = 6
+min_sentence_length = 7
 
-max_sentence_length = 20
+max_sentence_length = 19
 
 

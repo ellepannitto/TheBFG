@@ -43,7 +43,10 @@ def print_for_debug(sentence, rels):
 
 def test_sentence_length (sentence):
 
-	return len(sentence) > config.min_sentence_length and len(sentence) < config.max_sentence_length
+	sentence_length = len(sentence)
+
+	return sentence_length >= config.min_sentence_length and sentence_length <= config.max_sentence_length
+
 
 
 
@@ -77,22 +80,30 @@ class RelationsExtractor:
 		# Ignore the "lambda: True" thing.
 		# It is just in case we need different functions depending on the kind of relation.
 
+		"""
+
+
+		"""
+
+
+
+
 		self.switch_relations = {
-			"acomp" : lambda: True, 
-			"advcl" : lambda: True, 
-			"advmod":lambda: True, 
-			"amod": lambda: True, 
-			"ccomp": lambda: True, 
-			"conj": lambda: True,
-			"csubj": lambda: True,
-			"dobj": lambda: True,
-			"infmod": lambda: True,
-			"iobj": lambda: True,
-			"nsubj": lambda: True,
-			"partmod": lambda: True,
-			"purpcl": lambda: True,
-			"rcmod": lambda: True,
-			"xcomp": lambda: True
+			"acomp" : lambda: True, # adjectival complement
+			"advcl" : lambda: True, # adverbial clause modifier 
+			"advmod":lambda: True, # adverbial modifier
+			"amod": lambda: True, # attributive adjectival modifier
+			"ccomp": lambda: True, # clausal complement with internal subject
+			"conj": lambda: True, # conjunct
+			"csubj": lambda: True, # clausal subject
+			"dobj": lambda: True, # direct object
+			"infmod": lambda: True, # infinitival modifier 
+			"iobj": lambda: True, # indirect object 
+			"nsubj": lambda: True, # nominal subject
+			"partmod": lambda: True, # participial modifier
+			"purpcl": lambda: True, # purpose clause modifier
+			"rcmod": lambda: True, # relative clause modifier
+			"xcomp": lambda: True # clausal complement with external subject
 		}
 		
 	

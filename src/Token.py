@@ -71,24 +71,29 @@ class Token(object):
 		Only some of them are currently implemented.
 
 
-		
-		- Transforms passive relations into active relations (nsubjpass -> dobj, csubjpass -> ccomp)
-		
+		1) Transforms passive relations into active relations
+		-----------------------------------------------------
+
+		See below for examples.
+
+
+
+
+		2) Adds PoS or NE Class to lemma
+		--------------------------------
+
+
 		Patrick: could you please an example for each case?
 
 
 
-
-		- Adds PoS or NE Class to lemma
-
-		Patrick: could you please an example for each case?
-
-
-
 		
-		Other things that could be implemented here:
+		3) Other things that could be implemented here:
+
 		- filter lemmas on frequency
+
 		- add placeholders...
+
 		"""
 		
 		splitne = self.ne.split("-")
@@ -105,7 +110,8 @@ class Token(object):
 
 		# If it's B-Location or I-Location, 
 		# we just keep Location :) 
-		# If there's no "-", it's just "O" so we keep "O", but we're not using it anyway
+		# If there's no "-", it's just "O" so we keep "O".
+		# But we're not using it anyway ...
 
 		
 
@@ -152,27 +158,70 @@ class Token(object):
 				self.lemma = "*"
 			
 
-		# Associate the lemma to its POS...
+
+
+
+
+		# Associate the lemma to its POS.
+		# -------------------------------------
+
 		self.lemma = self.lemma + "/" + self.POS
 
 
 
+
+
+
+
+
+
+		"""
+		Transforms passive relations into active relations (I)
+		-----------------------------------------------------
+
+		nsubjpass -> dobj
+		-----------------
+		
+		Passive nominal subject (nsubjpass) -> direct object (dobj)
+		Dole was defeated by Clinton -> Clinton defeated Dole
+		nsubjpass(defeated, Dole) -> dobj(defeated, Dole)
+
+
+		"""
+
 		if self.rel == "nsubjpass":
 
 			self.rel = "dobj"
-
-
-
-		if self.rel == "csubjpass":
-
-			self.rel = "ccomp"
-
 
 		
 		if self.enhanced_rel == "nsubjpass":
 
 			self.enhanced_rel = "dobj"
 
+
+
+
+
+
+
+
+		"""		
+
+		Transforms passive relations into active relations (II)
+		-------------------------------------------------------
+
+		csubjpass -> ccomp
+		------------------
+		
+		Clausal passive subject (csubjpass) -> Clausal complement (ccomp)
+		That she lied was suspected by everyone -> Everyone suspected that she lied.
+		csubjpass(suspected, lied) -> ccomp(suspected, lied)
+		
+		"""
+
+		if self.rel == "csubjpass":
+
+			self.rel = "ccomp"
 
 
 		if self.enhanced_rel == "csubjpass":
@@ -183,11 +232,24 @@ class Token(object):
 
 
 
+
+
+
+
 	def add_part (self, prt):
 		"""
 		Expands lemma by adding prt
 
-		Patrick: could you please give an example?
+		prt: phrasal verb particle
+
+		Example : 
+
+		They shut down the station
+		prt(shut, down)
+
+		if lemma = 'shut', and prt = 'down', 
+		lemma becomes 'shut down'
+		
 		"""
 		
 		self.lemma = self.lemma + "_" + prt

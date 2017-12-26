@@ -9,23 +9,29 @@ We consider the dependencies (either basic dependencies or enhanced ones) as a t
 
 ## How to extract relations
 
-Example sentence:
+The following operations and considerations apply in order to extract relations from a sentence.
 
-> The tall student reads the black book while the teacher speaks about history
-
-How to build subsets:
-
-* We consider only nominal and verbal heads.
+* We consider only nominal and verbal heads of the sentence.
 
 * We can have different heads in a sentence (not only the head under the root of the sentence).
 
 * Each head defines a group.
 
-* For each head of a group, take all its dependants and generate all possible subsets involving the head and its dependants.
+* For each head of a group, consider all its dependants.
+
+* Generate all possible subsets involving the head and its dependants.
 
 * A subset can be made of 2 elements (pairs), 3 elements (trios), 4 elements, etc. 
 
-* In order to take into account potentially interesting relations between dependants of different heads, we generate pairs formed by two items belonging to different groups. These relations are generic association relations (not labeled with syntactic paths). The idea is that they are useful to activate neighbouring events.
+* Each subset corresponds to a relation WITHIN a group. The relation is named on the basis of the syntactical dependence linking the elements in the subset.
+
+* We are also interested by the relations BETWEEN groups. The idea is that these relations may be useful to activate neighbouring events. However we do no take all possible relations, for their number would be too large. We only consider the pairs formed by two items belonging to different groups. These relations are not named since there usually is not syntactic dependence between their elements. 
+
+
+Example sentence:
+
+> The tall student reads the black book while the teacher speaks about history
+
 
 From the example sentence, we can extract 4 heads, and so 4 groups are formed:
 
@@ -35,7 +41,7 @@ From the example sentence, we can extract 4 heads, and so 4 groups are formed:
 * Group4: head = speak, dependants = {teacher, history}
 
 
-We have two types of relations.
+Like we said earlier, we have two types of relations.
 
 1) The relationships WITHIN a group 
 
@@ -163,6 +169,10 @@ Group 3 - Group 4
 
 ('black', 'teacher')
 ('black', 'history')
+
+
+
+
 
 
 

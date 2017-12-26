@@ -38,7 +38,8 @@ def print_for_debug(sentence, rels):
 
 # This functions just checks whether a sentence is enough and not too long, 
 # as parsing errors are more frequent in longer sentences, 
-# and sentences shorter than 6 may well be incomplete sentences or mistakes of some kind.
+# and sentences that are too short may be incomplete 
+# or contain mistakes of some kind.
 
 def test_sentence_length (sentence):
 

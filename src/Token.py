@@ -71,55 +71,51 @@ class Token(object):
 		Only some of them are currently implemented.
 
 
-		1) Transforms passive relations into active relations
-		-----------------------------------------------------
 
-		See below for examples.
-
-
-
-
-		2) Adds PoS or NE Class to lemma
-		--------------------------------
-
-
-		Patrick: could you please an example for each case?
-
-
-
-		
-		3) Other things that could be implemented here:
+		Other things that could be implemented here:
 
 		- filter lemmas on frequency
 
 		- add placeholders...
 
+
+		Processing of NER : named entity tag
+		#################################### 
+
+		Possible values:
+
+		B-Location
+		I-Location
+		...
+
+		We keep just the first value it the string is at least 2 characters long
+
+		So:
+
+		B-Location -> B
+		I-Location -> I
+		...
+
+		Note: this might be a useless feature.
+
 		"""
 		
 		splitne = self.ne.split("-")
 
-		if len(self.ne) >1 :
+		if len(self.ne) > 1 :
 			
-			self.ne = splitne[1]
+			self.ne = splitne[0]  # This sould be 0 right?
+			#self.ne = splitne[1]
 
 
-		# Patrick: could you please an example ?
-
-
-
-
-		# If it's B-Location or I-Location, 
-		# we just keep Location :) 
-		# If there's no "-", it's just "O" so we keep "O".
-		# But we're not using it anyway ...
-
-		
 
 		#~ if not self.ne == "O":
 			#~ self.lemma = self.lemma+"/"+self.ne
 
 		#~ else:
 			#~ self.lemma = self.lemma+"/"+self.POS
+
+
 
 
 

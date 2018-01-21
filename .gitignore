@@ -102,4 +102,6 @@ ENV/
 
 
 #data folder
-data/
+data/vocabulary/*
+data/edges/*
+data/depcc/*

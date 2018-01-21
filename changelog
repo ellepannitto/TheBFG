@@ -1,3 +1,17 @@
+TheBFG ver 0.4
+	
+	- major code refactoring
+	- configuration files added
+	- pipeline added
+	- classes have been almost (!) properly commeted
+		
+	TODO:
+	- change folder organization (preprocessing + data extraction + graph building + query interface)
+	- handle possible common errors with parameters specification
+	- find a way to generate readable documentation
+  
+-- Ludovica Pannitto <ellepannitto@gmail.com>  Sun, 21 Jan 2018 22.15
+
 TheBFG ver 0.3.2
   
   * MainExtractor1:

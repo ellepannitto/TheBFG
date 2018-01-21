@@ -1,90 +1,142 @@
 class Token(object):
 	"""
-	  Represents a Token, formed by relevant attributes. 
+	  Represents a Token, formed by its relevant attributes. 
+	  These are:
+	  
+	  - id_ord: id of token, place of token in sentence, default -1
+	  - lemma: lemma or stem of word form, default ""
+	  - pos: coarse grained part of speech tag of token, default ""
+	  - pord: syntactic head of token, default -1
+	  - rel: dependency relation of token, default ""
+	  - enhanced_rel: enhanced dependency relation of token, default ""
+	  - enhanced_pord: head of token, concerning enhanced relation, default -1
+	  - ne: named entity tag in BIO notation, default "O"
 	"""
+
+	# initialization
 	def __init__(self):
-		self.id_ord = -1
+		"""
+		initialzies the token with default values
+		"""
+
+		# ID : word index
+		self.id_ord = -1 
+	
+		self.part_added = False
+		
+		# LEMMA : lemma or stem of word form
 		self.lemma = ""
+
+		# UPOSTAG : universal part-of-speech tag
 		self.pos = ""
+
+		# HEAD : head of the current word, which is either a value of ID or zero
 		self.pord = -1
+
+		# DEPREL : universal dependency relation to the 'HEAD'
 		self.rel = ""
+
+
+		# DEPS : enhanced dependency graph in the form of head-deprel pairs where 
+		# enhanced_pord is the HEAD
+		# enhanced_rel is DEPREL
 		self.enhanced_pord = -1
 		self.enhanced_rel = ""
+
+
+		# NER : named entity tag
 		self.ne = "O"
 		
+
+
+	# normalization of the Token
 	def normalize(self, vocab_dict):
 		"""
-		This function is meant to do a series of operations, only some of them being already implemented.
+		This function is meant to do a series of operations of normalization on properties of the token.
 		
-		- Transforms passive relations into active relations (nsubjpass -> dobj, csubjpass -> ccomp)
+		Parameters:
+		-----------
+		vocab_dict: dict
+			dictionary of the format {cpos: set}
+			where cpos is a standard coarse part of speech tag (such as N for noun, V for verb...) and set is a set of accepted lemmas
+
+
+		Operations performed:
+		- replacement of named entities:
+			when the token is tagged as part of a named entity, its lemma it's replaced by the NE tag.
+			for example, if the token is tagged as B-Organization, its lemma becomes _Organization_
+			
+		- replacement of proper nouns:
+			proper noun lemmas are discarded and replaced with a placeholder (_NNP_)
+			
+		- replacement of non-accepted lemmas:
+			lemmas which are not in the vocabulary dictionary are replaced by a wildcard (*)
 		
-		Patrick: could you please an example for each case?
-
-		- Adds PoS or NE Class to lemma
-
-		Patrick: could you please an example for each case?
-
-
-
-		
-		Other things that could be implemented here:
-		- filter lemmas on frequency
-		- add placeholders...
+		- normalization of passive relations:
+			passive dependency relations are turned into the active form, following this schema:
+				nsubjpass -> dobj
+				csubjpass -> ccomp
+			
 		"""
-		
+			
 		splitne = self.ne.split("-")
-		if len(self.ne)>1:
+
+		if len(self.ne) > 1 :
 			self.ne = splitne[1]
-
-		# Patrick: could you please an example ?
-		# If it's B-Location or I-Location, we just keep Location :) If there's no "-", it's just "O" so we keep "O", but we're not using it anyway
-
 		
-
-		#~ if not self.ne == "O":
-			#~ self.lemma = self.lemma+"/"+self.ne
-		#~ else:
-			#~ self.lemma = self.lemma+"/"+self.pos
-
-		# In order to remove proper nouns from the graph, but keep information about them (such as "ProperNoun subject of running" for example), I'm updating things this way:
-		#- proper nouns are in general replaced with a special string such as _NNP_
-		#- if the lemma is a recognized named entity, we replace it with _Location_ for example, so that we know it's a location, which is more specific than _NNP_
-		
+		search_lemma = self.lemma.split("_",1)[0] if self.part_added else self.lemma
+	
+		#if the token is a proper noun and not tagged as named entity
 		if self.pos in ["NNP", "NNPS"] and self.ne == "O":
-			self.lemma = "_"+self.pos+"_"
+			self.lemma = "_" + self.pos + "_"
+		#if the token is tagged as a named entity
 		elif not self.ne == "O":
-			self.lemma = "_"+self.ne+"_"
+			self.lemma = "_" + self.ne + "_"
+		#if the lemma is not among the accepted ones
 		elif self.pos[0] in vocab_dict:
-			#~ print self.lemma, self.pos
-			if not self.lemma+"/"+self.pos in vocab_dict[self.pos[0]]:
-				#~ print self.lemma+"/"+self.pos
-				#~ print vocab_dict[self.pos[0]]
-				#~ raw_input()
+			if not search_lemma + "/" + self.pos[0] in vocab_dict[self.pos[0]]:
 				self.lemma = "*"
 			
-		self.lemma = self.lemma+"/"+self.pos
+
+		# Associate the lemma to its coarse-grained PoS.
+		self.lemma = self.lemma + "/" + self.pos[0]
 
 
+
+		
+		#passive relations are turned into active forms
 		if self.rel == "nsubjpass":
 			self.rel = "dobj"
+		if self.enhanced_rel == "nsubjpass":
+			self.enhanced_rel = "dobj"
 
 		if self.rel == "csubjpass":
 			self.rel = "ccomp"
-		
-		if self.enhanced_rel == "nsubjpass":
-			self.enhanced_rel = "dobj"
 		if self.enhanced_rel == "csubjpass":
 			self.enhanced_rel = "ccomp"
 
 
+
 	def add_part (self, prt):
 		"""
-		Expands lemma by adding prt
+		Expands lemma by adding an extra part to it. The lemma and the new part are joined together with an underscore -> [lemma]_[prt]
+		It is mainly used to add particles of phrasal verbs.
+		
+		Parameters:
+		-----------
+		prt: string
+			string to add to the lemma
 
-		Patrick: could you please give an example?
+
+		Example : 
+
+		They shut down the station
+		phrasal_verb(shut, down)
+
+		if lemma = 'shut', and prt = 'down', 
+		lemma becomes 'shut_down'
+		
 		"""
 		
-		self.lemma = self.lemma+"_"+prt
-		
-		
-		
+		self.lemma = self.lemma + "_" + prt
+		self.part_added = True

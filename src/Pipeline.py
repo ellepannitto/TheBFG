@@ -1,4 +1,5 @@
 import os
+import glob
 import sys
 import gzip
 import urllib
@@ -13,6 +14,34 @@ import DepCCToken
 import RelationsExtractor
 import _utils
 
+def merge (folder, pattern):
+
+	print "merge started", pattern, "..."
+	
+	files_to_merge = glob.glob(folder+"*"+pattern+"*")
+	i = 0
+	while len(files_to_merge)>1:
+		
+		current_files_to_merge = files_to_merge[:100]
+		current_fnout = folder + "merged" + str(i) + "."+pattern+".gz"
+		i+=1
+		_utils._merge_sorted_files([gzip.open(f, "rb") for f in current_files_to_merge], gzip.open(current_fnout, "wb"))
+		
+		files_to_merge = files_to_merge[100:]
+		files_to_merge.append(current_fnout)
+
+
+	print "sum started", pattern, "..."
+
+	file_to_sum = current_fnout
+	fnout_sum = folder + "summed."+pattern+".gz"
+	fnout_sort = folder + "sorted."+pattern+".gz"
+
+	_utils._sum(gzip.open(file_to_sum, "rb"), gzip.open(fnout_sum, "wb"))
+	
+	print "sort started", pattern, "..."
+	
+	_utils._sort(gzip.open(fnout_sum, "rb"), gzip.open(fnout_sort, "wb"))	
 
 def process(partname):
 	"""
@@ -27,6 +56,10 @@ def process(partname):
 		
 	filename = parameters["corpus_folder"]+partname+".gz"
 	file_output = parameters["output_folder"] + "tmp/" + partname + ".edges.gz"
+	#provaprova
+	file_output_vocabulary = parameters["output_folder"] + "tmp/" + partname + ".voc.gz"
+	file_output_structures = parameters["output_folder"] + "tmp/" + partname + ".struct.gz"
+	
 	downloaded = False
 	
 	print ("started processing file {}".format(filename))
@@ -48,6 +81,9 @@ def process(partname):
 	rex = RelationsExtractor.RelationsExtractor(parameters)
 	
 	fout = gzip.open(file_output, "wb")
+	#provaprova
+	fout_voc = gzip.open(file_output_vocabulary, "wb")
+	fout_struct = gzip.open(file_output_structures, "wb")
 	
 	sentence_no = 0
 	for sentence in cr:
@@ -61,6 +97,9 @@ def process(partname):
 			rex.process(parsed_sentence)
 	
 	rex.dump_relations(fout)
+	#provaprova
+	rex.dump_vocabulary(fout_voc)
+	rex.dump_structures(fout_struct)
 
 	if downloaded and parameters["delete_downloaded"]:
 		os.remove("corpus_folder"+partname+".gz")
@@ -111,32 +150,16 @@ if __name__ == "__main__":
 	p.map(process, arg_list)
 
 
-	#Part 4: merge processed outputs
-	print "merge started"
-	
-	files_to_merge = os.listdir(parameters["output_folder"]+"tmp/")
-	i = 0
-	while len(files_to_merge)>1:
-		
-		current_files_to_merge = files_to_merge[:100]
-		current_fnout = parameters["output_folder"] + "tmp/" + "merged" + str(i) + ".gz"
-		i+=1
-		_utils._merge_sorted_files([gzip.open(parameters["output_folder"]+"tmp/"+f, "rb") for f in current_files_to_merge], gzip.open(current_fnout, "wb"))
-		
-		files_to_merge = files_to_merge[100:]
-		files_to_merge.append(current_fnout)
-	
-	print "merge finished"	
-	
-	#Part 5: sum and sort output
-	file_to_sum = current_fnout
-	fnout_sum = parameters["output_folder"] + "tmp/" + "summed.gz"
-	fnout_sort = parameters["output_folder"] + "sorted.gz"
 
-	_utils._sum(gzip.open(file_to_sum, "rb"), gzip.open(fnout_sum, "wb"))
-	_utils._sort(gzip.open(fnout_sum, "rb"), gzip.open(fnout_sort, "wb"))
-	
-	print "sorting finished"
+
+	#Part4-5: sum and sort output
+	merge (parameters["output_folder"]+"tmp/", "voc")
+	merge (parameters["output_folder"]+"tmp/", "struct")
+	merge (parameters["output_folder"]+"tmp/", "edges")
+
+	os.rename (parameters["output_folder"]+"tmp/sorted.voc.gz", parameters["output_folder"]+"sorted.voc.gz" )
+	os.rename (parameters["output_folder"]+"tmp/sorted.struct.gz", parameters["output_folder"]+"sorted.struct.gz" )
+	os.rename (parameters["output_folder"]+"tmp/sorted.edges.gz", parameters["output_folder"]+"sorted.edges.gz" )
 
 	#Part 6: remove temporary output files
 	print "removing files"

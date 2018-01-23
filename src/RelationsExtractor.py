@@ -39,6 +39,9 @@ class RelationsExtractor:
 		
 		self.items = defaultdict(lambda: defaultdict(int))
 		
+		self.vocabulary = defaultdict(int)
+		self.structures = defaultdict(int)
+		
 		
 		
 		#TODO: remove this things after some changes to the code
@@ -115,15 +118,20 @@ class RelationsExtractor:
 		dati_supp = []
 		groups = []
 		
+		seen_items = defaultdict(int)
+		
 		#The idea is that the queue contains the root at the begininng, and navigates the dependencies starting from there.
 		if root:
+			seen_items[root]+=1
 			Q = [root]
 
 			while Q:
 				x = Q.pop()
 				
 				curr_el = sentence[x]
+				
 				group = [(curr_el.lemma, "ROOT")]
+				
 				dati_supp.append([curr_el.lemma])
 				
 				curr_deps = []
@@ -132,52 +140,62 @@ class RelationsExtractor:
 
 				for i, r in curr_deps:
 					target = sentence[i]
+					
 					if target.pos[0] in self.lexical_cpos and target.rel not in self.ignored_deprels:
 						group.append((target.lemma, r))
 						dati_supp[-1].append(target.lemma)
+		
+						seen_items[i]+=1
 							
+					#~ if target.pos[0] in self.head_cpos and i in deps and len(deps[i])>0:
 					if target.pos[0] in self.head_cpos:
 						Q.append(i)
 				
 				groups.append(group)
-		
 
-		dati = {}
-		for i, d in enumerate(dati_supp):
-			for el in d:
-				if not el in dati:
-					dati[el] = []
-				dati[el].append(i)
-		
-		for i, g in enumerate(groups):			
-			for n in range(2, len(g)+1):
-				
-				subsets = set(itertools.combinations(g, n))
-				
-				for s in subsets:
-					s = sorted(s, key = lambda x:x[0])
-					
-					elements = [e[0] for e in s]
-					elements_0 = [e[0] for e in elements]
-					labels = [e[1] for e in s]
-				
-				
 
-				if elements_0.count("*")<= self.max_wildcards:
-					self.items[" ".join(elements)]["|".join(labels)]+=1
+			for i in seen_items:
+				lemma = sentence[i].lemma
+				self.vocabulary[lemma]+=seen_items[i]
+
+			dati = {}
+			for i, d in enumerate(dati_supp):
+				for el in d:
+					if not el in dati:
+						dati[el] = []
+					dati[el].append(i)
 			
-			
-			#GENERIC ASSOCIATIONS
-			for j, h in enumerate(groups):
-				
-				if j>i:
+			for i, g in enumerate(groups):			
+				for n in range(2, len(g)+1):
 					
-					for a in g:
-						for b in h:
-							
-							#~ #a nel gruppo i, b nel gruppo j
-							if not i in dati[b[0]]:
-								self.items[" ".join([min(a[0], b[0]), max(a[0], b[0])])]["genassoc"]+=1
+					subsets = set(itertools.combinations(g, n))
+					
+					for s in subsets:
+						s = sorted(s, key = lambda x:x[0])
+						
+						elements = [e[0] for e in s]
+						elements_0 = [e[0] for e in elements]
+						labels = [e[1] for e in s]
+					
+					if elements_0.count("*")<= self.max_wildcards:
+						self.items[" ".join(elements)]["|".join(labels)]+=1
+						
+						#add structure
+						sorted_labels = sorted(labels)
+						self.structures["|".join(sorted_labels)]+=1
+				
+				
+				#GENERIC ASSOCIATIONS
+				for j, h in enumerate(groups):
+					
+					if j>i:
+						
+						for a in g:
+							for b in h:
+								
+								#~ #a nel gruppo i, b nel gruppo j
+								if not i in dati[b[0]]:
+									self.items[" ".join([min(a[0], b[0]), max(a[0], b[0])])]["genassoc"]+=1
 
 	def dump_relations(self, fobj):
 		"""
@@ -202,7 +220,27 @@ class RelationsExtractor:
 			for lab_group in sorted(labels):
 				label = lab_group
 				
-				fobj.write(node + "\t" + label + "\t" + str(labels[lab_group]) + "\n")			
+				fobj.write(node + "\t" + label + "\t" + str(labels[lab_group]) + "\n")
+	
+	
+	def dump_vocabulary(self, fobj):
+		
+		to_write = self.vocabulary
+		
+		for lemma, freq in sorted(to_write.items()):
+			
+			fobj.write(lemma + "\t" + str(freq) + "\n")
+
+	def dump_structures(self, fobj):
+		
+		to_write = self.structures
+		
+		for struct, freq in sorted(to_write.items()):
+
+			fobj.write(struct + "\t" + str(freq) + "\n")
+		
+
+		
 
 if __name__ == "__main__":
 	pass

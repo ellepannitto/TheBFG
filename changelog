@@ -1,3 +1,18 @@
+TheBFG ver 0.4.1
+	
+	* RelationsExtractor:
+		- now keeps track of vocabulary and structure frequencies. These will be necessary to calculate association measures.
+	
+	* Pipeline:
+		- now performs merge also on vocabulary and structure files
+		
+	TODO:
+	- change folder organization (preprocessing + data extraction + graph building + query interface)
+	- handle possible common errors with parameters specification
+	- find a way to generate readable documentation
+  
+-- Ludovica Pannitto <ellepannitto@gmail.com>  Sun, 21 Jan 2018 22.15
+
 TheBFG ver 0.4
 	
 	- major code refactoring

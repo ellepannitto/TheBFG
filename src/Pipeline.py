@@ -102,7 +102,7 @@ def process(partname):
 	rex.dump_structures(fout_struct)
 
 	if downloaded and parameters["delete_downloaded"]:
-		os.remove("corpus_folder"+partname+".gz")
+		os.remove(parameters["corpus_folder"]+partname+".gz")
 
 	print ("finished processing file {}".format(filename))
 

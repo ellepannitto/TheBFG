@@ -1,3 +1,20 @@
+TheBFG ver 0.4.2
+	
+	* RelationsExtractor:
+		- changes counts of vocabulary frequencies
+		- fixed big bug in edges count
+	
+	* Pipeline:
+		- added a try-except to handle strange gzip exception
+		
+	TODO:
+	- handle other types of expression
+	- change folder organization (preprocessing + data extraction + graph building + query interface)
+	- handle possible common errors with parameters specification
+	- find a way to generate readable documentation
+  
+-- Ludovica Pannitto <ellepannitto@gmail.com>  Thu, 1 Feb 2018 12.00
+
 TheBFG ver 0.4.1
 	
 	* RelationsExtractor:

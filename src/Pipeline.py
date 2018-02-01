@@ -75,31 +75,35 @@ def process(partname):
 	#TODO: check if global is needed
 	parameters["vocab_list"] = _VOCAB_LISTS
 	
-	cr = CorpusReader.CorpusReader(gzip.open(filename, "rb"))
-	filterer = tests.Filterer (parameters)
-	sp = parameters["sentence_class"] ( parameters )
-	rex = RelationsExtractor.RelationsExtractor(parameters)
-	
-	fout = gzip.open(file_output, "wb")
-	#provaprova
-	fout_voc = gzip.open(file_output_vocabulary, "wb")
-	fout_struct = gzip.open(file_output_structures, "wb")
-	
-	sentence_no = 0
-	for sentence in cr:
-		sentence_no +=1
+	try:
+		cr = CorpusReader.CorpusReader(gzip.open(filename, "rb"))
+		filterer = tests.Filterer (parameters)
+		sp = parameters["sentence_class"] ( parameters )
+		rex = RelationsExtractor.RelationsExtractor(parameters)
+		
+		fout = gzip.open(file_output, "wb")
+		
+		fout_voc = gzip.open(file_output_vocabulary, "wb")
+		fout_struct = gzip.open(file_output_structures, "wb")
+		
+		sentence_no = 0
+		for sentence in cr:
+			sentence_no +=1
 
-		#~ if not sentence_no%100000:
-			#~ print "processing sentence", sentence_no, "..."
+			#~ if not sentence_no%100000:
+				#~ print "processing sentence", sentence_no, "..."
 
-		if filterer.filter ( sentence ) :
-			parsed_sentence = sp.parse_sent( sentence )
-			rex.process(parsed_sentence)
-	
-	rex.dump_relations(fout)
-	#provaprova
-	rex.dump_vocabulary(fout_voc)
-	rex.dump_structures(fout_struct)
+			if filterer.filter ( sentence ) :
+				parsed_sentence = sp.parse_sent( sentence )
+				rex.process(parsed_sentence)
+		
+		rex.dump_relations(fout)
+
+		rex.dump_vocabulary(fout_voc)
+		rex.dump_structures(fout_struct)
+	except Exception as e:
+		print e
+		print "problems with file{}".format(filename)
 
 	if downloaded and parameters["delete_downloaded"]:
 		os.remove(parameters["corpus_folder"]+partname+".gz")

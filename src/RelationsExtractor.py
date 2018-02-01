@@ -154,9 +154,19 @@ class RelationsExtractor:
 				groups.append(group)
 
 
-			for i in seen_items:
-				lemma = sentence[i].lemma
-				self.vocabulary[lemma]+=seen_items[i]
+			#~ for i in seen_items:
+				#~ lemma = sentence[i].lemma
+				#~ self.vocabulary[lemma]+=seen_items[i]
+			found_computer = False	
+			found_surpass = False	
+			for el, tok in sentence.items():
+				if tok.pos[0] in self.lexical_cpos:
+					self.vocabulary[tok.lemma]+=1
+				#~ if tok.lemma[:-2] == "computer":
+					#~ found_computer = True
+				#~ if tok.lemma[:-2] == "surpass":
+					#~ found_surpass = True
+					
 
 			dati = {}
 			for i, d in enumerate(dati_supp):
@@ -166,25 +176,38 @@ class RelationsExtractor:
 					dati[el].append(i)
 			
 			for i, g in enumerate(groups):			
+				
+				if found_computer and found_surpass:
+					print "DEBUG:", g
+				
 				for n in range(2, len(g)+1):
 					
 					subsets = set(itertools.combinations(g, n))
 					
 					for s in subsets:
+						
 						s = sorted(s, key = lambda x:x[0])
+						
+						if found_computer and found_surpass:
+							print s
 						
 						elements = [e[0] for e in s]
 						elements_0 = [e[0] for e in elements]
 						labels = [e[1] for e in s]
 					
-					if elements_0.count("*")<= self.max_wildcards:
-						self.items[" ".join(elements)]["|".join(labels)]+=1
-						
-						#add structure
-						sorted_labels = sorted(labels)
-						self.structures["|".join(sorted_labels)]+=1
+						if elements_0.count("*")<= self.max_wildcards:
+													
+							self.items[" ".join(elements)]["|".join(labels)]+=1
+							
+							#add structure
+							sorted_labels = sorted(labels)
+							self.structures["|".join(sorted_labels)]+=1
 				
+				if found_computer and found_surpass:
+					print
+
 				
+			for i, g in enumerate(groups):	
 				#GENERIC ASSOCIATIONS
 				for j, h in enumerate(groups):
 					

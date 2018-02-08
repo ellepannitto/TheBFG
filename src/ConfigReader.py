@@ -1,8 +1,8 @@
 import os
 import ConfigParser
 
-import DepCCSentenceParser
-import DepCCToken
+import DepCCSentenceParser, UDTreebankSentenceParser
+import DepCCToken, UDTreebankToken
 
 class ConfigMap:
 	"""
@@ -48,6 +48,12 @@ class ConfigMap:
 			"max_distance": int,
 		}
 		
+		
+		self.switch_tokenClass = {"depcc": DepCCToken.DepCCToken,
+								"UD": UDTreebankToken.UDTreebankToken,}
+
+		self.switch_sentenceClass = {"depcc": DepCCSentenceParser.DepCCSentenceParser,
+									"UD": UDTreebankSentenceParser.UDTreebankSentenceParser,}
 	
 	def parse (self):
 		"""
@@ -69,13 +75,17 @@ class ConfigMap:
 					d[option] = self.parse_value[option](d[option])
 	
 	
-		#TODO: add this parameters to cnf file
-		d["token_class"] = DepCCToken.DepCCToken
-		d["sentence_class"] = DepCCSentenceParser.DepCCSentenceParser
+	
+		d["token_class"] = self.switch_tokenClass[d["corpus"]]
+		d["sentence_class"] = self.switch_sentenceClass[d["corpus"]]
+		
 		
 		self.values = d
 		return d
 		
+
+
+
 
 
 if __name__ == "__main__":

@@ -144,7 +144,7 @@ if __name__ == "__main__":
 
 
 	#Part2: load vocabulary list
-	_VOCAB_LISTS = {x:FrequencyLoader._set_from_file(open(parameters["vocabulary_folder"]+x+"_frequency"), parameters["min_frequency"]) for x in parameters["lexical_cpos"]}
+	_VOCAB_LISTS = {x:FrequencyLoader._set_from_file(open(parameters["vocabulary_folder"]+x+"_frequency."+parameters["corpus"]), parameters["min_frequency"]) for x in parameters["lexical_cpos"]}
 	
 	print "vocabulary loaded"
 		

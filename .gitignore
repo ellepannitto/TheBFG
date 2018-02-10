@@ -105,6 +105,7 @@ ENV/
 data/vocabulary/*
 data/edges/*
 data/depcc/*
+data/ud-treebank/*
 
 #old src (for bug fixing)
 src_old/*

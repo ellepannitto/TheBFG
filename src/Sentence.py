@@ -33,3 +33,11 @@ class Sentence:
 		       "{}\n".format ("\n".join([str(x) + "\t\t" + str(v) for x,v in self.token_list.items()]) ) +\
 		       "         root={}\n".format(self.root) +\
 		       "         deps={}\n".format(self.deps)
+		       
+		       
+	def linear_repr (self):
+		
+		toks = []
+		for i, tok in sorted(self.token_list.items()):
+			toks.append(tok.lemma)
+		return " ".join(toks)

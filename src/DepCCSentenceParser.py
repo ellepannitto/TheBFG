@@ -1,3 +1,4 @@
+from __future__ import print_function
 import math
 
 import Sentence 
@@ -62,9 +63,9 @@ class DepCCSentenceParser:
 				if token.pord in sentence:
 					sentence[token.pord].add_part(token.lemma)
 				else:
-					print "DEBUG - head of particle not in sentence"
-					print raw_sentence
-					print token.pord
+					print("DEBUG - head of particle not in sentence")
+					print(raw_sentence)
+					print(token.pord)
 
 
 

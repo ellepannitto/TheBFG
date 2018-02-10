@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os
 import glob
 import sys
@@ -16,7 +17,7 @@ import _utils
 
 def merge (folder, pattern):
 
-	print "merge started", pattern, "..."
+	print("merge started", pattern, "...")
 	
 	files_to_merge = glob.glob(folder+"*"+pattern+"*")
 	i = 0
@@ -25,23 +26,23 @@ def merge (folder, pattern):
 		current_files_to_merge = files_to_merge[:100]
 		current_fnout = folder + "merged" + str(i) + "."+pattern+".gz"
 		i+=1
-		_utils._merge_sorted_files([gzip.open(f, "rb") for f in current_files_to_merge], gzip.open(current_fnout, "wb"))
+		_utils._merge_sorted_files([gzip.open(f, "rt") for f in current_files_to_merge], gzip.open(current_fnout, "wt"))
 		
 		files_to_merge = files_to_merge[100:]
 		files_to_merge.append(current_fnout)
 
 
-	print "sum started", pattern, "..."
+	print("sum started", pattern, "...")
 
 	file_to_sum = current_fnout
 	fnout_sum = folder + "summed."+pattern+".gz"
 	fnout_sort = folder + "sorted."+pattern+".gz"
 
-	_utils._sum(gzip.open(file_to_sum, "rb"), gzip.open(fnout_sum, "wb"))
+	_utils._sum(gzip.open(file_to_sum, "rt"), gzip.open(fnout_sum, "wt"))
 	
-	print "sort started", pattern, "..."
+	print("sort started", pattern, "...")
 	
-	_utils._sort(gzip.open(fnout_sum, "rb"), gzip.open(fnout_sort, "wb"))	
+	_utils._sort(gzip.open(fnout_sum, "rt"), gzip.open(fnout_sort, "wt"))	
 
 def process(partname):
 	"""
@@ -76,15 +77,15 @@ def process(partname):
 	parameters["vocab_list"] = _VOCAB_LISTS
 	
 	try:
-		cr = CorpusReader.CorpusReader(gzip.open(filename, "rb"))
+		cr = CorpusReader.CorpusReader(gzip.open(filename, "rt"))
 		filterer = tests.Filterer (parameters)
 		sp = parameters["sentence_class"] ( parameters )
 		rex = RelationsExtractor.RelationsExtractor(parameters)
 		
-		fout = gzip.open(file_output, "wb")
+		fout = gzip.open(file_output, "wt")
 		
-		fout_voc = gzip.open(file_output_vocabulary, "wb")
-		fout_struct = gzip.open(file_output_structures, "wb")
+		fout_voc = gzip.open(file_output_vocabulary, "wt")
+		fout_struct = gzip.open(file_output_structures, "wt")
 		
 		sentence_no = 0
 		for sentence in cr:
@@ -102,8 +103,8 @@ def process(partname):
 		rex.dump_vocabulary(fout_voc)
 		rex.dump_structures(fout_struct)
 	except Exception as e:
-		print e
-		print "problems with file{}".format(filename)
+		print(e)
+		print("problems with file{}".format(filename))
 
 	if downloaded and parameters["delete_downloaded"]:
 		os.remove(parameters["corpus_folder"]+partname+".gz")
@@ -138,15 +139,15 @@ if __name__ == "__main__":
 	cnf = ConfigReader.ConfigMap(cnf_filename)
 	parameters = cnf.parse()
 	
-	print "loaded parameters, recap:"
+	print("loaded parameters, recap:")
 	for par in parameters:
-		print par, ":", parameters[par]
+		print(par, ":", parameters[par])
 
 
 	#Part2: load vocabulary list
 	_VOCAB_LISTS = {x:FrequencyLoader._set_from_file(open(parameters["vocabulary_folder"]+x+"_frequency."+parameters["corpus"]), parameters["min_frequency"]) for x in parameters["lexical_cpos"]}
 	
-	print "vocabulary loaded"
+	print("vocabulary loaded")
 		
 	#Part 3: initialize a pool of workers and begin extraction process -> the extraction is handled by the "process" function
 	p = Pool(processes=parameters["workers_n"])
@@ -166,7 +167,7 @@ if __name__ == "__main__":
 	os.rename (parameters["output_folder"]+"tmp/sorted.edges.gz", parameters["output_folder"]+"sorted.edges.gz" )
 
 	#Part 6: remove temporary output files
-	print "removing files"
+	print("removing files")
 	
 	for f in os.listdir(parameters["output_folder"]+"tmp/"):
 		os.remove(parameters["output_folder"]+"tmp/"+f)

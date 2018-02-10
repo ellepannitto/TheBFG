@@ -1,3 +1,51 @@
+TheBFG ver 0.5.0
+
+	* BIG NOTE:
+		- the project has been ported to Python 3 because of compatibility issues with new classes that use neo4j APIs
+	
+	* Sentence:
+		- function to generate linear representation added
+	
+	* GraphBuilder and GraphQuery:
+		- new classes that create and query the actual class in neo4j
+		- there's still plenty to do here
+	
+	TODO:
+	- handle other types of exception
+	- change folder organization (preprocessing + data extraction + graph building + query interface)
+	- handle possible common errors with parameters specification
+	- find a way to generate readable documentation
+	- check bug in vocabulary extraction
+	- map deprels to a standard set
+  
+-- Ludovica Pannitto <ellepannitto@gmail.com>  Sat, 10 Feb 2018 17.50
+
+
+TheBFG ver 0.4.3
+	
+	* ConfigReader:
+		- now handles new parameter called "corpus"
+	
+	* UDTreebankToken and UDTreebankSentenceParser:
+		- new classes to use english UD Treebank
+		
+	* Folders:
+		- new folder of udtreebank-related files
+		- vocabulary files now end with corpus name
+	
+	* Pipeline_ud:
+		- new pipeline to process ud-treebank files
+	
+	TODO:
+	- handle other types of exception
+	- change folder organization (preprocessing + data extraction + graph building + query interface)
+	- handle possible common errors with parameters specification
+	- find a way to generate readable documentation
+	- check bug in vocabulary extraction
+	- map deprels to a standard set
+  
+-- Ludovica Pannitto <ellepannitto@gmail.com>  Thu, 8 Feb 2018 15.30
+
 TheBFG ver 0.4.2
 	
 	* RelationsExtractor:
@@ -8,7 +56,7 @@ TheBFG ver 0.4.2
 		- added a try-except to handle strange gzip exception
 		
 	TODO:
-	- handle other types of expression
+	- handle other types of exception
 	- change folder organization (preprocessing + data extraction + graph building + query interface)
 	- handle possible common errors with parameters specification
 	- find a way to generate readable documentation

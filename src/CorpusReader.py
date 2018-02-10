@@ -1,3 +1,4 @@
+#~ from __future__ import print_function
 class CorpusReader:
 	'''
 	CorpusReader iterates a corpus
@@ -58,7 +59,7 @@ class CorpusReader:
 		return self
 		
 
-	def next ( self ):
+	def __next__ ( self ):
 		'''
 		Returns next sentence of the corpus, if any, else it raises StopIteration
 		  
@@ -98,7 +99,7 @@ if __name__ == "__main__":
 
 		if x: 
 			i += 1
-			print "\n\nSentence " + str(i) + ":\n---\n"
+			print("\n\nSentence " + str(i) + ":\n---\n")
 			print(x)
 		
 			y = raw_input("\n( X or Q to exit the loop )\n")

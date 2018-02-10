@@ -1,3 +1,4 @@
+from __future__ import print_function
 import urllib
 import os
 import gzip
@@ -35,15 +36,15 @@ def f(i):
 	url = basic_url+k+".gz"
 
 	f = "../data/"+k+".gz"
-	print "[DEBUG] - file", f, "..."
+	print("[DEBUG] - file", f, "...")
 
 	testfile.retrieve(url, f)
 
-	print "[DEBUG] - downloaded file", f
+	print("[DEBUG] - downloaded file", f)
 
 	fobj = gzip.open(f, 'rb')
 
-	print "[DEBUG] - lemmas extraction started"
+	print("[DEBUG] - lemmas extraction started")
 
 
 	R = CorpusReader.CorpusReader(fobj)
@@ -58,11 +59,11 @@ def f(i):
 
 	fout = gzip.open("../data/"+k+".sorted.gz", 'wb')
 
-	print "[DEBUG] - writing to file"
+	print("[DEBUG] - writing to file")
 	for x, y in sortedlemmas:
 		fout.write (x+"\t"+str(y)+"\n")
 	fout.close()
-	print "[DEBUG] - removing file"
+	print("[DEBUG] - removing file")
 	os.remove(f)
 	
 	
@@ -81,7 +82,7 @@ arg_list = [i for i in range(_FROM, _TO)]
 p.map(f, arg_list)
 
 
-print "[DEBUG] - merge started"
+print("[DEBUG] - merge started")
 filenames = os.listdir("../data/")
 
 files = [gzip.open("../data/"+f, "rb") for f in  filenames]
@@ -91,6 +92,6 @@ for line in heapq.merge(*[decorated_file(f, keyfunc) for f in files]):
     outfile.write(line[1])
 outfile.close()    
     
-print "[DEBUG] - removing useless files"
+print("[DEBUG] - removing useless files")
 for f in filenames:
 	os.remove("../data/"+f)

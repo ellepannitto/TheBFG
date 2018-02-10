@@ -26,13 +26,13 @@ sp = parameters["sentence_class"] ( parameters )
 rex = RelationsExtractor.RelationsExtractor(parameters)
 
 
-file_output = parameters["output_folder"] + "ud.edges"
-file_output_vocabulary = parameters["output_folder"] + "ud.voc"
-file_output_structures = parameters["output_folder"] + "ud.struct"
+file_output = parameters["output_folder"] +parameters["corpus"]+".edges.gz"
+file_output_vocabulary = parameters["output_folder"] + parameters["corpus"]+".voc.gz"
+file_output_structures = parameters["output_folder"] + parameters["corpus"]+".struct.gz"
 
-fout = open(file_output, "w")
-fout_voc = open(file_output_vocabulary, "w")
-fout_struct = open(file_output_structures, "w")
+fout = gzip.open(file_output, "wt")
+fout_voc = gzip.open(file_output_vocabulary, "wt")
+fout_struct = gzip.open(file_output_structures, "wt")
 
 for sentence in cr:
 	if len(sentence)>0:
@@ -41,6 +41,9 @@ for sentence in cr:
 		#~ print "\n".join(sentence)
 
 		parsed_sentence = sp.parse_sent( sentence )
+		
+		#~ print parsed_sentence.linear_repr()
+		#~ raw_input()
 #		print parsed_sentence
 		rex.process(parsed_sentence)
 		
@@ -53,6 +56,6 @@ fout.close()
 fout_voc.close()
 fout_struct.close()
 
-_utils._sort(open(file_output, "r"), open(parameters["output_folder"] + "sorted.ud.edges", "w"))
-_utils._sort(open(file_output_vocabulary, "r"), open(parameters["output_folder"] + "sorted.ud.voc", "w"))
-_utils._sort(open(file_output_structures, "r"), open(parameters["output_folder"] + "sorted.ud.struct", "w"))
+_utils._sort(gzip.open(file_output, "rt"), gzip.open(parameters["output_folder"] + "sorted."+parameters["corpus"]+".edges.gz", "wt"))
+_utils._sort(gzip.open(file_output_vocabulary, "rt"), gzip.open(parameters["output_folder"] + "sorted."+parameters["corpus"]+".voc.gz", "wt"))
+_utils._sort(gzip.open(file_output_structures, "rt"), gzip.open(parameters["output_folder"] + "sorted."+parameters["corpus"]+".struct.gz", "wt"))

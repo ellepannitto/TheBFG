@@ -1,5 +1,6 @@
+from __future__ import print_function
 import os
-import ConfigParser
+import configparser
 
 import DepCCSentenceParser, UDTreebankSentenceParser
 import DepCCToken, UDTreebankToken
@@ -31,7 +32,7 @@ class ConfigMap:
 		
 		"""
 		
-		self.parser = ConfigParser.ConfigParser()
+		self.parser = configparser.ConfigParser()
 		self.parser.read(cnf_file)
 		
 		self.parse_value = {
@@ -46,6 +47,8 @@ class ConfigMap:
 			"sentencefilter_fun": lambda x: x.split(","),
 			"ignored_deprels": lambda x: x.split(","),
 			"max_distance": int,
+			"min_generic": int,
+			"min_struct": int,
 		}
 		
 		
@@ -94,4 +97,4 @@ if __name__ == "__main__":
 	config = ConfigMap("../data/confs/prova.cnf")
 
 	parameters = config.parse()	
-	print parameters
+	print(parameters)

@@ -2,6 +2,7 @@
 This file contains a number of different function, not directly related to the process of extracting relations.
 They are mainly used to process temporary output files.
 """
+#~ from __future__ import print_function
 
 
 import contextlib
@@ -22,7 +23,7 @@ def _merge_sorted_files(filehandlers, outfile):
 
 	"""
 
-	print "[DEBUG] - merge started"
+	print("[DEBUG] - merge started")
 	with contextlib.nested(*filehandlers):
 		outfile.writelines(heapq.merge(*filehandlers))
 

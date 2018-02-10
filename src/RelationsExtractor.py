@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os
 import itertools
 from collections import *
@@ -178,7 +179,7 @@ class RelationsExtractor:
 			for i, g in enumerate(groups):			
 				
 				if found_computer and found_surpass:
-					print "DEBUG:", g
+					print("DEBUG:", g)
 				
 				for n in range(2, len(g)+1):
 					
@@ -189,7 +190,7 @@ class RelationsExtractor:
 						s = sorted(s, key = lambda x:x[0])
 						
 						if found_computer and found_surpass:
-							print s
+							print(s)
 						
 						elements = [e[0] for e in s]
 						elements_0 = [e[0] for e in elements]
@@ -204,7 +205,7 @@ class RelationsExtractor:
 							self.structures["|".join(sorted_labels)]+=1
 				
 				if found_computer and found_surpass:
-					print
+					print()
 
 				
 			for i, g in enumerate(groups):	

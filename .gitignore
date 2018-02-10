@@ -105,3 +105,6 @@ ENV/
 data/vocabulary/*
 data/edges/*
 data/depcc/*
+
+#old src (for bug fixing)
+src_old/*

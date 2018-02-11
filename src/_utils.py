@@ -24,8 +24,13 @@ def _merge_sorted_files(filehandlers, outfile):
 	"""
 
 	print("[DEBUG] - merge started")
-	with contextlib.nested(*filehandlers):
-		outfile.writelines(heapq.merge(*filehandlers))
+
+	with contextlib.ExitStack() as stack:
+		files = [stack.enter_context(fn) for fn in filehandlers]
+		outfile.writelines(heapq.merge(*files))
+
+	#~ with contextlib.nested(*filehandlers):
+		#~ outfile.writelines(heapq.merge(*filehandlers))
 
 	outfile.close()
 

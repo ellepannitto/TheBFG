@@ -47,5 +47,6 @@ def _set_from_file (fobj, frequency_threshold, sep = "\t", item_col = 0, freq_co
 		ret.add(it)
 
 		line = fobj.readline().strip().split(sep)
+		#~ print (line)
 	
 	return ret

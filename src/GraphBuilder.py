@@ -25,9 +25,16 @@ class GraphBuilder:
 	def get_node (self, lma, cpos):
 		n = self.graph.run("MATCH (a:"+cpos+") WHERE a.user= '"+self.user+"' AND a.lemma = '"+lma+"' return a", lemma = lma).evaluate()
 		return n	
+		
+	def remove_isolated(self):
+		self.graph.run("match (n) where not (n)-[]-()  delete n")
+		
+	def reset_graph(self):
+		self.graph.run("MATCH (a) WHERE a.user= '"+self.user+"' OPTIONAL MATCH (a)-[r]-() DELETE a,r")
 	
 	def load_graph (self, user, pwd):
 		self.graph = Graph('http://localhost:7474/db/data', user=user, password=pwd)
+		return self.graph
 
 	def load_vertices (self):
 		self.total_nouns = 0
@@ -130,16 +137,15 @@ class GraphBuilder:
 					#~ input()
 
 		tx.commit()
-#		self.remove_isolated()
-		
-	def reset_graph(self):
-		self.graph.run("MATCH (a) WHERE a.user= '"+self.user+"' OPTIONAL MATCH (a)-[r]-() DELETE a,r")
+		self.remove_isolated()
 
 
 if __name__ == "__main__":
 	import ConfigReader
+	import sys
 	
-	cnf = ConfigReader.ConfigMap("../data/confs/provaud.cnf")
+	cnf = ConfigReader.ConfigMap(sys.argv[1])
 	parameters = cnf.parse()
 	
-	gb = GraphBuilder(parameters)
+	graph = GraphBuilder(parameters)
+	graph.load_graph("neo4j", "neo4j")

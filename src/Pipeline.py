@@ -4,6 +4,7 @@ import glob
 import sys
 import gzip
 import urllib
+from urllib import request
 from multiprocessing import Pool
 
 import ConfigReader
@@ -70,8 +71,8 @@ def process(partname):
 		
 		file_url = parameters["basic_url"] + partname + ".gz"
 		
-		testfile = urllib.URLopener()
-		testfile.retrieve(file_url, filename)
+		#~ testfile = urllib.URLopener()
+		request.urlretrieve(file_url, filename)
 	
 	#TODO: check if global is needed
 	parameters["vocab_list"] = _VOCAB_LISTS

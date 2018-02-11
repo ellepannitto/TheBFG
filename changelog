@@ -1,3 +1,17 @@
+TheBFG ver 0.5.1
+
+	* fixed bugs due to porting procedure
+	
+	TODO:
+	- handle other types of exception
+	- change folder organization (preprocessing + data extraction + graph building + query interface)
+	- handle possible common errors with parameters specification
+	- find a way to generate readable documentation
+	- check bug in vocabulary extraction
+	- map deprels to a standard set
+  
+-- Ludovica Pannitto <ellepannitto@gmail.com>  Sun, 11 Feb 2018 17.00
+
 TheBFG ver 0.5.0
 
 	* BIG NOTE:

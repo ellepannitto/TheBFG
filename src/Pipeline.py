@@ -57,7 +57,8 @@ def process(partname):
 	"""
 		
 	filename = parameters["corpus_folder"]+partname+".gz"
-	file_output = parameters["output_folder"] + "tmp/" + partname + ".edges.gz"
+	file_output_generic = parameters["output_folder"] + "tmp/" + partname + ".edges.generic.gz"
+	file_output_deprel = parameters["output_folder"] + "tmp/" + partname + ".edges.deprel.gz"
 	#provaprova
 	file_output_vocabulary = parameters["output_folder"] + "tmp/" + partname + ".voc.gz"
 	file_output_structures = parameters["output_folder"] + "tmp/" + partname + ".struct.gz"
@@ -83,7 +84,8 @@ def process(partname):
 		sp = parameters["sentence_class"] ( parameters )
 		rex = RelationsExtractor.RelationsExtractor(parameters)
 		
-		fout = gzip.open(file_output, "wt")
+		fout_generic = gzip.open(file_output_generic, "wt")
+		fout_deprel = gzip.open(file_output_deprel, "wt")
 		
 		fout_voc = gzip.open(file_output_vocabulary, "wt")
 		fout_struct = gzip.open(file_output_structures, "wt")
@@ -99,7 +101,7 @@ def process(partname):
 				parsed_sentence = sp.parse_sent( sentence )
 				rex.process(parsed_sentence)
 		
-		rex.dump_relations(fout)
+		rex.dump_relations(fout_generic, fout_deprel)
 
 		rex.dump_vocabulary(fout_voc)
 		rex.dump_structures(fout_struct)
@@ -161,11 +163,13 @@ if __name__ == "__main__":
 	#Part4-5: sum and sort output
 	merge (parameters["output_folder"]+"tmp/", "voc")
 	merge (parameters["output_folder"]+"tmp/", "struct")
-	merge (parameters["output_folder"]+"tmp/", "edges")
+	merge (parameters["output_folder"]+"tmp/", "edges.generic")
+	merge (parameters["output_folder"]+"tmp/", "edges.deprel")
 
-	os.rename (parameters["output_folder"]+"tmp/sorted.voc.gz", parameters["output_folder"]+"sorted.voc.gz" )
-	os.rename (parameters["output_folder"]+"tmp/sorted.struct.gz", parameters["output_folder"]+"sorted.struct.gz" )
-	os.rename (parameters["output_folder"]+"tmp/sorted.edges.gz", parameters["output_folder"]+"sorted.edges.gz" )
+	os.rename (parameters["output_folder"]+"tmp/sorted.voc.gz", parameters["output_folder"]+"sorted."+parameters["corpus"]+".voc.gz" )
+	os.rename (parameters["output_folder"]+"tmp/sorted.struct.gz", parameters["output_folder"]+"sorted."+parameters["corpus"]+".struct.gz" )
+	os.rename (parameters["output_folder"]+"tmp/sorted.edges.generic.gz", parameters["output_folder"]+"sorted."+parameters["corpus"]+".edges.generic.gz" )
+	os.rename (parameters["output_folder"]+"tmp/sorted.edges.deprel.gz", parameters["output_folder"]+"sorted."+parameters["corpus"]+".edges.deprel.gz" )
 
 	#Part 6: remove temporary output files
 	print("removing files")

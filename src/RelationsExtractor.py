@@ -221,7 +221,7 @@ class RelationsExtractor:
 								if not i in dati[b[0]]:
 									self.items[" ".join([min(a[0], b[0]), max(a[0], b[0])])]["genassoc"]+=1
 
-	def dump_relations(self, fobj):
+	def dump_relations(self, fobj_generic, fobj_deprel):
 		"""
 		The functions writes processed items in a file
 		
@@ -244,7 +244,10 @@ class RelationsExtractor:
 			for lab_group in sorted(labels):
 				label = lab_group
 				
-				fobj.write(node + "\t" + label + "\t" + str(labels[lab_group]) + "\n")
+				if label == "genassoc":
+					fobj_generic.write(node + "\t" + label + "\t" + str(labels[lab_group]) + "\n")
+				else:
+					fobj_deprel.write(node + "\t" + label + "\t" + str(labels[lab_group]) + "\n")
 	
 	
 	def dump_vocabulary(self, fobj):

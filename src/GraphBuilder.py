@@ -48,7 +48,7 @@ class GraphBuilder:
 		with gzip.open(self.vocab_file, "rt") as f:
 			
 			for line in f:
-				if not i%10000:
+				if not i%1000000:
 					if not first:
 						tx.commit()
 					first = False
@@ -85,7 +85,7 @@ class GraphBuilder:
 				fr = int(linesplit[2])
 		
 				lineno+=1
-				if not lineno%1000:
+				if not lineno%100000:
 					print(lineno)
 					
 				if all (x[0] not in ["_", "*"] for x in lemmi) and fr > self.minimum_generic_frequency:
@@ -119,7 +119,7 @@ class GraphBuilder:
 				fr = int(linesplit[2])
 		
 				lineno+=1
-				if not lineno%1000:
+				if not lineno%100000:
 					print(lineno)
 					
 				try:

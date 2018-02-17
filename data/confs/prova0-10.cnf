@@ -1,3 +1,10 @@
+[Version]
+user: Ludovica
+name: prova0-10
+
+[Corpus]
+corpus: depcc
+
 [Folders]
 rootdir: ..
 corpus_folder: %(rootdir)s/data/depcc/

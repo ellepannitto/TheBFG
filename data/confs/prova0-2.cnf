@@ -1,6 +1,6 @@
 [Version]
 user: Ludovica
-name: prova0-100
+name: prova0-2
 
 [Corpus]
 corpus: depcc
@@ -14,12 +14,12 @@ output_folder: %(rootdir)s/data/edges/
 
 [CorpusPortion]
 first_ID: 0
-last_ID: 200
+last_ID: 10
 delete_downloaded: True
 basic_url: http://ltdata1.informatik.uni-hamburg.de/depcc/corpus/parsed/part-m-
 
 [MultiProcessing]
-workers_n: 8
+workers_n: 4
 
 
 [GraphParameters]

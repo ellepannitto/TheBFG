@@ -1,3 +1,44 @@
+TheBFG ver 0.5.3
+
+	* RelationsExtractor:
+		- subsets of just 1 element included for weighing purposes
+
+	* Pipeline:
+		- output files are not sorted in frequency order anymore	
+	
+	TODO:
+	- handle other types of exception
+	- change folder organization (preprocessing + data extraction + graph building + query interface)
+	- handle possible common errors with parameters specification
+	- find a way to generate readable documentation
+	- map deprels to a standard set
+  
+-- Ludovica Pannitto <ellepannitto@gmail.com>  Sat, 17 Feb 2018 10.39
+
+TheBFG ver 0.5.2
+
+	* RelationsExtractor:
+		- now dumps generic associations separately from deprels
+
+	* Pipeline:
+		- name of output files now includes corpus name
+	
+	* GraphBuilder:
+		- now adds generic associations between nodes only when nodes have at least one relevant deprel incoming or outgoing edge
+	
+	* GraphQuery:
+		- there's plenty to do here, for the moment it's just able to weigh structures related to a given lemma, according to LMI (?)
+	
+	
+	TODO:
+	- handle other types of exception
+	- change folder organization (preprocessing + data extraction + graph building + query interface)
+	- handle possible common errors with parameters specification
+	- find a way to generate readable documentation
+	- map deprels to a standard set
+  
+-- Ludovica Pannitto <ellepannitto@gmail.com>  Wed, 14 Feb 2018 20.00
+
 TheBFG ver 0.5.1
 
 	* fixed bugs due to porting procedure

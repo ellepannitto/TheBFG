@@ -95,12 +95,14 @@ class GraphQuery:
 				#~ print(query)
 			
 				new_structs = self.graph.run(query)
-				
+				print (lemma+"\t"+curr_struct["n"]["text"]+"\t"+str(f_tok)+"\t"+str(f_curr_struct))
 				
 				tot = 0
 				while new_structs.forward():
 					s = new_structs.current()["s"]
 					x = new_structs.current()["x"]
+					
+					print ("\t"+s["text"]+"\t"+str(s["frequency"])+"\t"+x["lemma"]+"\t"+str(x["frequency"]))
 					
 					tot+=s["frequency"]/x["frequency"]
 					#~ print(s)
@@ -112,8 +114,10 @@ class GraphQuery:
 				mi = f_curr_struct * math.log(f_curr_struct/(f_tok*tot), 2)
 				#~ mi = math.log(f_curr_struct/(f_tok*tot), 2)
 				#~ print(mi)
-				
+				print("\t"+str(mi))
 				structs_weighted.append((curr_struct, mi))
+				
+				
 			
 			#~ print("")
 			#~ input()
@@ -121,12 +125,12 @@ class GraphQuery:
 		sorted_structs_weighted = sorted(structs_weighted, key = lambda x: x[1], reverse = True)
 		
 		
-		for x, y in sorted_structs_weighted:
-			print("STRUTTURA:")
-			print(x["n"]["text"])
-			print("PESO:")
-			print(y)
-			print("")
+		#~ for x, y in sorted_structs_weighted:
+			#~ print("STRUTTURA:")
+			#~ print(x["n"]["text"])
+			#~ print("PESO:")
+			#~ print(y)
+			#~ print("")
 
 
 if __name__=="__main__":

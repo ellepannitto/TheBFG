@@ -36,14 +36,15 @@ def merge (folder, pattern):
 	print("sum started", pattern, "...")
 
 	file_to_sum = current_fnout
-	fnout_sum = folder + "summed."+pattern+".gz"
-	fnout_sort = folder + "sorted."+pattern+".gz"
+	#~ fnout_sum = folder + "summed."+pattern+".gz"
+	fnout_sum = folder + "sorted."+pattern+".gz"
+	#~ fnout_sort = folder + "sorted."+pattern+".gz"
 
 	_utils._sum(gzip.open(file_to_sum, "rt"), gzip.open(fnout_sum, "wt"))
 	
-	print("sort started", pattern, "...")
+	#~ print("sort started", pattern, "...")
 	
-	_utils._sort(gzip.open(fnout_sum, "rt"), gzip.open(fnout_sort, "wt"))	
+	#~ _utils._sort(gzip.open(fnout_sum, "rt"), gzip.open(fnout_sort, "wt"))	
 
 def process(partname):
 	"""

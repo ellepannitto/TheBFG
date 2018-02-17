@@ -181,7 +181,7 @@ class RelationsExtractor:
 				if found_computer and found_surpass:
 					print("DEBUG:", g)
 				
-				for n in range(2, len(g)+1):
+				for n in range(1, len(g)+1):
 					
 					subsets = set(itertools.combinations(g, n))
 					

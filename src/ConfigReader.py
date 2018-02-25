@@ -2,8 +2,8 @@ from __future__ import print_function
 import os
 import configparser
 
-import DepCCSentenceParser, UDTreebankSentenceParser
-import DepCCToken, UDTreebankToken
+import DepCCSentenceParser, UDTreebankSentenceParser, ukWacSentenceParser
+import DepCCToken, UDTreebankToken, ukWacToken
 
 class ConfigMap:
 	"""
@@ -53,10 +53,12 @@ class ConfigMap:
 		
 		
 		self.switch_tokenClass = {"depcc": DepCCToken.DepCCToken,
-								"UD": UDTreebankToken.UDTreebankToken,}
+								"UD": UDTreebankToken.UDTreebankToken,
+								"ukwac": ukWacToken.ukWacToken,}
 
 		self.switch_sentenceClass = {"depcc": DepCCSentenceParser.DepCCSentenceParser,
-									"UD": UDTreebankSentenceParser.UDTreebankSentenceParser,}
+									"UD": UDTreebankSentenceParser.UDTreebankSentenceParser,
+									"ukwac": ukWacSentenceParser.ukWacSentenceParser,}
 	
 	def parse (self):
 		"""

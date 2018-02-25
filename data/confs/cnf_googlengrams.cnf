@@ -1,20 +1,20 @@
 [Version]
 user: Ludovica
-name: prova0-1000
+name: provaud
 
 [Corpus]
-corpus: depcc
+corpus: UD
 
 [Folders]
 rootdir: ..
-corpus_folder: %(rootdir)s/data/depcc/
+corpus_folder: %(rootdir)s/data/udtreebank/
 vocabulary_folder: %(rootdir)s/data/vocabulary/
 output_folder: %(rootdir)s/data/edges/
 
 
 [CorpusPortion]
-first_ID: 2000
-last_ID: 2500
+first_ID: 0
+last_ID: 10
 delete_downloaded: True
 basic_url: http://ltdata1.informatik.uni-hamburg.de/depcc/corpus/parsed/part-m-
 
@@ -23,15 +23,15 @@ workers_n: 4
 
 
 [GraphParameters]
-sentencefilter_fun: length,6,15
-min_frequency: 1000
-lexical_CPoS: N,V,J
-head_CPoS: V,N
+sentencefilter_fun: length,6,20
+min_frequency: 5
+lexical_CPoS: N,V,J,R
+head_CPoS: N,V,J
 max_wildcards: 1
 ignored_deprels: cop,prt,nn,aux,auxpass,dep,compound,flat,list
-max_distance: 5
+max_distance: 4
 
 [NodeFrequencies]
-min_generic: 1000
-min_struct: 300
+min_generic: 5
+min_struct: 3
 

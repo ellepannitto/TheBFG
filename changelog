@@ -1,3 +1,21 @@
+TheBFG ver 0.5.4
+
+	* ukWacSentenceParser, ukWacToken:
+		- provide an interface to parse ukwac-like annotated corpus
+		
+	* GraphQuery:
+		- now performs random walks. NB: first attempt
+	
+	TODO:
+	- handle other types of exception
+	- change folder organization (preprocessing + data extraction + graph building + query interface)
+	- handle possible common errors with parameters specification
+	- find a way to generate readable documentation
+	- map deprels to a standard set
+	- escape special chars in lemmas
+  
+-- Ludovica Pannitto <ellepannitto@gmail.com>  Sun, 25 Feb 2018 16.07
+
 TheBFG ver 0.5.3
 
 	* RelationsExtractor:

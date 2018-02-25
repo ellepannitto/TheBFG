@@ -7,6 +7,7 @@ They are mainly used to process temporary output files.
 
 import contextlib
 import heapq
+import random
 
 def _merge_sorted_files(filehandlers, outfile):
 	"""
@@ -118,3 +119,15 @@ def _sort (fin, fout):
 	
 	for line in lines:
 		fout.write("\t".join(line))
+		
+
+def _random_pick(weighted_list):
+
+    x = random.uniform(0, 1)
+    cumulative_probability = 0.0
+
+    for item, item_probability in weighted_list:
+        cumulative_probability += item_probability
+        if x < cumulative_probability: break
+        
+    return item

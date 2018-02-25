@@ -24,7 +24,7 @@ class GraphBuilder:
 	
 	@lru_cache(maxsize=8192)
 	def get_node (self, lma, cpos):
-		n = self.graph.run("MATCH (a:"+cpos+") WHERE a.user= '"+self.user+"' AND a.lemma = '"+lma+"' return a", lemma = lma).evaluate()
+		n = self.graph.run("MATCH (a) WHERE a.user= '"+self.user+"' AND a.lemma = '"+lma+"' AND a.pos = '"+cpos+"' return a", lemma = lma).evaluate()
 		return n	
 		
 	def remove_isolated(self):
@@ -39,7 +39,6 @@ class GraphBuilder:
 		return self.graph
 		
 	def load_vertices (self):
-		#~ self.total_nouns = 0
 
 		i = 0
 
@@ -56,7 +55,7 @@ class GraphBuilder:
 					print(i)
 				
 				if not (line[0] == "_" or line[0]=="*"):
-					#~ print(line)
+
 					linesplit = line.strip().rsplit("\t")
 					
 					lemmasplit = linesplit[0].rsplit("/", 1)
@@ -67,7 +66,8 @@ class GraphBuilder:
 					if pos in self.lexical_cpos and fr>self.minimum_struct_frequency:
 						#~ print(lemma + " " + pos)
 						#~ input()
-						n = Node(pos, lemma = lemma, frequency = fr, user = "Ludovica", ver = "prova1")
+						n = Node("Lemma", lemma = lemma, pos = pos[0], frequency = fr, user = "Ludovica", ver = "prova1")
+						#~ print("created "+str(n))
 						#~ self.total_nouns+=fr
 						tx.create(n)
 				i+=1
@@ -94,8 +94,8 @@ class GraphBuilder:
 					lemma2split = lemmi[1].rsplit("/", 1)
 					
 					try:
-						node1 = self.get_node(lemma1split[0], lemma1split[1])
-						node2 = self.get_node(lemma2split[0], lemma2split[1])
+						node1 = self.get_node(lemma1split[0], lemma1split[1][0])
+						node2 = self.get_node(lemma2split[0], lemma2split[1][0])
 						genassoc = Relationship (node1, "generic", node2, user = self.user, frequency = fr)
 						
 						tx.create(genassoc)
@@ -123,7 +123,6 @@ class GraphBuilder:
 					print(lineno)
 					
 				try:
-					#~ if "genassoc" not in labels:
 					if any(x[0] not in ["_", "*"] for x in lemmi) and fr > self.minimum_struct_frequency:
 						args = {"user":self.user, "frequency":fr, "text": linesplit[0]+"---"+linesplit[1]}
 						
@@ -138,7 +137,7 @@ class GraphBuilder:
 								
 								l = lsplit[0]
 								lab = labels[i]
-								nodo = self.get_node(l, pos)
+								nodo = self.get_node(l, pos[0])
 								nodeslist.append((nodo, lab))
 						
 						
@@ -148,24 +147,12 @@ class GraphBuilder:
 						for nodo, lab in nodeslist:
 							r = Relationship(nodo, lab, nodo_sr, user=self.user)
 							tx.create(r)
-								
-					#~ elif all (x[0] not in ["_", "*"] for x in lemmi) and fr > self.minimum_generic_frequency:
-						
-
-						#~ lemma1split = lemmi[0].rsplit("/", 1)
-						#~ lemma2split = lemmi[1].rsplit("/", 1)
-						
-						
-						#~ node1 = self.get_node(lemma1split[0], lemma1split[1])
-						#~ node2 = self.get_node(lemma2split[0], lemma2split[1])
-						#~ genassoc = Relationship (node1, "generic", node2, user = self.user, frequency = fr)
-						
-						#~ tx.create(genassoc)
 							
 				
 				except Exception as e:
 					print ("problema creazione nodo: {}".format(line))
 					print(e)
+					#~ input()
 					#~ print(node1)
 					#~ print(node2)
 					#~ input()
@@ -186,4 +173,4 @@ if __name__ == "__main__":
 	graph.reset_graph()
 	graph.load_vertices()
 	graph.load_edges_deprels()
-	graph.load_edges_generic()
+	#~ graph.load_edges_generic()

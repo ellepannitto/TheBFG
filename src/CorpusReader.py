@@ -49,7 +49,7 @@ class CorpusReader:
 			
 		sentence_delimiter: char
 			char separating interesting portions of the input file (e.g. sentences)
-			it must be the first char of the delimiting line
+			the separating char must be the first char of the delimiting line
 		'''
 		self.input_file = fin
 		self.delimiter = sentence_delimiter
@@ -70,20 +70,28 @@ class CorpusReader:
 			
 		'''
 		
+		to_del = False
 		curr_sent = []
 		line = self.input_file.readline()
 
 		while line and not line[0] == self.delimiter and len( line.strip() ) :
 
 			curr_sent.append(line.strip())
-			line = self.input_file.readline()
+			
+			try:
+				line = self.input_file.readline()
+			except Exception as e:
+				print(e)
+				to_del = True
 			
 
 		if len(line) > 0:
-			return curr_sent
+			if not to_del:
+				return curr_sent
+			else:
+				return []
 
 		else:
-
 			raise StopIteration
 
 

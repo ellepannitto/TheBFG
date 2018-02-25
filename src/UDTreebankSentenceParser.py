@@ -76,7 +76,7 @@ class UDTreebankSentenceParser:
 		
 		#this part computes a set of dependencies for each node (so that we know all the children of a certain node), 
 		#and selects the root of the sentence (element labeled as ROOT, if suitable to be a head)
-		deps  = {}
+		deps = {}
 		root = None
 		for id_ord in sentence:
 			token = sentence[id_ord]

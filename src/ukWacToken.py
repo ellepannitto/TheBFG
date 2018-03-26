@@ -38,7 +38,6 @@ class ukWacToken(Token):
 			
 		
 		EXAMPLE
-
 		# sent_id = http://attractivespot.blogspot.com/2012/03/sangla-vallay-in-himachal-in-india.html#1
 		# text = Sangla Valley in Himachal Pradesh in India .
 		0	Sangla	Sangla	NNP	NNP		1	nn	1:nn	B-Location
@@ -49,15 +48,11 @@ class ukWacToken(Token):
 		5	in	in	IN	IN		1	prep	_	O
 		6	India	India	NNP	NNP		5	pobj	1:prep_in	O
 		7	.	.	.	.		1	punct	1:punct	O
-
 		There are 8 tokens from 0 to 7, one token per line.
-
 		The second token has the following features: 
 		ID = 1, LEMMA = Valley, UPOSTAG = NNP, HEAD = 1, DEPREL = ROOT, DEPS = 1:ROOT, NER = I-Location
-
 		The third token has the following features:
 		ID = 2, LEMMA = in, UPOSTAG = IN, HEAD = 1, DEPREL = prep, DEPS = _, NER = O
-
 		The fifth token has the following features:
 		ID = 4, LEMMA = Pradesh, UPOSTAG = NNP, HEAD = 2, DEPREL = pobj, DEPS = 1:prep_in, NER = O
 		"""	

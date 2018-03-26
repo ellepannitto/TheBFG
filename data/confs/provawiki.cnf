@@ -1,13 +1,13 @@
 [Version]
 user: Ludovica
-name: prova0-2
+name: provawiki
 
 [Corpus]
-corpus: depcc
+corpus: wiki
 
 [Folders]
 rootdir: ..
-corpus_folder: %(rootdir)s/data/depcc/
+corpus_folder: %(rootdir)s/data/wikipedia/
 vocabulary_folder: %(rootdir)s/data/vocabulary/
 output_folder: %(rootdir)s/data/edges/
 
@@ -23,8 +23,8 @@ workers_n: 3
 
 
 [GraphParameters]
-sentencefilter_fun: length,6,20
-min_frequency: 900
+sentencefilter_fun: length,2,50
+min_frequency: 50
 lexical_CPoS: N,V,J
 head_CPoS: V,N
 max_wildcards: 1

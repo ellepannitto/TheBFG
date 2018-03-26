@@ -1,0 +1,8 @@
+1 Digit digit NN O ROOT=0
+
+1 Digit digit NN O nsubj=3
+2 may may MD O aux=3
+3 refer refer VB O ROOT=0
+4 to to TO O nmod=3
+5 : : : O punct=3
+

@@ -133,7 +133,7 @@ class GraphQuery:
 		
 		return sorted_structs_weighted
 			
-	def random_walk (self, start_lemma, start_pos, length):
+	def old_random_walk (self, start_lemma, start_pos, length):
 		path = ""
 		
 		self.visited = set()
@@ -187,6 +187,60 @@ class GraphQuery:
 			print(path)
 
 
+	def random_walk (self, start_lemma, start_pos, length):
+		path = ""
+		
+		self.visited = set()
+		
+		curr_lemma = start_lemma
+		curr_pos = start_pos
+		
+		i=0
+		while length > 0:
+			i+=1
+			path+=curr_lemma+"/"+curr_pos+" "
+			#~ print(curr)
+			self.visited.add(curr_lemma+"/"+curr_pos)
+
+			structs = self.graph.run("MATCH (a:Lemma)-[r]-(s:Struct) WHERE a.user ='"+self.user+"' and a.lemma='"+curr_lemma+"' and a.pos='"+curr_pos+"' return s, r.MI, ID(s) as id_s order by r.MI desc")
+			
+			new_lemmas = collections.defaultdict(int)
+			
+			while structs.forward():
+				s = structs.current()
+				
+				lmi = s["r.MI"]
+				
+				if lmi > 0:
+					#~ print (s)
+					nodes = self.retrieve_connected(s["id_s"])
+					
+					for n in nodes:
+						lemma = n["lemma"]
+						pos = n["pos"]
+						if not lemma+"/"+pos in self.visited:
+							new_lemmas[(lemma, pos)]+=lmi
+			
+			sum_lmis = sum([y for x, y in new_lemmas.items()])
+			
+			new_lemmas = {x: y/sum_lmis for x, y in new_lemmas.items()}
+			
+			sortedlist = sorted(new_lemmas.items(), key=lambda x: x[1], reverse=True)
+			#~ print(sortedlist)
+			#~ input()
+			
+			if len(sortedlist)>0:
+				pick = _utils._random_pick(sortedlist)
+				curr_lemma = pick[0]
+				curr_pos = pick[1]
+				length -=1
+			else:
+				length = 0
+				
+		if i>1:
+			print(path)
+				 		
+
 if __name__=="__main__":
 	import ConfigReader
 	import sys
@@ -216,6 +270,8 @@ if __name__=="__main__":
 	while lemmas.forward():
 		l = lemmas.current()
 		
+		#~ print(l)
+		
 		lemma = l["lemma"]
 		pos = l["pos"]
 		f = l["freq"]
@@ -226,4 +282,6 @@ if __name__=="__main__":
 		#~ input()
 		
 		for i in range(30+int(math.log(f,2))):
+		#~ for i in range(1):
 			gq.random_walk(lemma, pos, 20)
+			#~ gq.random_walk(lemma, pos, 2)

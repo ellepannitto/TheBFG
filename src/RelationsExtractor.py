@@ -1,4 +1,3 @@
-from __future__ import print_function
 import os
 import itertools
 from collections import *
@@ -120,13 +119,19 @@ class RelationsExtractor:
 		groups = []
 		
 		seen_items = defaultdict(int)
+		visited = defaultdict(bool)
 		
 		#The idea is that the queue contains the root at the begininng, and navigates the dependencies starting from there.
 		if root:
 			seen_items[root]+=1
 			Q = [root]
+			visited[root]=True
 
 			while Q:
+				if root ==5 and sentence[root].lemma == "lie/V":
+					print(Q)					
+					input()
+					
 				x = Q.pop()
 				
 				curr_el = sentence[x]
@@ -149,24 +154,22 @@ class RelationsExtractor:
 						seen_items[i]+=1
 							
 					#~ if target.pos[0] in self.head_cpos and i in deps and len(deps[i])>0:
-					if target.pos[0] in self.head_cpos:
+					if target.pos[0] in self.head_cpos and not visited[i]:
 						Q.append(i)
+						visited[i]=True
 				
 				groups.append(group)
+				
+			print ("gruppi {}".format(groups))
 
 
 			#~ for i in seen_items:
 				#~ lemma = sentence[i].lemma
 				#~ self.vocabulary[lemma]+=seen_items[i]
-			found_computer = False	
-			found_surpass = False	
+
 			for el, tok in sentence.items():
 				if tok.pos[0] in self.lexical_cpos:
 					self.vocabulary[tok.lemma]+=1
-				#~ if tok.lemma[:-2] == "computer":
-					#~ found_computer = True
-				#~ if tok.lemma[:-2] == "surpass":
-					#~ found_surpass = True
 					
 
 			dati = {}
@@ -175,51 +178,57 @@ class RelationsExtractor:
 					if not el in dati:
 						dati[el] = []
 					dati[el].append(i)
+						
 			
-			for i, g in enumerate(groups):			
-				
-				if found_computer and found_surpass:
-					print("DEBUG:", g)
-				
-				for n in range(1, len(g)+1):
-					
-					subsets = set(itertools.combinations(g, n))
-					
-					for s in subsets:
-						
-						s = sorted(s, key = lambda x:x[0])
-						
-						if found_computer and found_surpass:
-							print(s)
-						
-						elements = [e[0] for e in s]
-						elements_0 = [e[0] for e in elements]
-						labels = [e[1] for e in s]
-					
-						if elements_0.count("*")<= self.max_wildcards:
-													
-							self.items[" ".join(elements)]["|".join(labels)]+=1
+			
+			for i, g in enumerate(groups):		
+				e_0 = [x[0][0] for x in g]
+				#~ print(e_0)
+				if not all(x in ["*", "_"] for x in e_0):
+					if len(g)<11:
+					#~ print("{}/{}: {}".format(i,len(groups),g))
+					#~ input()
+
+						for n in range(1, len(g)+1):
 							
-							#add structure
-							sorted_labels = sorted(labels)
-							self.structures["|".join(sorted_labels)]+=1
+							subsets = set(itertools.combinations(g, n))
+							
+							for s in subsets:
+								
+								s = sorted(s, key = lambda x:x[0])
+								
+								elements = [e[0] for e in s]
+								elements_0 = [e[0] for e in elements]
+								labels = [e[1] for e in s]
+							
+								if elements_0.count("*")<= self.max_wildcards:
+															
+									self.items[" ".join(elements)]["|".join(labels)]+=1
+									
+									#add structure
+									sorted_labels = sorted(labels)
+									self.structures["|".join(sorted_labels)]+=1
+					else:
+						print(str(i)+"/"+str(len(groups))+": g is too big!")
+						print(g)
+				else:
+					#~ pass
+					print(str(i)+"/"+str(len(groups))+": gruppo escluso senza item lessicali, "+str(len(g)))
 				
-				if found_computer and found_surpass:
-					print()
 
 				
-			for i, g in enumerate(groups):	
-				#GENERIC ASSOCIATIONS
-				for j, h in enumerate(groups):
+			#~ for i, g in enumerate(groups):	
+				#~ #GENERIC ASSOCIATIONS
+				#~ for j, h in enumerate(groups):
 					
-					if j>i:
+					#~ if j>i:
 						
-						for a in g:
-							for b in h:
+						#~ for a in g:
+							#~ for b in h:
 								
-								#~ #a nel gruppo i, b nel gruppo j
-								if not i in dati[b[0]]:
-									self.items[" ".join([min(a[0], b[0]), max(a[0], b[0])])]["genassoc"]+=1
+								#a nel gruppo i, b nel gruppo j
+								#~ if not i in dati[b[0]]:
+									#~ self.items[" ".join([min(a[0], b[0]), max(a[0], b[0])])]["genassoc"]+=1
 
 	def dump_relations(self, fobj_generic, fobj_deprel):
 		"""

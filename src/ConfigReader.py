@@ -3,7 +3,7 @@ import os
 import configparser
 
 import DepCCSentenceParser, UDTreebankSentenceParser, ukWacSentenceParser
-import DepCCToken, UDTreebankToken, ukWacToken
+import DepCCToken, UDTreebankToken, ukWacToken, WikipediaToken
 
 class ConfigMap:
 	"""
@@ -54,9 +54,11 @@ class ConfigMap:
 		
 		self.switch_tokenClass = {"depcc": DepCCToken.DepCCToken,
 								"UD": UDTreebankToken.UDTreebankToken,
-								"ukwac": ukWacToken.ukWacToken,}
+								"ukwac": ukWacToken.ukWacToken,
+								"wiki": WikipediaToken.WikipediaToken,}
 
 		self.switch_sentenceClass = {"depcc": DepCCSentenceParser.DepCCSentenceParser,
+									"wiki": DepCCSentenceParser.DepCCSentenceParser,
 									"UD": UDTreebankSentenceParser.UDTreebankSentenceParser,
 									"ukwac": ukWacSentenceParser.ukWacSentenceParser,}
 	

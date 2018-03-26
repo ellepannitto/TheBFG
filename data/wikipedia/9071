@@ -1,0 +1,27 @@
+1 King King NNP O compound=2
+2 David David NNP PERSON ROOT=0
+3 -LRB- -lrb- -LRB- O punct=4
+4 disambiguation disambiguation NN O appos=2
+5 -RRB- -rrb- -RRB- O punct=4
+
+1 David David NNP PERSON nsubj=5
+2 was be VBD O cop=5
+3 the the DT O det=5
+4 second second JJ ORDINAL amod=5
+5 king king NN O ROOT=0
+6 of of IN O case=9
+7 the the DT O det=9
+8 united unite VBN O amod=9
+9 Kingdom Kingdom NNP O nmod:of=5
+10 of of IN O case=11
+11 Israel Israel NNP LOCATION nmod:of=9
+12 . . . O punct=5
+
+1 King King NNP O compound=2
+2 David David NNP PERSON nsubj=5
+3 may may MD O aux=5
+4 also also RB O advmod=5
+5 refer refer VB O ROOT=0
+6 to to TO O nmod=5
+7 : : : O punct=5
+

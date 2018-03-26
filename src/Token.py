@@ -114,7 +114,28 @@ class Token(object):
 			self.rel = "ccomp"
 		if self.enhanced_rel == "csubjpass":
 			self.enhanced_rel = "ccomp"
+		
+		#~ print (self.enhanced_rel)
 
+		splitrel = self.rel.split("_")
+		#~ if self.rel[:5]=="prep_":
+		if len(splitrel)>1:
+			#~ print("prep_ :"+self.rel)
+			#~ splitrel = self.rel.split("_")
+			if not all(c.isalpha() for c in splitrel[1]):
+				self.rel = splitrel[0]
+			#~ print(self.rel)
+			#~ input()
+			
+		splitrel = self.enhanced_rel.split("_")
+		#~ if self.enhanced_rel[:5]=="prep_":
+		if len(splitrel)>1:
+			#~ print("prep_ :"+self.enhanced_rel)
+			#~ splitrel = self.enhanced_rel.split("_")
+			if not all(c.isalpha() for c in splitrel[1]):
+				self.enhanced_rel = splitrel[0]
+			#~ print(self.enhanced_rel)
+			#~ input()	
 
 
 	def add_part (self, prt):

@@ -1,0 +1,13 @@
+1 Diaeresis diaeresis NN PERSON ROOT=0
+
+1 Diaeresis diaeresis NN O nsubj=8
+2 -LRB- -lrb- -LRB- O punct=3
+3 dieresis dieresis NN O dep=1
+4 , , , O punct=3
+5 diëresis diëresis NN O appos=3
+6 -RRB- -rrb- -RRB- O punct=3
+7 may may MD O aux=8
+8 refer refer VB O ROOT=0
+9 to to TO O nmod=8
+10 : : : O punct=8
+

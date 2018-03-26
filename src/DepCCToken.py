@@ -79,6 +79,7 @@ class DepCCToken(Token):
 		self.pord = int(split_tok[6])
 		
 		# DEPREL : universal dependency relation to the 'HEAD'
+		#~ self.rel = self.checkrel(split_tok[7].strip())
 		self.rel = split_tok[7].strip()
 		
 		# NER : named entity tag
@@ -91,6 +92,7 @@ class DepCCToken(Token):
 			
 		if not enhanced[0] == "_":
 			enhanced_pord = int(enhanced[0])
+			#~ enhanced_rel = self.checkrel(enhanced[1].strip())
 			enhanced_rel = enhanced[1].strip()
 			
 			# We copy the information, only if there is something new.
@@ -101,5 +103,20 @@ class DepCCToken(Token):
 				self.enhanced_pord = enhanced_pord
 				self.enhanced_rel = enhanced_rel
 	
+	def checkrel(self, rel):
+		if len(rel)>1:
+			splitrel = rel.split("_")
+		
+			if splitrel[0]=="prep" and len(splitrel)>1:
+				#~ print (rel)
+				#~ print (splitrel)
+				#~ input()
+				if all(c.isalpha() for c in splitrel[1]):
+					return rel
+				else:
+					return splitrel[0]
+		else:
+			return rel		
+			
 	def __repr__ (self):
 		return self.lemma+"\t"+self.pos+"\t"+str(self.pord)

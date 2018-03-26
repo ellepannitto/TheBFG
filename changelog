@@ -1,3 +1,33 @@
+TheBFG ver 0.6
+
+	* WikipediaToken:
+		- new interface for UD-parsed wikipedia corpus
+		
+	* Pipeline_wiki:
+		- new Pipeline for UD-parsed wikipedia corpus
+	
+	* Pipeline, Merged:
+		- experiment for async merging (still developing)
+	
+	* RelationsExtractor:
+		- minor changes to head extraction
+		
+	* GraphBuilder, GraphQuery:
+		- precomputes LMI
+		- deletes useless nodes
+		- performs much faster random walks
+			
+	
+	TODO:
+	- handle other types of exception
+	- change folder organization (preprocessing + data extraction + graph building + query interface)
+	- handle possible common errors with parameters specification
+	- find a way to generate readable documentation
+	- map deprels to a standard set
+	- escape special chars in lemmas
+  
+-- Ludovica Pannitto <ellepannitto@gmail.com>  Mon, 26 Mar 2018 10.58
+
 TheBFG ver 0.5.4
 
 	* ukWacSentenceParser, ukWacToken:

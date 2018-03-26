@@ -14,8 +14,36 @@ import FrequencyLoader
 import DepCCToken
 import RelationsExtractor
 import _utils
-import Merger
 
+def merge (folder, pattern):
+
+	print("merge started", pattern, "...")
+	
+	files_to_merge = glob.glob(folder+"*"+pattern+"*")
+	i = 0
+	while len(files_to_merge)>1:
+		
+		current_files_to_merge = files_to_merge[:100]
+		current_fnout = folder + "merged" + str(i) + "."+pattern+".gz"
+		i+=1
+		_utils._merge_sorted_files([gzip.open(f, "rt") for f in current_files_to_merge], gzip.open(current_fnout, "wt"))
+		
+		files_to_merge = files_to_merge[100:]
+		files_to_merge.append(current_fnout)
+
+
+	print("sum started", pattern, "...")
+
+	file_to_sum = current_fnout
+	#~ fnout_sum = folder + "summed."+pattern+".gz"
+	fnout_sum = folder + "sorted."+pattern+".gz"
+	#~ fnout_sort = folder + "sorted."+pattern+".gz"
+
+	_utils._sum(gzip.open(file_to_sum, "rt"), gzip.open(fnout_sum, "wt"))
+	
+	#~ print("sort started", pattern, "...")
+	
+	#~ _utils._sort(gzip.open(fnout_sum, "rt"), gzip.open(fnout_sort, "wt"))	
 
 def process(partname):
 	"""
@@ -28,61 +56,60 @@ def process(partname):
 	
 	"""
 		
-	filename = parameters["corpus_folder"]+partname+".gz"
+	#~ filename = parameters["corpus_folder"]+partname+".gz"
+	filename = partname	
+	partname = partname.split("/")[-1]
+	#~ print ("---------------"+partname)
 	file_output_generic = parameters["output_folder"] + "tmp/" + partname + ".edges.generic.gz"
 	file_output_deprel = parameters["output_folder"] + "tmp/" + partname + ".edges.deprel.gz"
 	#provaprova
 	file_output_vocabulary = parameters["output_folder"] + "tmp/" + partname + ".voc.gz"
 	file_output_structures = parameters["output_folder"] + "tmp/" + partname + ".struct.gz"
 	
-	downloaded = False
+	#~ downloaded = False
 	
 	print ("started processing file {}".format(filename))
-
-	if not os.path.exists(filename):
-		downloaded = True
-		
-		file_url = parameters["basic_url"] + partname + ".gz"
-		
-		#~ testfile = urllib.URLopener()
-		request.urlretrieve(file_url, filename)
 	
 	#TODO: check if global is needed
 	parameters["vocab_list"] = _VOCAB_LISTS
 	
-	try:
-		cr = CorpusReader.CorpusReader(gzip.open(filename, "rt"))
-		filterer = tests.Filterer (parameters)
-		sp = parameters["sentence_class"] ( parameters )
-		rex = RelationsExtractor.RelationsExtractor(parameters)
+	#~ try:
 		
-		fout_generic = gzip.open(file_output_generic, "wt")
-		fout_deprel = gzip.open(file_output_deprel, "wt")
+	cr = CorpusReader.CorpusReader(open(filename, "rt"))
+	filterer = tests.Filterer (parameters)
+	sp = parameters["sentence_class"] ( parameters )
+	rex = RelationsExtractor.RelationsExtractor(parameters)
+	
+	fout_generic = gzip.open(file_output_generic, "wt")
+	fout_deprel = gzip.open(file_output_deprel, "wt")
+	
+	fout_voc = gzip.open(file_output_vocabulary, "wt")
+	fout_struct = gzip.open(file_output_structures, "wt")
+	
+	sentence_no = 0
+	for sentence in cr:
+		sentence_no +=1
+
+		#~ if not sentence_no%100000:
+			#~ print "processing sentence", sentence_no, "..."
+
+		if filterer.filter ( sentence ) :
+			parsed_sentence = sp.parse_sent( sentence )
+			print ("processing sentence: {}".format(parsed_sentence))
+			rex.process(parsed_sentence)
+			print ("processed")
+	
+	rex.dump_relations(fout_generic, fout_deprel)
+
+	rex.dump_vocabulary(fout_voc)
+	rex.dump_structures(fout_struct)
 		
-		fout_voc = gzip.open(file_output_vocabulary, "wt")
-		fout_struct = gzip.open(file_output_structures, "wt")
-		
-		sentence_no = 0
-		for sentence in cr:
-			sentence_no +=1
+	#~ except Exception as e:
+		#~ print(e)
+		#~ print("problems with file{}".format(filename))
 
-			#~ if not sentence_no%100000:
-				#~ print "processing sentence", sentence_no, "..."
-
-			if filterer.filter ( sentence ) :
-				parsed_sentence = sp.parse_sent( sentence )
-				rex.process(parsed_sentence)
-		
-		rex.dump_relations(fout_generic, fout_deprel)
-
-		rex.dump_vocabulary(fout_voc)
-		rex.dump_structures(fout_struct)
-	except Exception as e:
-		print(e)
-		print("problems with file{}".format(filename))
-
-	if downloaded and parameters["delete_downloaded"]:
-		os.remove(parameters["corpus_folder"]+partname+".gz")
+	#~ if downloaded and parameters["delete_downloaded"]:
+		#~ os.remove(parameters["corpus_folder"]+partname+".gz")
 
 	print ("finished processing file {}".format(filename))
 
@@ -126,9 +153,24 @@ if __name__ == "__main__":
 		
 	#Part 3: initialize a pool of workers and begin extraction process -> the extraction is handled by the "process" function
 	p = Pool(processes=parameters["workers_n"])
-	arg_list = [str(i).zfill(5) for i in range(parameters["first_id"], parameters["last_id"])]
-	p.map(process, arg_list)
-	#~ process(arg_list[0])
+	
+	arg_list = []
+	#~ for root, dirs, filenames in os.walk(parameters["corpus_folder"]):
+		#~ for f in filenames:
+			#~ #avoid readme.txt
+			#~ if not f[:-1]=="t":
+				#~ arg_list.append(root+"/"+f)
+	
+	arg_list = [parameters["corpus_folder"]+f for f in os.listdir(parameters["corpus_folder"])]
+	
+	print(arg_list[:10])
+	#~ input()
+	#~ arg_list = [str(i).zfill(5) for i in range(parameters["first_id"], parameters["last_id"])]
+	
+	#~ p.map(process, arg_list)
+	for arg in arg_list:
+		print(arg)
+		process(arg)
 	#~ process(arg_list[1])
 
 

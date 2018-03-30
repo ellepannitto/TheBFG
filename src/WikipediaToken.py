@@ -69,14 +69,18 @@ class WikipediaToken(Token):
 		
 		rels = split_tok[5].strip().split(",")
 		
-		first_rel = rels[0].split("=")
-		
-		# HEAD : head of the current word, which is either a value of ID or zero
-		self.pord = int(first_rel[1])
-		
-		# DEPREL : universal dependency relation to the 'HEAD'
-		self.rel = "_".join(first_rel[0].split(":"))
-		
+		first_rel = rels[0].split("=")		
+
+		try:
+			# HEAD : head of the current word, which is either a value of ID or zero
+			self.pord = int(first_rel[1])
+			
+			# DEPREL : universal dependency relation to the 'HEAD'
+			self.rel = "_".join(first_rel[0].split(":"))	
+		except Exception as e:
+			print(e)
+			print(first_rel)	
+			
 		# NER : named entity tag
 		self.ne = "B-"+split_tok[4].strip()
 		
@@ -85,11 +89,16 @@ class WikipediaToken(Token):
 			print (rels)
 		elif len(rels)>1:
 			enhanced = rels[1].split("=")
-			enhanced_pord = int(enhanced[1])
-			enhanced_rel = "_".join(enhanced[0].split(":"))
 			
-			self.enhanced_pord = enhanced_pord
-			self.enhanced_rel = enhanced_rel
+			try:
+				enhanced_pord = int(enhanced[1])
+				enhanced_rel = "_".join(enhanced[0].split(":"))
+				
+				self.enhanced_pord = enhanced_pord
+				self.enhanced_rel = enhanced_rel
+			except Exception as e:
+				print(e)
+				print(enhanced)
 
 	
 	def __repr__ (self):

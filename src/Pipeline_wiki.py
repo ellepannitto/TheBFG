@@ -28,6 +28,9 @@ def merge (folder, pattern):
 		i+=1
 		_utils._merge_sorted_files([gzip.open(f, "rt") for f in current_files_to_merge], gzip.open(current_fnout, "wt"))
 		
+		for f in current_files_to_merge:
+			os.remove(f)
+		
 		files_to_merge = files_to_merge[100:]
 		files_to_merge.append(current_fnout)
 
@@ -95,9 +98,9 @@ def process(partname):
 
 		if filterer.filter ( sentence ) :
 			parsed_sentence = sp.parse_sent( sentence )
-			print ("processing sentence: {}".format(parsed_sentence))
+			#~ print ("processing sentence: {}".format(parsed_sentence))
 			rex.process(parsed_sentence)
-			print ("processed")
+			#~ print ("processed")
 	
 	rex.dump_relations(fout_generic, fout_deprel)
 
@@ -155,23 +158,20 @@ if __name__ == "__main__":
 	p = Pool(processes=parameters["workers_n"])
 	
 	arg_list = []
-	#~ for root, dirs, filenames in os.walk(parameters["corpus_folder"]):
-		#~ for f in filenames:
-			#~ #avoid readme.txt
-			#~ if not f[:-1]=="t":
-				#~ arg_list.append(root+"/"+f)
+	for root, dirs, filenames in os.walk(parameters["corpus_folder"]):
+		print("collecting files from {}...".format(root))
+		for f in filenames:
+			#avoid readme.txt and .gz things
+			if not f[-1]in ["t", "z"]:
+				arg_list.append(root+"/"+f)
 	
-	arg_list = [parameters["corpus_folder"]+f for f in os.listdir(parameters["corpus_folder"])]
+	#~ arg_list = [parameters["corpus_folder"]+f for f in os.listdir(parameters["corpus_folder"])]
 	
-	print(arg_list[:10])
-	#~ input()
-	#~ arg_list = [str(i).zfill(5) for i in range(parameters["first_id"], parameters["last_id"])]
 	
-	#~ p.map(process, arg_list)
-	for arg in arg_list:
-		print(arg)
-		process(arg)
-	#~ process(arg_list[1])
+	p.map(process, arg_list)
+	#~ for arg in arg_list:
+		#~ print(arg)
+		#~ process(arg)
 
 
 

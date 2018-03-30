@@ -128,9 +128,6 @@ class RelationsExtractor:
 			visited[root]=True
 
 			while Q:
-				if root ==5 and sentence[root].lemma == "lie/V":
-					print(Q)					
-					input()
 					
 				x = Q.pop()
 				
@@ -160,7 +157,7 @@ class RelationsExtractor:
 				
 				groups.append(group)
 				
-			print ("gruppi {}".format(groups))
+			#~ print ("gruppi {}".format(groups))
 
 
 			#~ for i in seen_items:

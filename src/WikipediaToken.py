@@ -1,3 +1,5 @@
+import math
+
 from Token import *
 
 """
@@ -67,38 +69,65 @@ class WikipediaToken(Token):
 		# UPOSTAG : universal part-of-speech tag
 		self.pos = split_tok[3].strip()
 		
-		rels = split_tok[5].strip().split(",")
+		rels = list(set(split_tok[5].strip().split(",")))
 		
-		first_rel = rels[0].split("=")		
-
-		try:
-			# HEAD : head of the current word, which is either a value of ID or zero
-			self.pord = int(first_rel[1])
+		rels_splitted = [x.split("=") for x in rels]
+		
+		
+		rels = []
+		for x in rels_splitted:
 			
-			# DEPREL : universal dependency relation to the 'HEAD'
-			self.rel = "_".join(first_rel[0].split(":"))	
-		except Exception as e:
-			print(e)
-			print(first_rel)	
+			try:
+				x_rel = x[0]
+				x_int = int(x[1])
+				
+				if x_rel == "compound:prt":
+					x_rel = "prt"
+				else:
+					
+					#~ pass
+					x_rel = x_rel.split(":")[0]
+					#~ print ("sono qui")
+					
+				rels.append((x_rel, x_int))
+					
+			except:
+				#~ print(e)
+				print("error during relation parsing {}".format(x))
+				#~ input()
+		
+		rels = sorted(rels, key = lambda x: math.fabs(x[1] - self.id_ord))
+		
+
+		if len(rels)>0:
+			first_rel = rels[0]
+		else:
+			first_rel = ("dep", self.id_ord)
+
+		# HEAD : head of the current word, which is either a value of ID or zero
+		self.pord = first_rel[1]
+		
+		# DEPREL : universal dependency relation to the 'HEAD'
+		self.rel = "_".join(first_rel[0].split(":"))	
+		
 			
 		# NER : named entity tag
 		self.ne = "B-"+split_tok[4].strip()
 		
-		if len(rels) > 2:
-			print("più di 2 rels")
-			print (rels)
-		elif len(rels)>1:
-			enhanced = rels[1].split("=")
-			
-			try:
-				enhanced_pord = int(enhanced[1])
-				enhanced_rel = "_".join(enhanced[0].split(":"))
+		if len(rels)>1:
+			second_rel = rels[1]
+
+			enhanced_pord = second_rel[1]
+			enhanced_rel = "_".join(second_rel[0].split(":"))
 				
-				self.enhanced_pord = enhanced_pord
-				self.enhanced_rel = enhanced_rel
-			except Exception as e:
-				print(e)
-				print(enhanced)
+			self.enhanced_pord = enhanced_pord
+			self.enhanced_rel = enhanced_rel
+		
+		if len(rels) > 2:
+			self.other_rels = rels[2:]
+			#~ print(self.id_ord)
+			#~ print("più di 2 rels")
+			#~ print (rels)
 
 	
 	def __repr__ (self):

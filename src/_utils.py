@@ -24,7 +24,7 @@ def _merge_sorted_files(filehandlers, outfile):
 
 	"""
 
-	print("[DEBUG] - merge started")
+	#~ print("[DEBUG] - merge started")
 
 	with contextlib.ExitStack() as stack:
 		files = [stack.enter_context(fn) for fn in filehandlers]
@@ -76,21 +76,21 @@ def _sum (fin, fout, min_freq = 0):
 	for line in fin:
 
 		linesplit = line.strip().rsplit("\t", 1)
-		
-		inst = linesplit[0]
-		freq = int(linesplit[1])
+		if len(linesplit)>1:
+			inst = linesplit[0]
+			freq = int(linesplit[1])
 
-		if inst == curr_inst:
-			curr_fr += freq
+			if inst == curr_inst:
+				curr_fr += freq
 
-		else:
-			
-			if curr_fr > min_freq:
-				fout.write(curr_inst + "\t" + str(curr_fr) + "\n")
+			else:
+				
+				if curr_fr > min_freq:
+					fout.write(curr_inst + "\t" + str(curr_fr) + "\n")
 
-			curr_inst = inst
-			
-			curr_fr = freq
+				curr_inst = inst
+				
+				curr_fr = freq
 		
 	fout.write(curr_inst + "\t" + str(curr_fr) + "\n")
 	

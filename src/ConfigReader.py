@@ -2,7 +2,7 @@ from __future__ import print_function
 import os
 import configparser
 
-import DepCCSentenceParser, UDTreebankSentenceParser, ukWacSentenceParser
+import DepCCSentenceParser, UDTreebankSentenceParser, ukWacSentenceParser, WikipediaSentenceParser
 import DepCCToken, UDTreebankToken, ukWacToken, WikipediaToken
 
 class ConfigMap:
@@ -58,7 +58,7 @@ class ConfigMap:
 								"wiki": WikipediaToken.WikipediaToken,}
 
 		self.switch_sentenceClass = {"depcc": DepCCSentenceParser.DepCCSentenceParser,
-									"wiki": DepCCSentenceParser.DepCCSentenceParser,
+									"wiki": WikipediaSentenceParser.WikipediaSentenceParser,
 									"UD": UDTreebankSentenceParser.UDTreebankSentenceParser,
 									"ukwac": ukWacSentenceParser.ukWacSentenceParser,}
 	

@@ -50,3 +50,33 @@ def _set_from_file (fobj, frequency_threshold, sep = "\t", item_col = 0, freq_co
 		#~ print (line)
 	
 	return ret
+
+def _load_list (fobj):
+	"""
+	The purpose of this function is to load vocabulary items from a file (fobj). Only items with frequency greater or equal to frequency_threshold are loaded.
+	The function returns a set.
+	
+	Parameters:
+	-----------
+	fobj: File
+		handler to file, containing vocabulary items.
+		
+	Returns:
+	-----------
+	set
+		set containing all selected strings
+	
+	"""
+	
+	ret = set()
+	
+	line = fobj.readline().strip()	
+	
+	while len(line)>0:
+		it = line
+				
+		ret.add(it)
+
+		line = fobj.readline().strip()
+	
+	return ret

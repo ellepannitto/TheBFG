@@ -7,28 +7,22 @@ corpus: wiki
 
 [Folders]
 rootdir: ..
-corpus_folder: /extra/corpora/corpora-en/Wiki20180203/
+corpus_folder: /extra/corpora/corpora-en/Wiki20180203/UDs
 vocabulary_folder: %(rootdir)s/data/vocabulary/
 output_folder: %(rootdir)s/data/edges/
 
-
-[CorpusPortion]
-first_ID: 0
-last_ID: 5
-delete_downloaded: True
-basic_url: http://ltdata1.informatik.uni-hamburg.de/depcc/corpus/parsed/part-m-
 
 [MultiProcessing]
 workers_n: 4
 
 
 [GraphParameters]
-sentencefilter_fun: length,5,45
+sentencefilter_fun: length,4,50
 min_frequency: 50
 lexical_CPoS: N,V,J
 head_CPoS: V,N
 max_wildcards: 1
-ignored_deprels: cop,prt,nn,aux,auxpass,dep,compound,flat,list
+ignored_deprels: punct,cop,det,ref,case,dep,mark,aux,auxpass,cc,neg,expl,discourse,root
 max_distance: 6
 
 [NodeFrequencies]

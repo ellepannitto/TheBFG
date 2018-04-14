@@ -44,29 +44,6 @@ class RelationsExtractor:
 		
 		
 		
-		#TODO: remove this things after some changes to the code
-		# - relations I'm not considering at all: "abbrev", "appos", "attr", "aux", "auxpass", "cc", "complm", "cop", "dep", "det", "mark", "nn", "null", "number", "parataxis", "predet", "pred", "prep", "punct", "rel"
-		# - relations I'm not considering since they're considered elsewhere: "nsubjpass", "csubjpass", "pobj", "pcomp", "ROOT"
-		# - relations I would like to consider somehow: "expl", "num"+"measure", "neg", "poss", "possessive", "preconj", "prt", "quantmod"(?), "tmod"
-		
-		#relations we're taking into consideration. Ignore the "lambda: True" thing, it is just in case we need different functions depending on the kind of relation
-		#~ self.switch_relations = {
-			#~ "acomp" : lambda: True, 
-			#~ "advcl" : lambda: True, 
-			#~ "advmod":lambda: True, 
-			#~ "amod": lambda: True, 
-			#~ "ccomp": lambda: True, 
-			#~ "conj": lambda: True,
-			#~ "csubj": lambda: True,
-			#~ "dobj": lambda: True,
-			#~ "infmod": lambda: True,
-			#~ "iobj": lambda: True,
-			#~ "nsubj": lambda: True,
-			#~ "partmod": lambda: True,
-			#~ "purpcl": lambda: True,
-			#~ "rcmod": lambda: True,
-			#~ "xcomp": lambda: True
-		#~ }
 				
 	def process (self, sentence):
 		"""
@@ -110,6 +87,8 @@ class RelationsExtractor:
 
 		
 		"""		
+		#~ print ("{}: started processing {}".format(os.getpid(),sentence))
+
 		root = sentence.root
 		deps = sentence.deps
 		sentence = sentence.token_list
@@ -126,6 +105,8 @@ class RelationsExtractor:
 			seen_items[root]+=1
 			Q = [root]
 			visited[root]=True
+			
+			#~ print ("{}: before whilw".format(os.getpid()))
 
 			while Q:
 					
@@ -144,25 +125,21 @@ class RelationsExtractor:
 				for i, r in curr_deps:
 					target = sentence[i]
 					
-					if target.pos[0] in self.lexical_cpos and target.rel not in self.ignored_deprels:
+					if target.pos[0] in self.lexical_cpos and not r in self.ignored_deprels:
 						group.append((target.lemma, r))
 						dati_supp[-1].append(target.lemma)
 		
 						seen_items[i]+=1
 							
-					#~ if target.pos[0] in self.head_cpos and i in deps and len(deps[i])>0:
 					if target.pos[0] in self.head_cpos and not visited[i]:
 						Q.append(i)
 						visited[i]=True
 				
 				groups.append(group)
 				
-			#~ print ("gruppi {}".format(groups))
+			#~ print ("{}: after while".format(os.getpid()))
 
 
-			#~ for i in seen_items:
-				#~ lemma = sentence[i].lemma
-				#~ self.vocabulary[lemma]+=seen_items[i]
 
 			for el, tok in sentence.items():
 				if tok.pos[0] in self.lexical_cpos:
@@ -177,12 +154,12 @@ class RelationsExtractor:
 					dati[el].append(i)
 						
 			
-			
+			#~ print ("{}: before enumerate(groups)".format(os.getpid()))
+
 			for i, g in enumerate(groups):		
 				e_0 = [x[0][0] for x in g]
 				#~ print(e_0)
 				if not all(x in ["*", "_"] for x in e_0):
-					if len(g)<11:
 					#~ print("{}/{}: {}".format(i,len(groups),g))
 					#~ input()
 
@@ -198,34 +175,18 @@ class RelationsExtractor:
 								elements_0 = [e[0] for e in elements]
 								labels = [e[1] for e in s]
 							
-								if elements_0.count("*")<= self.max_wildcards:
+								if elements_0.count("*")<= self.max_wildcards and elements_0.count("_") <= self.max_wildcards:
 															
 									self.items[" ".join(elements)]["|".join(labels)]+=1
 									
 									#add structure
 									sorted_labels = sorted(labels)
 									self.structures["|".join(sorted_labels)]+=1
-					else:
-						print(str(i)+"/"+str(len(groups))+": g is too big!")
-						print(g)
 				else:
-					#~ pass
-					print(str(i)+"/"+str(len(groups))+": gruppo escluso senza item lessicali, "+str(len(g)))
-				
-
-				
-			#~ for i, g in enumerate(groups):	
-				#~ #GENERIC ASSOCIATIONS
-				#~ for j, h in enumerate(groups):
-					
-					#~ if j>i:
-						
-						#~ for a in g:
-							#~ for b in h:
-								
-								#a nel gruppo i, b nel gruppo j
-								#~ if not i in dati[b[0]]:
-									#~ self.items[" ".join([min(a[0], b[0]), max(a[0], b[0])])]["genassoc"]+=1
+					pass
+					#~ print(str(i)+"/"+str(len(groups))+": gruppo escluso senza item lessicali, "+str(len(g)))
+			
+			#~ print ("{}: after enumerate(groups)".format(os.getpid()))
 
 	def dump_relations(self, fobj_generic, fobj_deprel):
 		"""

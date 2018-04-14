@@ -86,17 +86,33 @@ class Token(object):
 		
 		search_lemma = self.lemma.split("_",1)[0] if self.part_added else self.lemma
 	
+		#~ #if the token is a proper noun and not tagged as named entity
+		#~ if self.pos in ["NNP", "NNPS"] and self.ne == "O":
+			#~ self.lemma = "_" + self.pos + "_"
+		#~ #if the token is tagged as a named entity
+		#~ elif not self.ne == "O":
+			#~ self.lemma = "_" + self.ne + "_"
+		#~ #if the lemma is not among the accepted ones
+		#~ elif self.pos[0] in vocab_dict:
+			#~ if not search_lemma + "/" + self.pos[0] in vocab_dict[self.pos[0]]:
+				#~ self.lemma = "*"
+
+
+		#WIKIPEDIA NAMED ENTITIES ARE TOO MANY
 		#if the token is a proper noun and not tagged as named entity
-		if self.pos in ["NNP", "NNPS"] and self.ne == "O":
-			self.lemma = "_" + self.pos + "_"
-		#if the token is tagged as a named entity
-		elif not self.ne == "O":
-			self.lemma = "_" + self.ne + "_"
+		if self.pos in ["NNP", "NNPS"]:
+			if self.ne == "O":
+				self.lemma = "_" + self.pos + "_"
+			else:
+				self.lemma = "_" + self.ne + "_"
+
 		#if the lemma is not among the accepted ones
 		elif self.pos[0] in vocab_dict:
 			if not search_lemma + "/" + self.pos[0] in vocab_dict[self.pos[0]]:
-				self.lemma = "*"
-			
+				if self.ne == "O":
+					self.lemma = "*"
+				else:
+					self.lemma = "_" + self.ne + "_"
 
 		# Associate the lemma to its coarse-grained PoS.
 		self.lemma = self.lemma + "/" + self.pos[0]

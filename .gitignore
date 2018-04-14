@@ -106,6 +106,7 @@ data/vocabulary/*
 data/edges/*
 data/depcc/*
 data/ud-treebank/*
+data/relpron/*
 
 #old src (for bug fixing)
 src_old/*

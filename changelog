@@ -1,3 +1,23 @@
+TheBFG ver 0.6.1
+
+	* WikipediaSentenceParser:
+		- new interface for UD-parsed wikipedia corpus
+		- Note: this version has more that 2 rels for some tokens. Find a way to handle them
+				strage deprels like "000"?? - provide list of all possible deprels
+	
+	* WikipediaToken:
+		- new interface for UD-parsed wikipedia token
+	
+	TODO:
+	- handle other types of exception
+	- change folder organization (preprocessing + data extraction + graph building + query interface)
+	- handle possible common errors with parameters specification
+	- find a way to generate readable documentation
+	- map deprels to a standard set
+	- escape special chars in lemmas
+  
+-- Ludovica Pannitto <ellepannitto@gmail.com>  Mon, 14 Apr 2018 17.26
+
 TheBFG ver 0.6
 
 	* WikipediaToken:

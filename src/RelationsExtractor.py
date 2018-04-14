@@ -93,20 +93,22 @@ class RelationsExtractor:
 		deps = sentence.deps
 		sentence = sentence.token_list
 
-		
-		dati_supp = []
+
 		groups = []
 		
-		seen_items = defaultdict(int)
+
 		visited = defaultdict(bool)
+		added_to_voc = defaultdict(bool)
 		
 		#The idea is that the queue contains the root at the begininng, and navigates the dependencies starting from there.
 		if root:
-			seen_items[root]+=1
 			Q = [root]
-			visited[root]=True
 			
-			#~ print ("{}: before whilw".format(os.getpid()))
+			self.vocabulary[sentence[root].lemma]+=1
+			visited[root]=True
+			added_to_voc[root]=True
+			
+			#~ print ("{}: before while".format(os.getpid()))
 
 			while Q:
 					
@@ -116,7 +118,6 @@ class RelationsExtractor:
 				
 				group = [(curr_el.lemma, "ROOT")]
 				
-				dati_supp.append([curr_el.lemma])
 				
 				curr_deps = []
 				if x in deps:
@@ -125,11 +126,12 @@ class RelationsExtractor:
 				for i, r in curr_deps:
 					target = sentence[i]
 					
+					if not added_to_voc[i]:
+						added_to_voc[i] = True
+						self.vocabulary[target.lemma]+=1
+					
 					if target.pos[0] in self.lexical_cpos and not r in self.ignored_deprels:
 						group.append((target.lemma, r))
-						dati_supp[-1].append(target.lemma)
-		
-						seen_items[i]+=1
 							
 					if target.pos[0] in self.head_cpos and not visited[i]:
 						Q.append(i)
@@ -139,19 +141,9 @@ class RelationsExtractor:
 				
 			#~ print ("{}: after while".format(os.getpid()))
 
-
-
-			for el, tok in sentence.items():
-				if tok.pos[0] in self.lexical_cpos:
-					self.vocabulary[tok.lemma]+=1
-					
-
-			dati = {}
-			for i, d in enumerate(dati_supp):
-				for el in d:
-					if not el in dati:
-						dati[el] = []
-					dati[el].append(i)
+			#~ for el, tok in sentence.items():
+				#~ if tok.pos[0] in self.lexical_cpos:
+					#~ self.vocabulary[tok.lemma]+=1
 						
 			
 			#~ print ("{}: before enumerate(groups)".format(os.getpid()))
@@ -188,7 +180,7 @@ class RelationsExtractor:
 			
 			#~ print ("{}: after enumerate(groups)".format(os.getpid()))
 
-	def dump_relations(self, fobj_generic, fobj_deprel):
+	def dump_relations(self, fobj_deprel):
 		"""
 		The functions writes processed items in a file
 		
@@ -210,11 +202,7 @@ class RelationsExtractor:
 			
 			for lab_group in sorted(labels):
 				label = lab_group
-				
-				if label == "genassoc":
-					fobj_generic.write(node + "\t" + label + "\t" + str(labels[lab_group]) + "\n")
-				else:
-					fobj_deprel.write(node + "\t" + label + "\t" + str(labels[lab_group]) + "\n")
+				fobj_deprel.write(node + "\t" + label + "\t" + str(labels[lab_group]) + "\n")
 	
 	
 	def dump_vocabulary(self, fobj):

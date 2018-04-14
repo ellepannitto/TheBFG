@@ -43,8 +43,9 @@ def _set_from_file (fobj, frequency_threshold, sep = "\t", item_col = 0, freq_co
 	while len(line)>0 and fr >= frequency_threshold:
 		it = line[item_col]
 		fr = int(line[freq_col])
-				
-		ret.add(it)
+			
+		if len(it)>3 || all(c.isalpha() for c in it):		
+			ret.add(it)
 
 		line = fobj.readline().strip().split(sep)
 		#~ print (line)
@@ -74,8 +75,9 @@ def _load_list (fobj):
 	
 	while len(line)>0:
 		it = line
-				
-		ret.add(it)
+		
+		if len(it)>3 || all(c.isalpha() for c in it):				
+			ret.add(it)
 
 		line = fobj.readline().strip()
 	

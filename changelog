@@ -1,3 +1,28 @@
+TheBFG ver 0.6.2
+
+	* FrequencyLoader:
+		- an item is added only if its frequency its greater than 3 or it is composed by all alphabetic chars
+	
+	* Token:
+		- NE is substituted to lemma only for NNP/NNPS
+	
+	* RelationsExtractor:
+		- better way to compute vocabulary
+		
+	* General:
+		- generic associations removed from computation
+	
+
+	
+	TODO:
+	- handle other types of exception
+	- change folder organization (preprocessing + data extraction + graph building + query interface)
+	- handle possible common errors with parameters specification
+	- find a way to generate readable documentation
+	- escape special chars in lemmas
+  
+-- Ludovica Pannitto <ellepannitto@gmail.com>  Mon, 14 Apr 2018 18.35
+
 TheBFG ver 0.6.1
 
 	* WikipediaSentenceParser:

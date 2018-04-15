@@ -1,6 +1,6 @@
 [Version]
 user: Ludovica
-name: provawiki
+name: estrazione_wiki
 
 [Corpus]
 corpus: wiki
@@ -13,11 +13,11 @@ output_folder: %(rootdir)s/data/edges/
 
 
 [MultiProcessing]
-workers_n: 4
+workers_n: 2
 
 
 [GraphParameters]
-sentencefilter_fun: length,4,50
+sentencefilter_fun: length,4,100
 min_frequency: 50
 lexical_CPoS: N,V,J
 head_CPoS: V,N

@@ -126,12 +126,11 @@ class RelationsExtractor:
 				for i, r in curr_deps:
 					target = sentence[i]
 					
-					if not added_to_voc[i]:
-						added_to_voc[i] = True
-						self.vocabulary[target.lemma]+=1
-					
 					if target.pos[0] in self.lexical_cpos and not r in self.ignored_deprels:
 						group.append((target.lemma, r))
+						if not added_to_voc[i]:
+							added_to_voc[i] = True
+							self.vocabulary[target.lemma]+=1
 							
 					if target.pos[0] in self.head_cpos and not visited[i]:
 						Q.append(i)
@@ -161,7 +160,7 @@ class RelationsExtractor:
 							
 							for s in subsets:
 								
-								s = sorted(s, key = lambda x:x[0])
+								s = sorted(set(s), key = lambda x:x[0])
 								
 								elements = [e[0] for e in s]
 								elements_0 = [e[0] for e in elements]

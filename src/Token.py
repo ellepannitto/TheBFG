@@ -111,6 +111,8 @@ class Token(object):
 			if not search_lemma + "/" + self.pos[0] in vocab_dict[self.pos[0]]:
 				if self.ne == "O":
 					self.lemma = "*"
+				else:
+					self.lemma = "_" + self.ne + "_"
 
 		# Associate the lemma to its coarse-grained PoS.
 		self.lemma = self.lemma + "/" + self.pos[0]

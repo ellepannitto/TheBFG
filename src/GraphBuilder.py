@@ -216,18 +216,18 @@ class GraphBuilder:
 				#~ query+=" and degree="+str(i+1)+" return x, s"
 				query+=" and degree="+str(i)+" return s"
 				
-				print(query)
+				#~ print(query)
 				#~ input()
 				
 				new_structs = self.graph.run(query)
 				
-				print (new_structs)
+				#~ print (new_structs)
 				list_to_delete_asap = []
 				while new_structs.forward():
 					new_structs_curr = new_structs.current()
 					list_to_delete_asap.append((new_structs_curr["s"], new_structs_curr["s"]["text"]))
 				
-				print (list_to_delete_asap)
+				#~ print (list_to_delete_asap)
 				struct_bare = sorted(list_to_delete_asap, key = lambda x: len(x[1]))[0][0]
 				
 				mi = f_curr_struct*math.log(self.len_corpus*f_curr_struct/(f_tok*struct_bare["frequency"]), 2) 

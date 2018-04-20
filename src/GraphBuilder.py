@@ -24,22 +24,42 @@ class GraphBuilder:
 		
 		self.ver = parameters["name"]
 	
-	@lru_cache(maxsize=8192)
+	@lru_cache(maxsize=16384)
 	def get_node (self, lma, cpos):
 		n = None
 		try:
-			n = self.graph.run("MATCH (a) WHERE a.user= '"+self.user+"' AND a.lemma = '"+lma+"' AND a.pos = '"+cpos+"' return a", lemma = lma).evaluate()
+			n = self.graph.run("MATCH (a) WHERE a.user= '"+self.user+"' AND a.lemma = '"+lma+"' AND a.pos = '"+cpos+"' return a").evaluate()
 		except:
 			print ("problema ricerca nodo: {}".format(lma))	
 		return n	
+
+	def get_nodes_list (self, lma_cpos_list):
+		
+		s = "["+",".join(["'"+x+"'" for x in lma_cpos_list])+"]"
+		
+		query = "MATCH (a) WHERE a.user= '"+self.user+"' AND (a.lemma+a.pos) IN "+s+" return a, a.lemma as lemma, a.pos as pos"
+		#~ print (query)
+		
+		ret = None
+		try:
+			n = self.graph.run(query)
+			ret = {}
+			while n.forward():
+				curr = n.current()
+				ret[curr["lemma"]+"/"+curr["pos"]]=curr["a"]
+		except Exception as e:
+			print(e)
+			print ("problema ricerca nodo: {}".format(query))	
+		
+		return ret
 		
 	def remove_isolated(self):
 		self.graph.run("match (n) where not (n)-[]-()  delete n")
-		#TODO: remove nodes which have only generic associations
+		
 		
 	def remove_onetoone(self):
 		self.graph.run("match (a:Lemma)-[r]-(n:Struct) with r, a, size((a)-[]-()) as degree_a, n, size(()-[]-(n)) as degree_n where degree_a = 1 and degree_n = 1 delete r, a, n")
-		#TODO: remove nodes which have only generic associations
+		
 		
 	def reset_graph(self):
 		self.graph.run("MATCH (a) WHERE a.user= '"+self.user+"' OPTIONAL MATCH (a)-[r]-() DELETE a,r")
@@ -57,6 +77,7 @@ class GraphBuilder:
 		with gzip.open(self.vocab_file, "rt") as f:
 			
 			for line in f:
+								
 				#~ if not i%1000000:
 				if not i%10000:
 					if not first:
@@ -64,15 +85,19 @@ class GraphBuilder:
 					first = False
 					tx = self.graph.begin()
 					print(i)
+				
+				i+=1
 
+				
 				linesplit = line.strip().rsplit("\t")
 					
 				lemmasplit = linesplit[0].rsplit("/", 1)
 				#~ lemma = lemmasplit[0]
-				#~ lemma = re.escape(lemmasplit[0])
 				lemma = lemmasplit[0]
 				if "'" in lemma or '"' in lemma:
-					lemma = re.escape(lemma)
+					lemma = lemma.replace("'", r"\'")
+					lemma = lemma.replace('"', r'\"')
+					
 					#~ print(lemma)
 					#~ input()
 				pos = lemmasplit[1]
@@ -85,8 +110,7 @@ class GraphBuilder:
 					#~ print("created "+str(n))
 					#~ self.total_nouns+=fr
 					tx.create(n)
-				i+=1
-
+				
 		#~ n = Node("Lemma", lemma = "*", pos = "N", frequency = 1000000, user = "Ludovica", ver = "prova1")
 		#~ tx.create(n)
 		#~ n = Node("Lemma", lemma = "*", pos = "J", frequency = 1000000, user = "Ludovica", ver = "prova1")
@@ -96,11 +120,11 @@ class GraphBuilder:
 		tx.commit()		
 
 		
-	def load_edges_deprels (self):
+	def load_edges_deprels_bak (self):
 		lineno = 0
 		tx = self.graph.begin()
-		#~ with gzip.open(self.edges_file, "rt") as f:
-		with open(self.edges_file, "rt") as f:
+		with gzip.open(self.edges_file, "rt") as f:
+		#~ with open(self.edges_file, "rt") as f:
 			line = f.readline()
 			linesplit = line.strip().split("\t")
 				
@@ -110,7 +134,7 @@ class GraphBuilder:
 			
 			while fr > self.minimum_struct_frequency:
 				lineno+=1
-				if not lineno%10000:
+				if not lineno%1000:
 					print(lineno)
 					
 				#~ try:
@@ -124,7 +148,8 @@ class GraphBuilder:
 					
 					l = lsplit[0]
 					if "'" in l or '"' in l:
-						l = re.escape(l)
+						l = l.replace("'", r"\'")
+						l = l.replace('"', r'\"')
 					
 					lab = labels[i]
 					nodo = self.get_node(l, pos[0])
@@ -147,6 +172,93 @@ class GraphBuilder:
 				fr = int(linesplit[2])
 
 		tx.commit()
+
+
+	def retrieve_and_commit (self, lemmas_to_query, lines):
+		tx = self.graph.begin()
+		
+		nodes = self.get_nodes_list( set (lemmas_to_query) )
+		
+		for line in lines:
+			linesplit = line.strip().split("\t")
+					
+			lemmi = linesplit[0].split()
+			labels = linesplit[1].split("|")
+			fr = int(linesplit[2])
+
+			nodeslist = []			
+			for i, l in enumerate(lemmi):
+				lab = labels[i]
+				lsplit = l.rsplit("/", 1)
+				pos = lsplit[1]	
+				l = lsplit[0]
+				#~ if "'" in l or '"' in l:
+					#~ l = l.replace("'", "\\'")
+					#~ l = l.replace('"', '\\"')
+					
+				#~ print("{} {}".format(l, pos))
+				
+				try:
+					nodo = nodes[l+"/"+pos]
+					nodeslist.append((nodo, lab))
+				except Exception as e:
+					print ("Errore con nodo {}".format(l+"/"+pos))
+					print (e)
+			
+			args = {"user":self.user, "frequency":fr, "text": linesplit[0]+"---"+linesplit[1]}
+
+			nodo_sr = Node("Struct", **args)
+					
+			tx.create(nodo_sr)
+			for nodo, lab in nodeslist:
+				r = Relationship(nodo, lab, nodo_sr, user=self.user, MI = 0)
+				tx.create(r)
+		
+		tx.commit()
+
+
+	def load_edges_deprels (self):
+		lineno = 0
+		
+		lemmas_to_query = []
+		rels_to_query = []
+		
+		with gzip.open(self.edges_file, "rt") as f:
+			
+			for line in f:
+				
+				lineno+=1
+				#~ if lineno < 99000:
+					#~ continue
+				
+				linesplit = line.strip().split("\t")
+					
+				lemmi = linesplit[0].split()
+				labels = linesplit[1].split("|")
+				fr = int(linesplit[2])
+				
+				
+				if not lineno%5000:
+					print(lineno)
+					#~ print ( self.get_node.cache_info() )
+					
+					self.retrieve_and_commit(lemmas_to_query, rels_to_query)
+					lemmas_to_query = []
+					rels_to_query = []
+					
+				
+				if fr > self.minimum_struct_frequency:
+					for i, l in enumerate(lemmi):
+						lsplit = l.rsplit("/", 1)
+						pos = lsplit[1]	
+						l = lsplit[0]
+						if "'" in l or '"' in l:
+							l = l.replace("'", r"\'")
+							l = l.replace('"', r'\"')
+						lemmas_to_query.append(l+pos)
+					rels_to_query.append(line)
+
+		self.retrieve_and_commit(lemmas_to_query, rels_to_query)
 
 	def sum_vocabulary (self):
 		self.total_lemmas = {v:0 for v in self.lexical_cpos}

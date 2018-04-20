@@ -27,5 +27,5 @@ max_distance: 6
 
 [NodeFrequencies]
 min_generic: 1000
-min_struct: 700
+min_struct: 5
 

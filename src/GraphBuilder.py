@@ -62,7 +62,24 @@ class GraphBuilder:
 		
 		
 	def reset_graph(self):
-		self.graph.run("MATCH (a) WHERE a.user= '"+self.user+"' OPTIONAL MATCH (a)-[r]-() DELETE a,r")
+		deleted = 1
+		while not deleted == 0:
+			query = "MATCH ()-[r]-() WITH r LIMIT 50000 DELETE r RETURN count(r) as deletedNodesCount"
+			res = self.graph.run(query)
+			res.forward()
+			deleted = res.current()["deletedNodesCount"]
+			print ("deleted relationships: {}".format(deleted))
+
+		deleted = 1
+		while not deleted == 0:
+			query = "MATCH (n)  WITH n LIMIT 50000 DELETE n RETURN count(n) as deletedNodesCount"
+			res = self.graph.run(query)
+			res.forward()
+			deleted = res.current()["deletedNodesCount"]
+			print ("deleted nodes: {}".format(deleted))
+
+
+#		self.graph.run("MATCH (a) WHERE a.user= '"+self.user+"' OPTIONAL MATCH (a)-[r]-() DELETE a,r")
 	
 	def load_graph (self, user, pwd):
 		self.graph = Graph('http://localhost:7474/db/data', user=user, password=pwd)

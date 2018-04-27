@@ -1,3 +1,18 @@
+TheBFG ver 0.6.5
+
+	* GraphBuilder:
+		- improved memory usage
+	
+		
+	TODO:
+	- handle other types of exception
+	- change folder organization (preprocessing + data extraction + graph building + query interface)
+	- handle possible common errors with parameters specification
+	- find a way to generate readable documentation
+	- introduce logging
+  
+-- Ludovica Pannitto <ellepannitto@gmail.com>  Fri, 27 Apr 2018 12.37
+
 TheBFG ver 0.6.4
 
 	* GraphBuilder:

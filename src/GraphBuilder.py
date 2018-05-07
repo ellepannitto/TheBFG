@@ -54,11 +54,26 @@ class GraphBuilder:
 		return ret
 		
 	def remove_isolated(self):
-		self.graph.run("match (n) where not (n)-[]-()  delete n")
+		deleted = 1
+		while not deleted == 0:
+			query = "match (n) where not (n)-[]-() with n limit 50000 delete n RETURN count(n) as deletedNodesCount"
+			res = self.graph.run(query)
+			res.forward()
+			deleted = res.current()["deletedNodesCount"]
+			print ("deleted relationships: {}".format(deleted))
+		
+		
+		#~ self.graph.run("match (n) where not (n)-[]-()  delete n")
 		
 		
 	def remove_onetoone(self):
-		self.graph.run("match (a:Lemma)-[r]-(n:Struct) with r, a, size((a)-[]-()) as degree_a, n, size(()-[]-(n)) as degree_n where degree_a = 1 and degree_n = 1 delete r, a, n")
+		#~ deleted = 1
+		#~ while not deleted == 0:
+		query = "call apoc.periodic.iterate(\"match (a:Lemma)-[r]-(b:Struct) CALL apoc.cypher.run('WITH {a} AS a match (a)-[s]-(c) with c limit 3 return count(c) as cnt',{a:a}) yield value with value as deg_a, a, r, b where deg_a.cnt=1 CALL apoc.cypher.run('WITH {b} AS b match (b)-[s]-(c) with c limit 3 return count(c) as cnt',{b:b}) yield value with value as deg_b, a, r, b where deg_b.cnt=1 return a,r,b\", \"DETACH DELETE a,r,b\", {batchSize:1000}) yield batches, total return batches, total"			
+		res = self.graph.run(query)
+		res.forward()
+		deleted = res.current()
+		print ("deleted relationships: {}".format(deleted))	
 		
 		
 	def reset_graph(self):
@@ -255,7 +270,7 @@ class GraphBuilder:
 				fr = int(linesplit[2])
 				
 				
-				if not lineno%5000:
+				if not lineno%10000:
 					print(lineno)
 					#~ print ( self.get_node.cache_info() )
 					
@@ -344,9 +359,7 @@ class GraphBuilder:
 				query+=" and ".join(list_where)
 				#~ query+=" and degree="+str(i+1)+" return x, s"
 				query+=" and degree="+str(i)+" return s"
-				
-				#~ print(query)
-				#~ input()
+			
 				
 				new_structs = self.graph.run(query)
 				
@@ -357,48 +370,66 @@ class GraphBuilder:
 					list_to_delete_asap.append((new_structs_curr["s"], new_structs_curr["s"]["text"]))
 				
 				#~ print (list_to_delete_asap)
-				struct_bare = sorted(list_to_delete_asap, key = lambda x: len(x[1]))[0][0]
-				
-				mi = f_curr_struct*math.log(self.len_corpus*f_curr_struct/(f_tok*struct_bare["frequency"]), 2) 
-				self.graph.run("Match ()-[r]-() where ID(r)="+str(curr_relation_id)+" set r.MI="+str(mi))
+				if len(list_to_delete_asap)>0:
+					struct_bare = sorted(list_to_delete_asap, key = lambda x: len(x[1]))[0][0]
+					
+					#~ mi = f_curr_struct*math.log(self.len_corpus*f_curr_struct/(f_tok*struct_bare["frequency"]), 2) 
+					mi = math.log(self.len_corpus*f_curr_struct/(f_tok*struct_bare["frequency"]), 2) 
+					self.graph.run("Match ()-[r]-() where ID(r)="+str(curr_relation_id)+" set r.MI="+str(mi))
+				else:
+					print ("impossible to calculate mi for {}".format(curr_struct))
+					print(query)
+					#~ input()
 		
 		
 		
 	def update_lmi(self):
-		triplets = self.graph.run("MATCH (a:Lemma)-[r]-(n:Struct) WHERE a.user ='"+self.user+"' return a, r, n, ID(n) as id_n, ID(r) as id_r order by n")
 		
-		triplets.forward()
-		first_triple = triplets.current()
-		#~ print (first_triple)
+		res = self.graph.run("match (a:Struct) return max(ID(a)) as max_id, min(ID(a)) as min_id")
+		while res.forward():
+			max_id = res.current()["max_id"]
+			min_id = res.current()["min_id"]
+			
+		print ("min id: {}".format(min_id))			
+		print ("max id: {}".format(max_id))
+
+
+		j = min_id
+		k = 10000
 		
-		#~ first_lemma = first_triple["a"]["lemma"]
-		#~ first_pos = first_triple["a"]["pos"]
-		first_struct = first_triple["id_n"]
-		
-		structlist = [first_triple]
+		while j < max_id:
+
+			triplets = self.graph.run("MATCH (a:Lemma)-[r]-(n:Struct) WHERE ID(n) <"+str(j+k)+" and ID(n)>"+str(j-1)+" and a.user ='"+self.user+"' and not a.lemma in ['*','+', '.'] return a, r, n, ID(n) as id_n, ID(r) as id_r order by n")
+
 			
-		while triplets.forward():
-			
-			curr = triplets.current()
-			#~ lemma = curr["a"]["lemma"]
-			#~ pos = curr["a"]["pos"]
-			id_n = curr["id_n"]
-			
-			if id_n == first_struct:
-				structlist.append(curr)
-			else:
-				#~ print (structlist)
-				#~ input()
-				if len(structlist)>1:
-					self.compute_lmi(structlist)
+			if triplets.forward():
+				first_triple = triplets.current()
+
+				first_struct = first_triple["id_n"]
+				structlist = [first_triple]
 				
-				first_struct = id_n
+			while triplets.forward():
 				
-				#~ first_lemma = lemma
-				#~ first_pos = pos
-				structlist = [curr]
+				curr = triplets.current()
+
+				id_n = curr["id_n"]
+				
+				if id_n == first_struct:
+					structlist.append(curr)
+				else:
+
+					if len(structlist)>1:
+						#~ print (structlist)
+						#~ input()
+						
+						self.compute_lmi(structlist)
+					
+					first_struct = id_n
+					
+					structlist = [curr]
 			
-			#~ input()
+			print ("considering ids until {}".format(j+k))
+			j = j+k
 
 
 if __name__ == "__main__":
@@ -411,15 +442,15 @@ if __name__ == "__main__":
 	graph = GraphBuilder(parameters)
 	graph.load_graph(sys.argv[2], sys.argv[3])
 	print ("graph reset")
-	graph.reset_graph()
+	#~ graph.reset_graph()
 	print ("load vertices")
-	graph.load_vertices()
+	#~ graph.load_vertices()
 	print ("load deprels")
-	graph.load_edges_deprels()
+	#~ graph.load_edges_deprels()
 	print ("remove isolated")
-	graph.remove_isolated()
+	#~ graph.remove_isolated()
 	print("remove one to one")
-	graph.remove_onetoone()
+	#~ graph.remove_onetoone()
 	print ("sum voc")
 	graph.sum_vocabulary()
 	print ("update lmi")
